@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export default function Home() {
-  return <h1>Hello!</h1>;
+  return <div className='h-test p-4'>포스트 작성될 자리!</div>;
 }
