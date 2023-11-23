@@ -1,5 +1,11 @@
-import React from 'react';
+import Avata from '@/components/Avata';
+import Resume from './resume/page';
 
 export default function AboutPage() {
-  return <h1>About Page!</h1>;
+  return (
+    <article>
+      <Avata />
+      <Resume />
+    </article>
+  );
 }

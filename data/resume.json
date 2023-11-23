@@ -1,0 +1,5 @@
+[
+  { "title": "Who am I?", "description": "개발을 사랑하는 풀스택 개발자\n사람과 디자인을 담는 웹앱 개발자" },
+  { "title": "Career", "description": "구글러(-2019)\n삼준전자(2016-2019)" },
+  { "title": "Skills", "description": "React, TypeScript\nTailwindCSS, PostCSS\nJest, Cypress" }
+]
