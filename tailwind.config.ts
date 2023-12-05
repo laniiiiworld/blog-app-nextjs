@@ -13,6 +13,7 @@ const config: Config = {
         border: { light: colors.zinc[200] },
         light: colors.zinc[500],
         hover: '#27abe9',
+        point: '#27abe9',
       },
       height: {
         test: '1000px',

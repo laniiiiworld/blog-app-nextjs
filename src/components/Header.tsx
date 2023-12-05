@@ -11,7 +11,7 @@ export default function Header({ font }: Props) {
       <h1 className={`${font.className} text-2xl`}>
         <Link href='/'>Lani's Blog</Link>
       </h1>
-      <nav className='flex gap-2 pt-1 font-semibold'>
+      <nav className='flex gap-2 pt-1 text-lg font-semibold'>
         <Link href='/' className='hover:text-hover'>
           Home
         </Link>
