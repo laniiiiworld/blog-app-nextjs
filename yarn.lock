@@ -727,6 +727,7 @@ __metadata:
     next: "npm:14.0.3"
     react: "npm:^18"
     react-dom: "npm:^18"
+    react-multi-carousel: "npm:^2.8.4"
     tailwindcss: "npm:^3.3.5"
     typescript: "npm:^5"
   languageName: unknown
@@ -3142,6 +3143,13 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
+  languageName: node
+  linkType: hard
+
+"react-multi-carousel@npm:^2.8.4":
+  version: 2.8.4
+  resolution: "react-multi-carousel@npm:2.8.4"
+  checksum: 056b89bfe98adc1267cdf1d757c7276f3394f3465418aee552ce831692ab0befe3882166836c9535fdc76c03395a704d3afafe83ee725ad926745f3a0d1a5802
   languageName: node
   linkType: hard
 

@@ -20,6 +20,7 @@
     "autoprefixer": "^10.4.16",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
+    "react-multi-carousel": "^2.8.4",
     "tailwindcss": "^3.3.5",
     "typescript": "^5"
   }
