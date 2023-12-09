@@ -9,6 +9,7 @@ export type Post = {
   category: string;
   path: string;
   featured: boolean;
+  content?: string;
 };
 
 export async function getPosts(): Promise<Post[]> {
@@ -17,9 +18,17 @@ export async function getPosts(): Promise<Post[]> {
   return JSON.parse(data);
 }
 
+export async function getPostContent(name: string) {
+  const filePath = path.join(process.cwd(), 'data/posts', `${name}.md`);
+  const data = await promises.readFile(filePath, 'utf-8');
+  return data;
+}
+
 export async function getPost(path: string): Promise<Post | undefined> {
   const data = await getPosts();
-  return data.find((post) => post.path === path);
+  const post = data.find((post) => post.path === path)!;
+  const content = await getPostContent(post.path);
+  return { ...post, content };
 }
 
 export async function getCategories(posts: Post[]): Promise<string[]> {
