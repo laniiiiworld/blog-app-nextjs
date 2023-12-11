@@ -10,6 +10,7 @@ export type Post = {
   path: string;
   featured: boolean;
   content?: string;
+  findIndex: number;
 };
 
 export async function getPosts(): Promise<Post[]> {
@@ -24,11 +25,20 @@ export async function getPostContent(name: string) {
   return data;
 }
 
-export async function getPost(path: string): Promise<Post | undefined> {
+export async function getPost(path: string, index?: number): Promise<Post | undefined> {
   const data = await getPosts();
-  const post = data.find((post) => post.path === path)!;
+
+  if (index !== undefined) {
+    if (index < 0) return { ...data[data.length - 1], findIndex: data.length - 1 };
+    if (index >= data.length) return { ...data[0], findIndex: 0 };
+    return { ...data[index], findIndex: index };
+  }
+
+  const findIndex = data.findIndex((post) => post.path === path)!;
+  const post = data[findIndex];
   const content = await getPostContent(post.path);
-  return { ...post, content };
+
+  return { ...post, content, findIndex };
 }
 
 export async function getCategories(posts: Post[]): Promise<string[]> {
