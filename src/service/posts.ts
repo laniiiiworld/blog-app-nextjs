@@ -1,0 +1,47 @@
+import path from 'path';
+import { promises } from 'fs';
+import { SELECT_ALL } from '@/components/FilteredPostList';
+
+export type Post = {
+  title: string;
+  description: string;
+  date: string;
+  category: string;
+  path: string;
+  featured: boolean;
+  content?: string;
+  findIndex: number;
+};
+
+export async function getPosts(): Promise<Post[]> {
+  const filePath = path.join(process.cwd(), 'data', 'posts.json');
+  const data = await promises.readFile(filePath, 'utf-8');
+  return JSON.parse(data);
+}
+
+export async function getPostContent(name: string) {
+  const filePath = path.join(process.cwd(), 'data/posts', `${name}.md`);
+  const data = await promises.readFile(filePath, 'utf-8');
+  return data;
+}
+
+export async function getPost(path: string, index?: number): Promise<Post | undefined> {
+  const data = await getPosts();
+
+  if (index !== undefined) {
+    if (index < 0) return { ...data[data.length - 1], findIndex: data.length - 1 };
+    if (index >= data.length) return { ...data[0], findIndex: 0 };
+    return { ...data[index], findIndex: index };
+  }
+
+  const findIndex = data.findIndex((post) => post.path === path)!;
+  const post = data[findIndex];
+  const content = await getPostContent(post.path);
+
+  return { ...post, content, findIndex };
+}
+
+export async function getCategories(posts: Post[]): Promise<string[]> {
+  const categories = new Set(posts.map((post) => post.category));
+  return [SELECT_ALL, ...categories];
+}
