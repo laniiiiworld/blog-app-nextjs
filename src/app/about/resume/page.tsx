@@ -6,8 +6,8 @@ export default async function Resume() {
 
   return (
     <section className='bg-zinc-100 w-10/12 mx-auto py-8 flex flex-col items-center gap-2'>
-      {items.map(({ title, description }) => (
-        <ResumeItem title={title} description={description} />
+      {items.map(({ title, description }, index) => (
+        <ResumeItem key={index} title={title} description={description} />
       ))}
     </section>
   );
