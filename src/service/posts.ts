@@ -13,10 +13,15 @@ export type Post = {
   findIndex: number;
 };
 
-export async function getPosts(): Promise<Post[]> {
+export async function getAllPosts(): Promise<Post[]> {
   const filePath = path.join(process.cwd(), 'data', 'posts.json');
   const data = await promises.readFile(filePath, 'utf-8');
-  return JSON.parse(data);
+  return (<Post[]>JSON.parse(data)).sort((a, b) => (a.date > b.date ? -1 : 1));
+}
+
+export async function getFeaturedPosts(): Promise<Post[]> {
+  const posts = await getAllPosts();
+  return posts.filter((post) => post.featured);
 }
 
 export async function getPostContent(name: string) {
@@ -26,7 +31,7 @@ export async function getPostContent(name: string) {
 }
 
 export async function getPost(path: string, index?: number): Promise<Post | undefined> {
-  const data = await getPosts();
+  const data = await getAllPosts();
 
   if (index !== undefined) {
     if (index < 0) return { ...data[data.length - 1], findIndex: data.length - 1 };

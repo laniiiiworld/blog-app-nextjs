@@ -1,8 +1,8 @@
 import FilteredPostList from '@/components/FilteredPostList';
-import { getCategories, getPosts } from '@/service/posts';
+import { getCategories, getAllPosts } from '@/service/posts';
 
 export default async function PostsPage() {
-  const posts = await getPosts();
+  const posts = await getAllPosts();
   const categories = await getCategories(posts);
 
   return <FilteredPostList posts={posts} categories={categories} />;

@@ -1,7 +1,7 @@
 'use client';
 
 import Categories from '@/components/Categories';
-import PostList from '@/components/PostList';
+import PostsGrid from '@/components/PostsGrid';
 import { Post } from '@/service/posts';
 import { useState } from 'react';
 
@@ -22,7 +22,7 @@ export default function FilteredPostList({ posts, categories }: Props) {
 
   return (
     <article className='flex'>
-      <PostList posts={filteredPosts} />
+      <PostsGrid posts={filteredPosts} />
       <Categories
         categories={categories}
         selectedCategory={selectedCategory}

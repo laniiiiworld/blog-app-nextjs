@@ -3,7 +3,7 @@
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Post } from '@/service/posts';
-import PostItem from './PostItem';
+import PostCard from './PostCard';
 
 const responsive = {
   desktop: {
@@ -22,7 +22,6 @@ const responsive = {
     slidesToSlide: 1,
   },
 };
-
 type Props = {
   posts: Post[];
 };
@@ -41,7 +40,7 @@ export default function CarouselPostList({ posts }: Props) {
       itemClass='rounded-md overflow-hidden shadow-md cursor-pointer my-2 w-80 hover:bg-yellow-50'
     >
       {filteredPosts.map((post) => (
-        <PostItem key={post.path} post={post} />
+        <PostCard key={post.path} post={post} />
       ))}
     </Carousel>
   );
