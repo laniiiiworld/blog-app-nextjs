@@ -15,9 +15,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='ko'>
-      <body className={`${gothic.className} w-full max-w-screen-xl mx-auto leading-normal font-normal`}>
+      <body
+        className={`${gothic.className} flex flex-col w-full h-screen max-w-screen-2xl mx-auto leading-normal font-normal`}
+      >
         <Header font={oswald} />
-        {children}
+        <main className='grow'>{children}</main>
         <Footer />
       </body>
     </html>

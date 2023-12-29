@@ -8,10 +8,10 @@ type Props = {
 export default function Header({ font }: Props) {
   return (
     <header className='flex justify-between items-center p-4 border-b border-border-light select-none'>
-      <h1 className={`${font.className} text-2xl`}>
-        <Link href='/'>Lani&#39;s Blog</Link>
-      </h1>
-      <nav className='flex gap-2 pt-1 text-lg font-semibold'>
+      <Link href='/'>
+        <h1 className={`${font.className} text-2xl`}>{"Lani's Blog"}</h1>
+      </Link>
+      <nav className='flex gap-4 pt-1 text-lg font-semibold'>
         <Link href='/' className='hover:text-hover'>
           Home
         </Link>
