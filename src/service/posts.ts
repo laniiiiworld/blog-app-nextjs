@@ -16,7 +16,9 @@ export type Post = {
 export async function getAllPosts(): Promise<Post[]> {
   const filePath = path.join(process.cwd(), 'data', 'posts.json');
   const data = await promises.readFile(filePath, 'utf-8');
-  return (<Post[]>JSON.parse(data)).sort((a, b) => (a.date > b.date ? -1 : 1));
+  return (<Post[]>JSON.parse(data)).sort(
+    (a, b) => Number(b.date.replaceAll('-', '')) - Number(a.date.replaceAll('-', ''))
+  );
 }
 
 export async function getFeaturedPosts(): Promise<Post[]> {
