@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import profile from '/public/images/profile.png';
+import profile from '/public/images/profile.jpg';
 import ContactButton from './ContactButton';
 
 export default function Avata() {
