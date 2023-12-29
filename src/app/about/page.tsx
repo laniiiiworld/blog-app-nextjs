@@ -1,10 +1,10 @@
-import Avata from '@/components/Avata';
+import Hero from '@/components/Hero';
 import Resume from './resume/page';
 
 export default function AboutPage() {
   return (
     <article>
-      <Avata />
+      <Hero />
       <Resume />
     </article>
   );

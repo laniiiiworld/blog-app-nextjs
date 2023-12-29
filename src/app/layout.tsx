@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${gothic.className} flex flex-col w-full h-screen max-w-screen-2xl mx-auto leading-normal font-normal`}
       >
         <Header font={oswald} />
-        <main className='grow'>{children}</main>
+        <main className='grow p-4'>{children}</main>
         <Footer />
       </body>
     </html>
