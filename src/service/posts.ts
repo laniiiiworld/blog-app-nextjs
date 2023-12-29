@@ -26,6 +26,11 @@ export async function getFeaturedPosts(): Promise<Post[]> {
   return posts.filter((post) => post.featured);
 }
 
+export async function getNoneFeaturedPosts(): Promise<Post[]> {
+  const posts = await getAllPosts();
+  return posts.filter((post) => !post.featured);
+}
+
 export async function getPostContent(name: string) {
   const filePath = path.join(process.cwd(), 'data/posts', `${name}.md`);
   const data = await promises.readFile(filePath, 'utf-8');

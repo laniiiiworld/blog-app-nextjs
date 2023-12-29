@@ -7,6 +7,7 @@
 
 - Next.js 13 버전을 이용하여 app 폴더 하위에서 파일 시스템 기반 라우터를 구성
 - Featured Posts를 필터링하여 제공
+- Carousel을 사용하여 "You May Like" 게시물 제공
 
 ## 사용 기술 및 라이브러리
 
@@ -21,6 +22,8 @@
 - React (v18)
 
 ### 라이브러리
+
+- react-multi-carousel(v2.8.4)
 
 ### 새로 설치한 익스텐션
 
