@@ -6,8 +6,9 @@
 ## 기능
 
 - Next.js 13 버전을 이용하여 app 폴더 하위에서 파일 시스템 기반 라우터를 구성
-- Featured Posts를 필터링하여 제공
-- Carousel을 사용하여 "You May Like" 게시물 제공
+- Home에서 Featured Posts를 필터링하여 제공
+- Home에서 Carousel을 사용하여 "You May Like" 게시물 제공
+- Posts 메뉴에서 Category별 게시글 제공
 
 ## 사용 기술 및 라이브러리
 

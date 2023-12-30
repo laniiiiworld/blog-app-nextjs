@@ -1,6 +1,6 @@
 import path from 'path';
 import { promises } from 'fs';
-import { SELECT_ALL } from '@/components/FilteredPostList';
+import { SELECT_ALL } from '@/components/FilterablePosts';
 
 export type Post = {
   title: string;
