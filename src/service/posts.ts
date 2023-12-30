@@ -9,9 +9,10 @@ export type Post = {
   category: string;
   path: string;
   featured: boolean;
-  content?: string;
   findIndex: number;
 };
+
+export type PostData = Post & { content: string };
 
 export async function getAllPosts(): Promise<Post[]> {
   const filePath = path.join(process.cwd(), 'data', 'posts.json');
@@ -31,23 +32,24 @@ export async function getNoneFeaturedPosts(): Promise<Post[]> {
   return posts.filter((post) => !post.featured);
 }
 
-export async function getPostContent(name: string) {
-  const filePath = path.join(process.cwd(), 'data/posts', `${name}.md`);
-  const data = await promises.readFile(filePath, 'utf-8');
-  return data;
+export async function getPostContent(fileName: string) {
+  const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
+  const content = await promises.readFile(filePath, 'utf-8');
+  return content;
 }
 
-export async function getPost(path: string, index?: number): Promise<Post | undefined> {
-  const data = await getAllPosts();
+export async function getPostData(fileName: string, index?: number): Promise<PostData> {
+  const posts = await getAllPosts();
+  if (!posts) throw new Error(`${fileName}에 해당하는 게시글을 찾을 수 없습니다.`);
 
   if (index !== undefined) {
-    if (index < 0) return { ...data[data.length - 1], findIndex: data.length - 1 };
-    if (index >= data.length) return { ...data[0], findIndex: 0 };
-    return { ...data[index], findIndex: index };
+    if (index < 0) return { ...posts[posts.length - 1], content: '', findIndex: posts.length - 1 };
+    if (index >= posts.length) return { ...posts[0], content: '', findIndex: 0 };
+    return { ...posts[index], content: '', findIndex: index };
   }
 
-  const findIndex = data.findIndex((post) => post.path === path)!;
-  const post = data[findIndex];
+  const findIndex = posts.findIndex((post) => post.path === fileName)!;
+  const post = posts[findIndex];
   const content = await getPostContent(post.path);
 
   return { ...post, content, findIndex };
