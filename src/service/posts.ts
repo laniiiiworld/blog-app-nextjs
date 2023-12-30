@@ -9,10 +9,13 @@ export type Post = {
   category: string;
   path: string;
   featured: boolean;
-  findIndex: number;
 };
 
-export type PostData = Post & { content: string };
+export type PostData = Post & {
+  content: string;
+  prevPost: Post | null;
+  nextPost: Post | null;
+};
 
 export async function getAllPosts(): Promise<Post[]> {
   const filePath = path.join(process.cwd(), 'data', 'posts.json');
@@ -27,35 +30,28 @@ export async function getFeaturedPosts(): Promise<Post[]> {
   return posts.filter((post) => post.featured);
 }
 
+// You May Like
 export async function getNoneFeaturedPosts(): Promise<Post[]> {
   const posts = await getAllPosts();
   return posts.filter((post) => !post.featured);
 }
 
-export async function getPostContent(fileName: string) {
+export async function getPostData(fileName: string): Promise<PostData> {
   const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
-  const content = await promises.readFile(filePath, 'utf-8');
-  return content;
-}
-
-export async function getPostData(fileName: string, index?: number): Promise<PostData> {
   const posts = await getAllPosts();
-  if (!posts) throw new Error(`${fileName}에 해당하는 게시글을 찾을 수 없습니다.`);
+  const findIndex = posts.findIndex((post) => post.path === fileName);
 
-  if (index !== undefined) {
-    if (index < 0) return { ...posts[posts.length - 1], content: '', findIndex: posts.length - 1 };
-    if (index >= posts.length) return { ...posts[0], content: '', findIndex: 0 };
-    return { ...posts[index], content: '', findIndex: index };
-  }
+  if (findIndex === -1) throw new Error(`${fileName}에 해당하는 게시글을 찾을 수 없습니다.`);
 
-  const findIndex = posts.findIndex((post) => post.path === fileName)!;
   const post = posts[findIndex];
-  const content = await getPostContent(post.path);
+  const content = await promises.readFile(filePath, 'utf-8');
+  const prevPost = findIndex > 0 ? posts[findIndex - 1] : null;
+  const nextPost = findIndex < posts.length - 1 ? posts[findIndex + 1] : null;
 
-  return { ...post, content, findIndex };
+  return { ...post, content, prevPost, nextPost };
 }
 
-export async function getCategories(posts: Post[]): Promise<string[]> {
+export function getCategories(posts: Post[]): string[] {
   const categories = new Set(posts.map((post) => post.category));
   return [SELECT_ALL, ...categories];
 }

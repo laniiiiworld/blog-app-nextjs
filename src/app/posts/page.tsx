@@ -3,7 +3,7 @@ import { getCategories, getAllPosts } from '@/service/posts';
 
 export default async function PostsPage() {
   const posts = await getAllPosts();
-  const categories = await getCategories(posts);
+  const categories = getCategories(posts);
 
   return <FilterablePosts posts={posts} categories={categories} />;
 }
