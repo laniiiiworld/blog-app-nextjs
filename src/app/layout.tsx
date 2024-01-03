@@ -8,8 +8,12 @@ const oswald = Oswald({ subsets: ['latin'] });
 const gothic = Nanum_Gothic({ weight: ['400', '700'], subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: '라니의 블로그',
-  description: 'NextJS와 TypeScript를 이용하여 만든 블로그',
+  title: {
+    default: '라니의 블로그',
+    template: '라니의 블로그 | %s',
+  },
+  description: 'FrontEnd 개발자 라니의 블로그',
+  icons: { icon: '/favicon.ico' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

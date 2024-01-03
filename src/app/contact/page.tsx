@@ -1,7 +1,13 @@
 import ContactForm from '@/components/ContactForm';
 import { getContactInfo } from '@/service/contact';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
+
+export const metadata: Metadata = {
+  title: 'Contact Me',
+  description: 'Lani에게 메일 보내기',
+};
 
 export default async function ContactPage() {
   const contactInfo = await getContactInfo();
