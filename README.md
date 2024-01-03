@@ -11,6 +11,7 @@
 - Posts 메뉴에서 Category별 게시물 제공
 - 가독성을 높이기 위해 Markdown Viewer를 이용하여 상세 게시글 제공
 - 상세 게시글에서 이전/다음 게시글로 이동 구현
+- Contact 메뉴에서 이메일 전송 기능 구현
 
 ## 사용 기술 및 라이브러리
 
@@ -31,5 +32,7 @@
 - remark-gfm (v4.0.0)
 - react-syntax-highlighter (v15.5.0)
 - react-icons (v4.12.0)
+- nodemailer (v6.9.7)
+- yup(v1.3.2)
 
 ## 개선사항

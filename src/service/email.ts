@@ -1,4 +1,4 @@
-import { EmailContent } from '@/components/Email';
+import { EmailContent } from '@/components/ContactForm';
 
 export async function sendContactEmail(email: EmailContent) {
   const response = await fetch('/api/email', {
