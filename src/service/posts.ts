@@ -1,6 +1,7 @@
 import path from 'path';
 import { promises } from 'fs';
 import { SELECT_ALL } from '@/components/FilterablePosts';
+import { cache } from 'react';
 
 export type Post = {
   title: string;
@@ -17,13 +18,14 @@ export type PostData = Post & {
   nextPost: Post | null;
 };
 
-export async function getAllPosts(): Promise<Post[]> {
+//https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#caching-data
+export const getAllPosts = cache(async () => {
   const filePath = path.join(process.cwd(), 'data', 'posts.json');
   const data = await promises.readFile(filePath, 'utf-8');
   return (<Post[]>JSON.parse(data)).sort(
     (a, b) => Number(b.date.replaceAll('-', '')) - Number(a.date.replaceAll('-', ''))
   );
-}
+});
 
 export async function getFeaturedPosts(): Promise<Post[]> {
   const posts = await getAllPosts();
