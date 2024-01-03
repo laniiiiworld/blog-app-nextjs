@@ -1,6 +1,6 @@
 import path from 'path';
 import { promises as fs } from 'fs';
-import { EmailContent } from '@/components/Email';
+import { EmailContent } from '@/components/ContactForm';
 import { createTransport } from 'nodemailer';
 
 export type ContactInfo = {

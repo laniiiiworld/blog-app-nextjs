@@ -1,6 +1,7 @@
 import path from 'path';
 import { promises } from 'fs';
-import { SELECT_ALL } from '@/components/FilteredPostList';
+import { SELECT_ALL } from '@/components/FilterablePosts';
+import { cache } from 'react';
 
 export type Post = {
   title: string;
@@ -9,39 +10,50 @@ export type Post = {
   category: string;
   path: string;
   featured: boolean;
-  content?: string;
-  findIndex: number;
 };
 
-export async function getPosts(): Promise<Post[]> {
+export type PostData = Post & {
+  content: string;
+  prevPost: Post | null;
+  nextPost: Post | null;
+};
+
+//https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#caching-data
+export const getAllPosts = cache(async () => {
   const filePath = path.join(process.cwd(), 'data', 'posts.json');
   const data = await promises.readFile(filePath, 'utf-8');
-  return JSON.parse(data);
+  return (<Post[]>JSON.parse(data)).sort(
+    (a, b) => Number(b.date.replaceAll('-', '')) - Number(a.date.replaceAll('-', ''))
+  );
+});
+
+export async function getFeaturedPosts(): Promise<Post[]> {
+  const posts = await getAllPosts();
+  return posts.filter((post) => post.featured);
 }
 
-export async function getPostContent(name: string) {
-  const filePath = path.join(process.cwd(), 'data/posts', `${name}.md`);
-  const data = await promises.readFile(filePath, 'utf-8');
-  return data;
+// You May Like
+export async function getNoneFeaturedPosts(): Promise<Post[]> {
+  const posts = await getAllPosts();
+  return posts.filter((post) => !post.featured);
 }
 
-export async function getPost(path: string, index?: number): Promise<Post | undefined> {
-  const data = await getPosts();
+export async function getPostData(fileName: string): Promise<PostData> {
+  const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
+  const posts = await getAllPosts();
+  const findIndex = posts.findIndex((post) => post.path === fileName);
 
-  if (index !== undefined) {
-    if (index < 0) return { ...data[data.length - 1], findIndex: data.length - 1 };
-    if (index >= data.length) return { ...data[0], findIndex: 0 };
-    return { ...data[index], findIndex: index };
-  }
+  if (findIndex === -1) throw new Error(`${fileName}에 해당하는 게시글을 찾을 수 없습니다.`);
 
-  const findIndex = data.findIndex((post) => post.path === path)!;
-  const post = data[findIndex];
-  const content = await getPostContent(post.path);
+  const post = posts[findIndex];
+  const content = await promises.readFile(filePath, 'utf-8');
+  const prevPost = findIndex > 0 ? posts[findIndex - 1] : null;
+  const nextPost = findIndex < posts.length - 1 ? posts[findIndex + 1] : null;
 
-  return { ...post, content, findIndex };
+  return { ...post, content, prevPost, nextPost };
 }
 
-export async function getCategories(posts: Post[]): Promise<string[]> {
+export function getCategories(posts: Post[]): string[] {
   const categories = new Set(posts.map((post) => post.category));
   return [SELECT_ALL, ...categories];
 }

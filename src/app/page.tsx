@@ -1,18 +1,13 @@
-import Avata from '@/components/Avata';
-import CarouselPostList from '@/components/CarouselPostList';
-import FeaturedPostList from '@/components/FeaturedPostList';
-import { getPosts } from '@/service/posts';
+import Hero from '@/components/Hero';
+import CarouselPosts from '@/components/CarouselPosts';
+import FeaturedPosts from '@/components/FeaturedPosts';
 
-export default async function Home() {
-  const posts = await getPosts();
-
+export default function HomePage() {
   return (
-    <div className='p-4'>
-      <Avata />
-      <h2 className='font-semibold text-lg pl-8'>Featured Posts</h2>
-      <FeaturedPostList posts={posts} />
-      <h2 className='font-semibold text-lg pl-8'>You May Like</h2>
-      <CarouselPostList posts={posts} />
-    </div>
+    <>
+      <Hero />
+      <FeaturedPosts />
+      <CarouselPosts />
+    </>
   );
 }
