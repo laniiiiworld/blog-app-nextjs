@@ -1,5 +1,13 @@
 [
   {
+    "title": "더 좋은 Git commit 메세지를 위한 고민",
+    "description": "더 좋은 Git commit 메세지를 위한 고민들 정리",
+    "date": "2023-01-06",
+    "category": "git",
+    "path": "better-git-commit-message",
+    "featured": true
+  },
+  {
     "title": "2021년 리뷰",
     "description": "2021년 한해 동안 배운 기술들, 생각들 정리",
     "date": "2021-12-31",
