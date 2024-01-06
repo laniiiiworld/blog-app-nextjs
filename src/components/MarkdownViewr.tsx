@@ -42,6 +42,9 @@ export default function MarkdownViewr({ content }: Props) {
             height={350}
           />
         ),
+        a: item => (
+          <a href={item.href} target='_blank'>{item.children}</a>
+        ),
       }}
     >
       {content}
