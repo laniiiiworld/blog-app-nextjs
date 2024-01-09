@@ -28,7 +28,10 @@ export default function MarkdownViewr({ content }: Props) {
               {String(children).replace(/\n$/, '')}
             </SyntaxHighlighter>
           ) : (
-            <code {...rest} className={className}>
+            <code
+              className='bg-stone-300 text-stone-800 rounded-md before:content-none after:content-none py-1 px-2'
+              {...rest}
+            >
               {children}
             </code>
           );
