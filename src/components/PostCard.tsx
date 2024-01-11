@@ -1,6 +1,6 @@
 import { Post } from '@/service/posts';
-import Image from 'next/image';
 import Link from 'next/link';
+import PostCardImage from './PostCardImage';
 
 type Props = {
   post: Post;
@@ -8,17 +8,10 @@ type Props = {
 
 export default function PostCard({ post }: Props) {
   const { title, description, date, category, path } = post;
-
   return (
     <Link href={`/posts/${path}`}>
       <article className='rounded-md overflow-hidden shadow-md cursor-pointer hover:shadow-xl'>
-        <Image //
-          src={`/images/posts/${path}.png`}
-          alt={title}
-          width={300}
-          height={200}
-          className='w-full'
-        />
+        <PostCardImage post={post} width={300} height={200} />
         <div className='flex flex-col items-center p-2 mb-3 leading-relaxed'>
           <time className='self-end text-light text-sm'>{date}</time>
           <h3 className='text-lg font-semibold w-full truncate text-center'>{title}</h3>
