@@ -16,6 +16,14 @@
     "featured": true
   },
   {
+    "title": "null VS undefined VS false 중 무엇을 체크할까?",
+    "description": "javascript 문법에서 체크하는 값이 null, undefined, false 중 무엇인지 헷갈리는 순간들 총정리",
+    "date": "2023-01-26",
+    "category": "javascript",
+    "path": "null-undefined-false",
+    "featured": true
+  },
+  {
     "title": "2021년 리뷰",
     "description": "2021년 한해 동안 배운 기술들, 생각들 정리",
     "date": "2021-12-31",
