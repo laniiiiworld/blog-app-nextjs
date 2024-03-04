@@ -7,7 +7,7 @@ type Props = {
 
 export default function Header({ font }: Props) {
   return (
-    <header className='flex justify-between items-center p-4 border-b border-border-light select-none'>
+    <header className='fixed w-full max-w-screen-xl z-10 flex justify-between items-center p-4 bg-white/70 backdrop-blur-lg text-black border-b border-border-light select-none'>
       <Link href='/'>
         <h1 className={`${font.className} text-2xl`}>{"Lani's Blog"}</h1>
       </Link>

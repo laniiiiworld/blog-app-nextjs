@@ -21,7 +21,7 @@ export default async function PostPage({ params: { slug } }: Props) {
   const { prevPost, nextPost } = post;
 
   return (
-    <article className='m-2 relative rounded-2xl overflow-hidden bg-slate-100 shadow-lg'>
+    <article className='m-2 mt-10 relative rounded-2xl overflow-hidden bg-slate-100 shadow-lg'>
       <PostPageImage post={post} width={760} height={420} />
       <PostContent post={post} />
       <section className='flex'>
