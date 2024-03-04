@@ -11,7 +11,7 @@ type Props = {
 
 export default function PostCardImage({ post, width, height }: Props) {
   const { path, title } = post;
-  const [isImage, setIsImage] = useState(true);
+  const [isImage, setIsImage] = useState(post.isImage);
 
   return (
     <div className={`relative w-full aspect-video bg-black`}>
