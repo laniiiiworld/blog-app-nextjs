@@ -54,7 +54,12 @@ export async function getPostData(fileName: string): Promise<PostData> {
   return { ...post, content, prevPost, nextPost };
 }
 
-export function getTags(posts: Post[]): string[] {
-  const tags = new Set(posts.map((post) => post.tag));
-  return [SELECT_ALL, ...tags];
+export function getTags(posts: Post[]): Map<string, number> {
+  const tags = new Map();
+  tags.set(SELECT_ALL, posts.length);
+  for (const { tag } of posts) {
+    const count = tags.get(tag) || 0;
+    tags.set(tag, count + 1);
+  }
+  return tags;
 }

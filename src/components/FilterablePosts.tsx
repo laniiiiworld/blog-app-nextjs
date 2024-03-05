@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 type Props = {
   posts: Post[];
-  tags: string[];
+  tags: Map<string, number>;
 };
 
 export const SELECT_ALL = 'All Posts';
