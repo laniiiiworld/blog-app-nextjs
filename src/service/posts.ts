@@ -10,6 +10,7 @@ export type Post = {
   category: string;
   path: string;
   featured: boolean;
+  isImage: boolean;
 };
 
 export type PostData = Post & {

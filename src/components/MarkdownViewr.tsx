@@ -14,7 +14,7 @@ export default function MarkdownViewr({ content }: Props) {
       className='prose lg:prose-lg max-w-none'
       remarkPlugins={[remarkGfm]}
       components={{
-        code(props) {
+        code: (props) => {
           const { children, className, node, ...rest } = props;
           const match = /language-(\w+)/.exec(className || '');
           return match ? (
@@ -28,7 +28,10 @@ export default function MarkdownViewr({ content }: Props) {
               {String(children).replace(/\n$/, '')}
             </SyntaxHighlighter>
           ) : (
-            <code {...rest} className={className}>
+            <code
+              className='bg-stone-300 text-stone-800 rounded-md before:content-none after:content-none py-1 px-2'
+              {...rest}
+            >
               {children}
             </code>
           );
@@ -42,9 +45,32 @@ export default function MarkdownViewr({ content }: Props) {
             height={350}
           />
         ),
-        a: item => (
-          <a href={item.href} target='_blank'>{item.children}</a>
+        a: ({ href, children }) => (
+          <a href={href} target='_blank'>
+            {children}
+          </a>
         ),
+        th: ({ children, ...rest }) => {
+          return (
+            <th className='bg-gray-200 p-3' {...rest}>
+              {children}
+            </th>
+          );
+        },
+        tr: ({ children, ...rest }) => (
+          <tr className='bg-gray-100' {...rest}>
+            {children}
+          </tr>
+        ),
+        td: ({ children, ...rest }) => {
+          if (typeof children === 'string') {
+            children = children.split(/<br[ ]?\/>/g);
+          }
+          if (Array.isArray(children)) {
+            children = children.map((str, index) => (str.match(/<br[ ]?\/>/g) ? <br key={index} /> : str));
+          }
+          return <td {...rest}>{children}</td>;
+        },
       }}
     >
       {content}

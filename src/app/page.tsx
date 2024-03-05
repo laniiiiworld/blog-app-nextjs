@@ -1,13 +1,14 @@
 import Hero from '@/components/Hero';
-import CarouselPosts from '@/components/CarouselPosts';
-import FeaturedPosts from '@/components/FeaturedPosts';
+import AllPosts from '@/components/AllPosts';
+import { getAllPosts } from '@/service/posts';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const posts = await getAllPosts();
+
   return (
     <>
       <Hero />
-      <FeaturedPosts />
-      <CarouselPosts />
+      <AllPosts posts={posts} />
     </>
   );
 }

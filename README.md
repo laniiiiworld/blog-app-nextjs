@@ -6,8 +6,7 @@
 ## 기능
 
 - Next.js 13 버전을 이용하여 app 폴더 하위에서 파일 시스템 기반 라우터를 구성
-- Home에서 Featured Posts를 필터링하여 제공
-- Home에서 Carousel을 사용하여 "You May Like" 게시물 제공
+- Home에서 Posts를 최신순/오래된순/이름순 정렬하여 제공
 - Posts 메뉴에서 Category별 게시물 제공
 - 가독성을 높이기 위해 Markdown Viewer를 이용하여 상세 게시글 제공
 - 상세 게시글에서 이전/다음 게시글로 이동 구현
@@ -40,6 +39,4 @@
 
 - loading
 - 게시글 카테고리 1개 → 여러개 작성 가능하도록 개선
-- 게시글 이미지가 없는 경우, default 이미지를 보여주도록 개선
 - 댓글
-- Markdown Viewer br태그 줄바꿈 안됨

@@ -1,11 +1,30 @@
 [
   {
+    "title": "React Markdown을 커스텀 해보자",
+    "description": "react-markdown 라이브러리를 커스텀하여 코드 블럭, 줄바꿈 등을 표현하는 방법",
+    "date": "2024-01-09",
+    "category": "react-library",
+    "path": "quit-react-markdown",
+    "featured": true,
+    "isImage": false
+  },
+  {
     "title": "더 좋은 Git commit 메세지를 위한 고민",
     "description": "더 좋은 Git commit 메세지를 위한 고민들 정리",
-    "date": "2023-01-06",
+    "date": "2024-01-06",
     "category": "git",
     "path": "better-git-commit-message",
-    "featured": true
+    "featured": true,
+    "isImage": true
+  },
+  {
+    "title": "null VS undefined VS false 중 무엇을 체크할까?",
+    "description": "javascript 문법에서 체크하는 값이 null, undefined, false 중 무엇인지 헷갈리는 순간들 총정리",
+    "date": "2024-01-26",
+    "category": "javascript",
+    "path": "null-undefined-false",
+    "featured": true,
+    "isImage": false
   },
   {
     "title": "2021년 리뷰",
@@ -13,7 +32,8 @@
     "date": "2021-12-31",
     "category": "my story",
     "path": "review-2021",
-    "featured": false
+    "featured": false,
+    "isImage": true
   },
   {
     "title": "자바스크립트 기초 문법",
@@ -21,7 +41,8 @@
     "date": "2022-05-08",
     "category": "javascript",
     "path": "javascript-basic",
-    "featured": false
+    "featured": false,
+    "isImage": true
   },
   {
     "title": "자바스크립트 10가지 프로팁!",
@@ -29,7 +50,8 @@
     "date": "2022-06-15",
     "category": "javascript",
     "path": "javascript-10-tips",
-    "featured": true
+    "featured": false,
+    "isImage": true
   },
   {
     "title": "Node 기초 정리",
@@ -37,7 +59,8 @@
     "date": "2022-08-21",
     "category": "backend",
     "path": "node-basic",
-    "featured": false
+    "featured": false,
+    "isImage": true
   },
   {
     "title": "2022년 리뷰",
@@ -45,7 +68,8 @@
     "date": "2022-12-31",
     "category": "my story",
     "path": "review-2022",
-    "featured": false
+    "featured": false,
+    "isImage": true
   },
   {
     "title": "Node 프로 팁!",
@@ -53,7 +77,8 @@
     "date": "2023-04-10",
     "category": "backend",
     "path": "node-pro-tips",
-    "featured": false
+    "featured": false,
+    "isImage": true
   },
   {
     "title": "리액트 Best Practice!",
@@ -61,7 +86,8 @@
     "date": "2023-04-15",
     "category": "frontend",
     "path": "best-react-practices",
-    "featured": true
+    "featured": false,
+    "isImage": true
   },
   {
     "title": "리액트 18버전!",
@@ -69,7 +95,8 @@
     "date": "2023-05-02",
     "category": "frontend",
     "path": "react18-walkthrough",
-    "featured": true
+    "featured": false,
+    "isImage": true
   },
   {
     "title": "2023년 리뷰",
@@ -77,6 +104,7 @@
     "date": "2023-12-31",
     "category": "my story",
     "path": "review-2023",
-    "featured": true
+    "featured": false,
+    "isImage": true
   }
 ]
