@@ -14,10 +14,10 @@ export default function PostCardImage({ post, width, height }: Props) {
   const [isImage, setIsImage] = useState(post.isImage);
 
   return (
-    <div className={`relative w-full aspect-video bg-black`}>
+    <div className={`relative w-full aspect-video bg-black rounded-md overflow-hidden`}>
       {isImage && (
         <Image //
-          className='w-full h-full'
+          className='w-full h-full pointer-events-none'
           src={`/images/posts/${path}.png`}
           alt={title}
           width={width}
