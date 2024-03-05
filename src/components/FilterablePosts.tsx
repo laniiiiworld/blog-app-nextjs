@@ -20,15 +20,15 @@ export default function FilterablePosts({ posts, tags }: Props) {
       : posts.filter((post) => post.tag === selected);
 
   return (
-    <section className='flex mt-12'>
-      <aside className='grow basis-1/6 text-center p-4'>
+    <section className='flex mt-4 md:mt-12 flex-col md:flex-row'>
+      <aside className='grow md:basis-1/6 md:text-center p-4'>
         <Tags //
           tags={tags}
           selected={selected}
           onClick={setSelected}
         />
       </aside>
-      <section className='grow basis-5/6'>
+      <section className='grow md:basis-5/6'>
         <PostsGrid posts={filtered} />
       </section>
     </section>
