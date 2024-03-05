@@ -1,5 +1,5 @@
 import FilterablePosts from '@/components/FilterablePosts';
-import { getCategories, getAllPosts } from '@/service/posts';
+import { getTags, getAllPosts } from '@/service/posts';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default async function PostsPage() {
   const posts = await getAllPosts();
-  const categories = getCategories(posts);
+  const tags = getTags(posts);
 
-  return <FilterablePosts posts={posts} categories={categories} />;
+  return <FilterablePosts posts={posts} tags={tags} />;
 }

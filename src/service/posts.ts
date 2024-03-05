@@ -7,7 +7,7 @@ export type Post = {
   title: string;
   description: string;
   date: string;
-  category: string;
+  tag: string;
   path: string;
   featured: boolean;
   isImage: boolean;
@@ -54,7 +54,7 @@ export async function getPostData(fileName: string): Promise<PostData> {
   return { ...post, content, prevPost, nextPost };
 }
 
-export function getCategories(posts: Post[]): string[] {
-  const categories = new Set(posts.map((post) => post.category));
-  return [SELECT_ALL, ...categories];
+export function getTags(posts: Post[]): string[] {
+  const tags = new Set(posts.map((post) => post.tag));
+  return [SELECT_ALL, ...tags];
 }
