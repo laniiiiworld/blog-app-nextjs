@@ -24,14 +24,14 @@ export default function AllPosts({ posts }: Props) {
 
   return (
     <section>
-      <ul className='flex gap-4 justify-end pr-4 text-slate-700 text-sm'>
+      <ul className='flex gap-4 justify-end pr-4 text-light text-sm'>
         {orders.map(({ key, name }) => (
           <li
             key={key}
             onClick={() => setSelected(key)}
             className={`cursor-pointer ${
-              key === selected ? 'text-hover font-semibold' : 'hover:underline'
-            } focus:text-hover`}
+              key === selected ? 'text-hover font-semibold' : 'hover:underline focus:underline'
+            }`}
           >
             {name}
           </li>

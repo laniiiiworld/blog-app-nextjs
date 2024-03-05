@@ -16,8 +16,8 @@ export default function Categories({ categories, selected, onClick }: Props) {
             key={category}
             onClick={() => onClick(category)}
             className={`cursor-pointer ${
-              category === selected && 'text-hover font-semibold'
-            } hover:text-hover focus:text-hover`}
+              category === selected ? 'text-hover font-semibold' : 'hover:underline focus:underline'
+            }`}
           >
             {category}
           </li>
