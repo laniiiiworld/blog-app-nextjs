@@ -1,22 +1,22 @@
 import Image from 'next/image';
 import profile from '/public/images/profile.jpg';
-import ContactButton from './ContactButton';
 
 export default function Hero() {
   return (
-    <section className='text-center leading-relaxed py-4 mt-4'>
+    <section className='py-12 mt-4 flex flex-col items-center justify-center md:flex-row'>
       <Image //
         src={profile}
         alt='lani'
-        width={250}
-        height={250}
-        className='rounded-full mx-auto'
+        width={170}
+        height={170}
+        className='rounded-full'
         priority
       />
-      <h2 className='text-2xl font-semibold mt-2'>Lani</h2>
-      <h3 className='text-lg font-semibold'>FrontEnd Engineer</h3>
-      <p>꿈을 코딩하는 사람, 드림코더 라니</p>
-      <ContactButton />
+      <div className='ml-0 flex flex-col gap-1 items-center md:items-start md:ml-8'>
+        <h2 className='text-lg font-semibold mt-2'>이랑 (Lani)</h2>
+        <h3 className='text-lg font-semibold'>FrontEnd Engineer</h3>
+        <p>꿈을 코딩하는 사람, 드림코더 라니</p>
+      </div>
     </section>
   );
 }
