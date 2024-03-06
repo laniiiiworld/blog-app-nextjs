@@ -14,6 +14,22 @@ const config: Config = {
       height: {
         test: '1000px',
       },
+      keyframes: {
+        'bounce-left': {
+          '0%': { transform: 'translateX(0px)' },
+          '50%': { transform: 'translateX(-8px)' },
+          '100%': { transform: 'translateX(0px)' },
+        },
+        'bounce-right': {
+          '0%': { transform: 'translateX(0px)' },
+          '50%': { transform: 'translateX(8px)' },
+          '100%': { transform: 'translateX(0px)' },
+        },
+      },
+      animation: {
+        'bounce-left': 'bounce-left 1s ease 1',
+        'bounce-right': 'bounce-right 1s ease 1',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],
