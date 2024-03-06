@@ -9,27 +9,18 @@ type Props = {
   height: number;
 };
 
-export default function PostCardImage({ post, width, height }: Props) {
+export default function PostPageImage({ post, width, height }: Props) {
   const { path, title } = post;
-  const [isImage, setIsImage] = useState(true);
 
   return (
     <>
-      {isImage && (
-        <Image
-          className='w-full h-1/6 max-h-[450px] object-cover'
-          src={`/images/posts/${path}.png`} //
-          alt={title}
-          width={width}
-          height={height}
-          onError={() => setIsImage(false)}
-        />
-      )}
-      {!isImage && (
-        <div className='w-full h-[28rem] bg-black text-white'>
-          <h3 className='font-bold text-4xl flex justify-center items-center h-full'>{title}</h3>
-        </div>
-      )}
+      <Image
+        className='w-full h-1/6 max-h-[450px] object-cover rounded-xl my-6'
+        src={`/images/posts/${path}.png`} //
+        alt={title}
+        width={width}
+        height={height}
+      />
     </>
   );
 }
