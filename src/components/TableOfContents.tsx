@@ -46,12 +46,12 @@ export default function TableOfContents() {
   }, []);
 
   return (
-    <aside className='max-lg:hidden sticky top-24 left-0 p-2 w-1/5 h-full basis-0 shrink-0 grow'>
+    <aside className='max-lg:hidden sticky top-44 left-0 p-2 w-1/5 h-full basis-0 shrink-0 grow'>
       <ul>
         {headings.map(({ index, title, size }) => (
           <li
             key={index}
-            className={`transition-all border-l-2 border-gray-200 pl-[${size * 10}px] ${
+            className={`transition-all border-l-2 border-gray-200 ${size === 1 ? 'pl-3' : 'pl-6'} ${
               current === title ? 'text-hover font-semibold' : 'text-light hover:text-hover'
             }`}
           >
