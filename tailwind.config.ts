@@ -5,6 +5,9 @@ const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      screens: {
+        'max-lg': { max: '1023px' },
+      },
       colors: {
         border: { light: colors.zinc[200] },
         light: colors.zinc[500],
