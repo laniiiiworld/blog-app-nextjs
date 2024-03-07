@@ -1,6 +1,6 @@
 import AdjacentPostCard from '@/components/AdjacentPostCard';
-import PostPageImage from '@/components/PostPageImage';
 import PostContent from '@/components/PostContent';
+import TableOfContents from '@/components/TableOfContents';
 import { getFeaturedPosts, getPostData } from '@/service/posts';
 import { Metadata } from 'next';
 
@@ -21,13 +21,15 @@ export default async function PostPage({ params: { slug } }: Props) {
   const { prevPost, nextPost } = post;
 
   return (
-    <article className='m-2 mt-10 relative rounded-2xl overflow-hidden bg-slate-100 shadow-lg'>
-      <PostPageImage post={post} width={760} height={420} />
-      <PostContent post={post} />
-      <section className='flex'>
-        {prevPost && <AdjacentPostCard type='prev' post={prevPost} />}
-        {nextPost && <AdjacentPostCard type='next' post={nextPost} />}
-      </section>
+    <article className='relative flex mt-10'>
+      <div className='w-full lg:basis-0 lg:grow-[4] lg:w-4/5'>
+        <PostContent post={post} />
+        <section className='overflow-hidden flex flex-col md:flex-row'>
+          {prevPost && <AdjacentPostCard type='prev' post={prevPost} />}
+          {nextPost && <AdjacentPostCard type='next' post={nextPost} />}
+        </section>
+      </div>
+      <TableOfContents />
     </article>
   );
 }

@@ -29,7 +29,7 @@ export default function MarkdownViewr({ content }: Props) {
             </SyntaxHighlighter>
           ) : (
             <code
-              className='bg-stone-300 text-stone-800 rounded-md before:content-none after:content-none py-1 px-2'
+              className='bg-green-gray text-black font-medium rounded-md before:content-none after:content-none py-1 px-2'
               {...rest}
             >
               {children}
@@ -46,19 +46,31 @@ export default function MarkdownViewr({ content }: Props) {
           />
         ),
         a: ({ href, children }) => (
-          <a href={href} target='_blank'>
+          <a href={href} target='_blank' className='text-light no-underline hover:underline'>
             {children}
           </a>
         ),
+        strong: ({ children, ...rest }) => {
+          return (
+            <strong className='text-green-800' {...rest}>
+              {children}
+            </strong>
+          );
+        },
+        table: ({ children, ...rest }) => (
+          <table className='rounded-xl overflow-hidden' {...rest}>
+            {children}
+          </table>
+        ),
         th: ({ children, ...rest }) => {
           return (
-            <th className='bg-gray-200 p-3' {...rest}>
+            <th className='bg-green-light border-green-800 border-b-2 p-3 text-center' {...rest}>
               {children}
             </th>
           );
         },
         tr: ({ children, ...rest }) => (
-          <tr className='bg-gray-100' {...rest}>
+          <tr className='bg-green-gray' {...rest}>
             {children}
           </tr>
         ),
@@ -69,7 +81,11 @@ export default function MarkdownViewr({ content }: Props) {
           if (Array.isArray(children)) {
             children = children.map((str, index) => (str.match(/<br[ ]?\/>/g) ? <br key={index} /> : str));
           }
-          return <td {...rest}>{children}</td>;
+          return (
+            <td style={{ paddingLeft: 10 + 'px' }} {...rest}>
+              {children}
+            </td>
+          );
         },
       }}
     >
