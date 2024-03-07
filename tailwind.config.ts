@@ -13,6 +13,8 @@ const config: Config = {
         light: colors.zinc[500],
         hover: '#27abe9',
         point: '#27abe9',
+        'green-gray': '#edf1f7',
+        'green-light': '#c2d8d2',
       },
       height: {
         test: '1000px',

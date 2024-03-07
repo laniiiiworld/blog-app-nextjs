@@ -12,14 +12,14 @@ export default function PostContent({ post }: Props) {
 
   return (
     <section className='p-4'>
-      <div className='flex items-center justify-end text-sky-600 font-semibold text-sm'>
+      <div className='flex items-center justify-end text-green-800 font-semibold text-sm'>
         <FaRegCalendar />
         <p className='ml-1'>{date}</p>
       </div>
       <h1 className='text-4xl font-bold mb-2'>{title}</h1>
       {isImage && <PostPageImage post={post} width={760} height={420} />}
       <p className='pt-2 mb-4 text-xl font-semibold'>{description}</p>
-      <div className='w-44 h-1 bg-sky-600 mt-2 mb-4'></div>
+      <div className='w-44 h-1 bg-green-800 mt-2 mb-4'></div>
       <MarkdownViewr content={content} />
     </section>
   );
