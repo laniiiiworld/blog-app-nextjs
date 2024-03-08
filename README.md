@@ -6,9 +6,11 @@
 ## 기능
 
 - Next.js 13 버전을 이용하여 app 폴더 하위에서 파일 시스템 기반 라우터를 구성
+- Firebase의 Realtime Database 이용하여 Posts 제공
 - Home에서 Posts를 최신순/오래된순/이름순 정렬하여 제공
 - Posts 메뉴에서 Tag별 게시물 제공
 - 가독성을 높이기 위해 Markdown Viewer를 이용하여 상세 게시글 제공
+- 상세 게시글에서 IntersectionObserver을 이용하여 TOC(Table of contents) 제공
 - 상세 게시글에서 이전/다음 게시글로 이동 구현
 - Contact 메뉴에서 이메일 전송 기능 구현
 - 페이지 별로 적절한 metadata를 제공하여 SEO 최적화
@@ -34,6 +36,10 @@
 - react-icons (v4.12.0)
 - nodemailer (v6.9.7)
 - yup(v1.3.2)
+
+### 클라우드 서비스
+
+- Firebase (v10.8.1)
 
 ## 개선사항
 
