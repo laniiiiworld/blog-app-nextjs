@@ -6,7 +6,7 @@
 ## 기능
 
 - Next.js 13 버전을 이용하여 app 폴더 하위에서 파일 시스템 기반 라우터를 구성
-- Firebase의 Realtime Database 이용하여 Posts 제공
+- Firebase의 Firestore Database 이용하여 Posts 제공 및 댓글 구현
 - Home에서 Posts를 최신순/오래된순/이름순 정렬하여 제공
 - Posts 메뉴에서 Tag별 게시물 제공
 - 가독성을 높이기 위해 Markdown Viewer를 이용하여 상세 게시글 제공
@@ -44,5 +44,11 @@
 ## 개선사항
 
 - loading
-- 게시글 카테고리 1개 → 여러개 작성 가능하도록 개선
-- 댓글
+- error page
+- TOC를 보여줄 때, dom요소가 아닌 markdown파일에서 정규식으로 가져온 데이터를 표현하도록 변경
+- 게시글 tag 클릭시 해당 tag 관련 게시글을 조회
+- 게시글 tag 1개 → 여러개 작성 가능하도록 개선
+- 댓글 글자 수 제한
+- 댓글 order by 문자열 사전순 정렬로 인해 등록일 asc가 정상적으로 작동하지 않음
+- 답글 기능
+- 공유, top 이동 버튼 추가

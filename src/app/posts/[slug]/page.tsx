@@ -1,4 +1,5 @@
 import AdjacentPostCard from '@/components/AdjacentPostCard';
+import Comments from '@/components/Comments';
 import PostContent from '@/components/PostContent';
 import TableOfContents from '@/components/TableOfContents';
 import { getFeaturedPosts, getPostData } from '@/service/posts';
@@ -24,10 +25,11 @@ export default async function PostPage({ params: { slug } }: Props) {
     <article className='relative flex mt-10'>
       <div className='w-full lg:basis-0 lg:grow-[4] lg:w-4/5'>
         <PostContent post={post} />
-        <section className='overflow-hidden flex flex-col md:flex-row'>
+        <section className='overflow-hidden flex flex-col px-4 md:flex-row'>
           {prevPost && <AdjacentPostCard type='prev' post={prevPost} />}
           {nextPost && <AdjacentPostCard type='next' post={nextPost} />}
         </section>
+        <Comments postId={post.id} />
       </div>
       <TableOfContents />
     </article>

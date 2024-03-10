@@ -1,7 +1,8 @@
 import { Post } from '@/service/posts';
+import { Comment } from '@/components/Comments';
 import { GoogleAuthProvider, User, getAuth, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { collection, getDocs, getFirestore, orderBy, query } from 'firebase/firestore';
+import { collection, doc, getDocs, getFirestore, orderBy, query, setDoc } from 'firebase/firestore';
 import { Dispatch, SetStateAction } from 'react';
 
 const firebaseConfig = {
@@ -47,5 +48,25 @@ export function logout() {
   } catch (error: any) {
     const { code, message } = error;
     console.error(code, message);
+  }
+}
+
+export async function getPostComments(postId: string): Promise<[] | Comment[]> {
+  try {
+    const commentsRef = collection(database, 'posts', postId, 'comments');
+    const commentsQuery = query(commentsRef, orderBy('createdAt', 'asc'));
+    const datas = await getDocs(commentsQuery);
+    return datas.docs.map((doc) => doc.data() as Comment);
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}
+
+export async function addPostComment(postId: string, comment: Comment) {
+  try {
+    return await setDoc(doc(database, 'posts', postId, 'comments', comment.id), comment);
+  } catch (error) {
+    console.log(error);
   }
 }

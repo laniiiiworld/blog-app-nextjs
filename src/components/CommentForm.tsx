@@ -1,15 +1,18 @@
 'use client';
 
-import { useAuthContext } from '@/context/AuthContext';
-import { Post } from '@/service/posts';
-import Image from 'next/image';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { useAuthContext } from '@/context/AuthContext';
+import useComments from '@/hooks/useComments';
+import Image from 'next/image';
+import { v4 as uuidv4 } from 'uuid';
+import { Comment } from './Comments';
 
 type Props = {
-  post: Post;
+  postId: string;
 };
 
-export default function CommentForm({ post }: Props) {
+export default function CommentForm({ postId }: Props) {
+  const { addComment } = useComments(postId);
   const { user, login, logout } = useAuthContext();
   const [content, setContent] = useState('');
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -27,9 +30,25 @@ export default function CommentForm({ post }: Props) {
       login();
       return;
     }
-    if (!post?.id) return;
+    if (!postId) return;
 
-    console.log(content);
+    const comment: Comment = {
+      postId,
+      id: uuidv4(),
+      content,
+      createdAt: new Date().toLocaleDateString('ko', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+      user: {
+        uid: user.uid,
+        photoURL: user.photoURL || '',
+        email: user.email || '',
+        displayName: user.displayName || '',
+      },
+    };
+    addComment.mutate({ postId, comment });
     setContent('');
   };
 
