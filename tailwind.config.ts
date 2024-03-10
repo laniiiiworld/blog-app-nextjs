@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         border: { light: colors.zinc[200] },
         light: colors.zinc[500],
-        hover: '#27abe9',
+        hover: colors.green[800],
         point: '#27abe9',
         'green-gray': '#edf1f7',
         'green-light': '#c2d8d2',

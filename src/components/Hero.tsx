@@ -15,7 +15,7 @@ export default function Hero() {
       <div className='ml-0 flex flex-col gap-1 items-center md:items-start md:ml-8'>
         <h2 className='text-lg font-semibold mt-2'>이랑 (Lani)</h2>
         <h3 className='text-lg font-semibold'>FrontEnd Engineer</h3>
-        <p>꿈을 코딩하는 사람, 드림코더 라니</p>
+        <p>가장 강력한 표현은 간단하고 명료하다</p>
       </div>
     </section>
   );

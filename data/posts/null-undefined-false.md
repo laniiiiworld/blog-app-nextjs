@@ -129,12 +129,6 @@ printString(null); // null
 \
 새로운 문법을 접할 때마다 null, undefined, false 중 무엇을 체크해야하는지 고민하는 습관을 들여 생각지 못했던 부분에서 발생하는 오류를 줄일 수 있기를 기대해본다.
 
-**※ 이 글에 문제되는 부분이 보인다면, 번거롭겠지만 메일(laniiiiworld@gmail.com)로 연락 부탁드립니다.**
-
-**불편을 줄이기 위해 댓글 기능도 빠르게 만들어 보겠습니다.**
-
-**감사합니다!**
-
 ## References
 
 - [자바스크립트 최신 문법 (ES6, ES11) \| 모르면 후회 하는 최신 문법과 사용법 정리 🐶](https://youtu.be/36HrZHzPeuY?si=ikjl6sHht9Qj4776)

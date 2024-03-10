@@ -941,6 +941,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.25.0":
+  version: 5.25.0
+  resolution: "@tanstack/query-core@npm:5.25.0"
+  checksum: 2a0f48b45a9ff8add40d559197b7328a2b340976b3f7a6689cc5851fadf4f788f598e7f29769ebccb4477fc269eecb5c63d9bac4a508411577c0a1994236d501
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.25.0":
+  version: 5.25.0
+  resolution: "@tanstack/react-query@npm:5.25.0"
+  dependencies:
+    "@tanstack/query-core": "npm:5.25.0"
+  peerDependencies:
+    react: ^18.0.0
+  checksum: 6b6e8114bebd1e5dfdc72c6a80a2cad2e93cec6583308df07a943eec551ae04eaba57101330a918051ddf826702951905a711c34e4509dad8606f70dd7b08272
+  languageName: node
+  linkType: hard
+
 "@types/debug@npm:^4.0.0":
   version: 4.1.12
   resolution: "@types/debug@npm:4.1.12"
@@ -1481,6 +1499,7 @@ __metadata:
   resolution: "blog-nextjs@workspace:."
   dependencies:
     "@tailwindcss/typography": "npm:^0.5.10"
+    "@tanstack/react-query": "npm:^5.25.0"
     "@types/node": "npm:^20"
     "@types/nodemailer": "npm:^6"
     "@types/react": "npm:^18"
