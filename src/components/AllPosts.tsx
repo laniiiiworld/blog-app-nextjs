@@ -1,11 +1,9 @@
 'use client';
 import PostsGrid from '@/components/PostsGrid';
+import usePosts from '@/hooks/usePosts';
 import { Post } from '@/service/posts';
 import { useEffect, useState } from 'react';
 
-type Props = {
-  posts: Post[];
-};
 type Order = 'ASC' | 'DESC' | 'NAME';
 type OrderItem = { key: Order; name: string };
 const orders: OrderItem[] = [
@@ -14,7 +12,10 @@ const orders: OrderItem[] = [
   { key: 'NAME', name: '이름순' },
 ];
 
-export default function AllPosts({ posts }: Props) {
+export default function AllPosts() {
+  const {
+    postsQuery: { data: posts = [] },
+  } = usePosts();
   const [selected, setSelected] = useState<Order>('DESC');
   let sorted = sortPosts(posts, selected);
 
@@ -43,6 +44,7 @@ export default function AllPosts({ posts }: Props) {
 }
 
 function sortPosts(posts: Post[], selected: Order) {
+  if (posts.length === 0) return [];
   if (selected === 'NAME') return posts.sort((a, b) => sortTitle(a, b));
   return posts.sort((a, b) => {
     const date1 = parseInt(a.date.replaceAll('-', ''));

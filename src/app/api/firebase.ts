@@ -1,8 +1,8 @@
 import { Post } from '@/service/posts';
-import { Comment } from '@/components/Comments';
 import { GoogleAuthProvider, User, getAuth, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { get, getDatabase, ref } from 'firebase/database';
+import { collection, getDocs, getFirestore, orderBy, query } from 'firebase/firestore';
+import { Dispatch, SetStateAction } from 'react';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,16 +14,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
-const database = getDatabase(app);
+const database = getFirestore(app);
 
 export async function getPosts(): Promise<Post[]> {
-  const snapshot = await get(ref(database, 'posts'));
-  if (snapshot.exists()) {
-    return Object.values(snapshot.val());
-  } else {
-    console.log('No data available');
-  }
-  return [];
+  const postsRef = collection(database, 'posts');
+  const postsQuery = query(postsRef, orderBy('date', 'asc'));
+  const datas = await getDocs(postsQuery);
+  return datas.docs.map((doc) => doc.data() as Post);
 }
 
 export function onUserStateChanged(callback: Dispatch<SetStateAction<User | null>>) {
