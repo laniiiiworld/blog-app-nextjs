@@ -1,7 +1,7 @@
 'use client';
 
 import { useCommentsContext } from '@/context/CommentsContext';
-import Comment from './Comment';
+import CommentItem from './CommentItem';
 
 export default function CommentList() {
   const { comments } = useCommentsContext();
@@ -9,7 +9,7 @@ export default function CommentList() {
     <>
       <ul>
         {comments && //
-          comments.map((comment) => <Comment key={comment.id} comment={comment} />)}
+          comments.map((comment) => <CommentItem key={comment.id} comment={comment} />)}
       </ul>
     </>
   );
