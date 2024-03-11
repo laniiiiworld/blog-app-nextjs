@@ -13,19 +13,29 @@ const CommentsContext = createContext({
   postId: '',
   comments: [] as Comment[] | undefined,
   addComment: ({ content, user }: { content: string; user: User }) => {},
+  removeComment: (commentId: string) => {},
 });
 
 export function CommentsContextProvider({ postId, children }: Props) {
   const {
     commentQuery: { data: comments },
     addComment: add,
+    removeComment: remove,
   } = useComments(postId);
 
   const addComment = ({ content, user }: { content: string; user: User }) => {
     add.mutate({ postId, content, user });
   };
 
-  return <CommentsContext.Provider value={{ postId, comments, addComment }}>{children}</CommentsContext.Provider>;
+  const removeComment = (commentId: string) => {
+    remove.mutate({ postId, commentId });
+  };
+
+  return (
+    <CommentsContext.Provider value={{ postId, comments, addComment, removeComment }}>
+      {children}
+    </CommentsContext.Provider>
+  );
 }
 
 export function useCommentsContext() {

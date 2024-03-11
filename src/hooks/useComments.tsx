@@ -1,6 +1,6 @@
 'use client';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
-import { getPostComments, addPostComment } from '@/app/api/firebase';
+import { getPostComments, addPostComment, removePostComment } from '@/app/api/firebase';
 import { User, Comment } from '@/components/Comments';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,5 +31,11 @@ export default function useComments(postId: string) {
     },
   });
 
-  return { commentQuery, addComment };
+  const removeComment = useMutation({
+    mutationFn: async ({ postId, commentId }: { postId: string; commentId: string }) =>
+      await removePostComment(postId, commentId),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comments', postId || ''] }),
+  });
+
+  return { commentQuery, addComment, removeComment };
 }

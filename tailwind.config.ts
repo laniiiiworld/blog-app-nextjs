@@ -30,10 +30,21 @@ const config: Config = {
           '50%': { transform: 'translateX(8px)' },
           '100%': { transform: 'translateX(0px)' },
         },
+        'popup-bg': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '0.9' },
+        },
+        popup: {
+          '0%': { opacity: '0', transform: 'translateY(400px) scale(0.75)' },
+          '75%': { opacity: '1', transform: 'translateY(-16px) scale(1)' },
+          '100%': { opacity: '1', transform: 'translateY(0px)' },
+        },
       },
       animation: {
         'bounce-left': 'bounce-left 1s ease 1',
         'bounce-right': 'bounce-right 1s ease 1',
+        'popup-bg': '0.25s ease 0s 1 normal forwards running popup-bg',
+        popup: '0.4s ease-in-out 0s 1 normal forwards running popup',
       },
     },
   },
