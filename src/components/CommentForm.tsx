@@ -2,19 +2,18 @@
 
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAuthContext } from '@/context/AuthContext';
-import useComments from '@/hooks/useComments';
 import Image from 'next/image';
-import { v4 as uuidv4 } from 'uuid';
-import { Comment } from './Comments';
+import { useCommentsContext } from '@/context/CommentsContext';
 
 type Props = {
-  postId: string;
+  commentId: string;
+  text: string;
 };
 
-export default function CommentForm({ postId }: Props) {
-  const { addComment } = useComments(postId);
+export default function CommentForm({ commentId, text }: Props) {
+  const { postId, addComment } = useCommentsContext();
   const { user, login, logout } = useAuthContext();
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(text);
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const {
       target: { name, value },
@@ -32,23 +31,19 @@ export default function CommentForm({ postId }: Props) {
     }
     if (!postId) return;
 
-    const comment: Comment = {
-      postId,
-      id: uuidv4(),
-      content,
-      createdAt: new Date().toLocaleDateString('ko', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      }),
-      user: {
-        uid: user.uid,
-        photoURL: user.photoURL || '',
-        email: user.email || '',
-        displayName: user.displayName || '',
-      },
-    };
-    addComment.mutate({ postId, comment });
+    if (!commentId) {
+      addComment({
+        content,
+        user: {
+          uid: user.uid,
+          photoURL: user.photoURL || '',
+          email: user.email || '',
+          displayName: user.displayName || '',
+        },
+      });
+    } else {
+      // update
+    }
     setContent('');
   };
 
@@ -78,14 +73,14 @@ export default function CommentForm({ postId }: Props) {
         />
       </div>
       <div className='text-right'>
-        {user && (
-          <button
-            onClick={() => logout()}
-            className='bg-green-800 text-white rounded-sm px-4 py-2 mr-4 cursor-pointer hover:brightness-125'
-          >
-            로그아웃
-          </button>
-        )}
+        <button
+          onClick={() => logout()}
+          className={`${
+            !user && 'hidden'
+          } bg-green-800 text-white rounded-sm px-4 py-2 mr-4 cursor-pointer hover:brightness-125`}
+        >
+          로그아웃
+        </button>
         <input
           type='submit'
           value={user ? '댓글 작성' : '로그인'}

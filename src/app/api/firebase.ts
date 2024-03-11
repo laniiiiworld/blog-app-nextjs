@@ -2,7 +2,7 @@ import { Post } from '@/service/posts';
 import { Comment } from '@/components/Comments';
 import { GoogleAuthProvider, User, getAuth, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { collection, doc, getDocs, getFirestore, orderBy, query, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, getFirestore, orderBy, query, setDoc } from 'firebase/firestore';
 import { Dispatch, SetStateAction } from 'react';
 
 const firebaseConfig = {
@@ -69,4 +69,8 @@ export async function addPostComment(postId: string, comment: Comment) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function removePostComment(postId: string, commentId: string) {
+  return await deleteDoc(doc(database, 'posts', postId, 'comments', commentId));
 }

@@ -2,6 +2,7 @@ import AdjacentPostCard from '@/components/AdjacentPostCard';
 import Comments from '@/components/Comments';
 import PostContent from '@/components/PostContent';
 import TableOfContents from '@/components/TableOfContents';
+import { PopUpContextProvider } from '@/context/PopUpContext';
 import { getFeaturedPosts, getPostData } from '@/service/posts';
 import { Metadata } from 'next';
 
@@ -22,17 +23,19 @@ export default async function PostPage({ params: { slug } }: Props) {
   const { prevPost, nextPost } = post;
 
   return (
-    <article className='relative flex mt-10'>
-      <div className='w-full lg:basis-0 lg:grow-[4] lg:w-4/5'>
-        <PostContent post={post} />
-        <section className='overflow-hidden flex flex-col px-4 md:flex-row'>
-          {prevPost && <AdjacentPostCard type='prev' post={prevPost} />}
-          {nextPost && <AdjacentPostCard type='next' post={nextPost} />}
-        </section>
-        <Comments postId={post.id} />
-      </div>
-      <TableOfContents />
-    </article>
+    <PopUpContextProvider>
+      <article className='relative flex mt-10'>
+        <div className='w-full lg:basis-0 lg:grow-[4] lg:w-4/5'>
+          <PostContent post={post} />
+          <section className='overflow-hidden flex flex-col px-4 md:flex-row'>
+            {prevPost && <AdjacentPostCard type='prev' post={prevPost} />}
+            {nextPost && <AdjacentPostCard type='next' post={nextPost} />}
+          </section>
+          <Comments postId={post.id} />
+        </div>
+        <TableOfContents />
+      </article>
+    </PopUpContextProvider>
   );
 }
 
