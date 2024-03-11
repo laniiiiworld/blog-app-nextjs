@@ -1,17 +1,10 @@
 'use client';
 
-import useComments from '@/hooks/useComments';
+import { useCommentsContext } from '@/context/CommentsContext';
 import Image from 'next/image';
 
-type Props = {
-  postId: string;
-};
-
-export default function CommentList({ postId }: Props) {
-  const {
-    commentQuery: { data: comments },
-  } = useComments(postId);
-
+export default function CommentList() {
+  const { comments } = useCommentsContext();
   return (
     <ul>
       {comments &&
