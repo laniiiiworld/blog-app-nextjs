@@ -11,7 +11,7 @@ type Props = {
   comment: Comment;
 };
 
-export default function Comment({ comment }: Props) {
+export default function CommentItem({ comment }: Props) {
   const { user } = useAuthContext();
   const { removeComment } = useCommentsContext();
   const { setIsShow, value: deleted, setValue: setDeleted } = usePopUpContext();
