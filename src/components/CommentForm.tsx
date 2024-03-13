@@ -11,9 +11,11 @@ type Props = {
 };
 
 export default function CommentForm({ commentId, text }: Props) {
-  const { postId, addComment } = useCommentsContext();
+  const { postId, edited, setEdited, addComment, updateComment } = useCommentsContext();
   const { user, login, logout } = useAuthContext();
   const [content, setContent] = useState(text);
+  const isCreating = !commentId;
+  const isUpdating = edited && edited === commentId;
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const {
       target: { name, value },
@@ -42,7 +44,9 @@ export default function CommentForm({ commentId, text }: Props) {
         },
       });
     } else {
-      // update
+      console.log('update');
+      updateComment({ content });
+      setEdited('');
     }
     setContent('');
   };
@@ -50,7 +54,7 @@ export default function CommentForm({ commentId, text }: Props) {
   return (
     <form onSubmit={onSubmit}>
       <div className='flex my-4 gap-4'>
-        {user && (
+        {isCreating && user && (
           <div>
             <Image //
               src={user.photoURL || ''}
@@ -62,30 +66,51 @@ export default function CommentForm({ commentId, text }: Props) {
             <div className='font-semibold text-center'>{user.displayName}</div>
           </div>
         )}
-        <textarea
-          name='content' //
-          id='content'
-          placeholder='댓글을 작성하세요'
-          required={user ? true : false}
-          value={content}
-          onChange={onChange}
-          className='resize-none outline-none border border-gray-200 w-full h-28 rounded-sm p-4'
-        />
+        {(isCreating || isUpdating) && (
+          <textarea
+            name='content' //
+            id='content'
+            placeholder='댓글을 작성하세요'
+            required={user ? true : false}
+            value={content}
+            onChange={onChange}
+            className='resize-none outline-none border border-gray-200 w-full h-28 rounded-sm p-4'
+          />
+        )}
       </div>
       <div className='text-right'>
-        <button
-          onClick={() => logout()}
-          className={`${
-            !user && 'hidden'
-          } bg-green-800 text-white rounded-sm px-4 py-2 mr-4 cursor-pointer hover:brightness-125`}
-        >
-          로그아웃
-        </button>
-        <input
-          type='submit'
-          value={user ? '댓글 작성' : '로그인'}
-          className='bg-green-800 text-white rounded-sm px-4 py-2 cursor-pointer hover:brightness-125'
-        />
+        {isCreating && (
+          <>
+            <button
+              onClick={() => logout()}
+              className={`${
+                !user && 'hidden'
+              } bg-green-800 text-white rounded-sm px-4 py-2 mr-4 cursor-pointer hover:brightness-125`}
+            >
+              로그아웃
+            </button>
+            <input
+              type='submit'
+              value={user ? '댓글 작성' : '로그인'}
+              className='bg-green-800 text-white rounded-sm px-4 py-2 cursor-pointer hover:brightness-125'
+            />
+          </>
+        )}
+        {isUpdating && (
+          <>
+            <button
+              onClick={() => setEdited('')}
+              className='bg-white text-green-800 rounded-sm px-4 py-2 mr-4 cursor-pointer hover:bg-gray-100'
+            >
+              취소
+            </button>
+            <input
+              type='submit'
+              value='댓글 수정'
+              className='bg-green-800 text-white rounded-sm px-4 py-2 cursor-pointer hover:brightness-125'
+            />
+          </>
+        )}
       </div>
     </form>
   );
