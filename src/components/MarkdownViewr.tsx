@@ -36,6 +36,8 @@ export default function MarkdownViewr({ content }: Props) {
             </code>
           );
         },
+        h2: ({ children }) => <h2 id={children?.toString().replaceAll(' ', '-')}>{children}</h2>,
+        h3: ({ children }) => <h3 id={children?.toString().replaceAll(' ', '-')}>{children}</h3>,
         img: (image) => (
           <Image //
             className='w-full max-h-60 object-cover'

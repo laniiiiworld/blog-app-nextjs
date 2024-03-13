@@ -2,6 +2,7 @@ import AdjacentPostCard from '@/components/AdjacentPostCard';
 import Comments from '@/components/Comments';
 import PostContent from '@/components/PostContent';
 import TableOfContents from '@/components/TableOfContents';
+import TopButton from '@/components/ui/TopButton';
 import { PopUpContextProvider } from '@/context/PopUpContext';
 import { getFeaturedPosts, getPostData } from '@/service/posts';
 import { Metadata } from 'next';
@@ -33,7 +34,10 @@ export default async function PostPage({ params: { slug } }: Props) {
           </section>
           <Comments postId={post.id} />
         </div>
-        <TableOfContents />
+        <aside className='max-lg:hidden sticky top-44 left-0 p-2 w-1/5 h-full basis-0 shrink-0 grow'>
+          <TableOfContents />
+        </aside>
+        <TopButton />
       </article>
     </PopUpContextProvider>
   );

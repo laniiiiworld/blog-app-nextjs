@@ -130,7 +130,7 @@ Github가 이슈 종료로 인식하는 키워드를 아래와 같이 분류하�
 
 하지만 기능 차이가 없기 때문에 문법이나 맥락에 맞게 사용하면 된다.
 
-### [적절한 commit 단위](https://tech.10000lab.xyz/git/git-commit-discipline.html)
+### 적절한 commit 단위
 
 대규모 프로젝트의 commit 로그를 둘러보며, "**의미있는 최소 단위로 commit하는 것이 좋다**"는 말이 와닿았다. 대부분의 commit의 덩어리가 작았기 때문이다. "Docs: fix typo in README.md"와 같이 정말 오타만 수정된 commit도 있었다.
 

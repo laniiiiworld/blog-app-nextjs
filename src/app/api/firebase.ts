@@ -71,6 +71,14 @@ export async function addPostComment(postId: string, comment: Comment) {
   }
 }
 
+export async function updatePostComment(postId: string, comment: Comment) {
+  try {
+    return await setDoc(doc(database, 'posts', postId, 'comments', comment.id), comment);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function removePostComment(postId: string, commentId: string) {
   return await deleteDoc(doc(database, 'posts', postId, 'comments', commentId));
 }

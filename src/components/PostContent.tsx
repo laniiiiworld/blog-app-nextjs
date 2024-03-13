@@ -1,7 +1,6 @@
 import PostPageImage from '@/components/PostPageImage';
 import MarkdownViewr from '@/components/MarkdownViewr';
 import { PostData } from '@/service/posts';
-import { FaRegCalendar } from 'react-icons/fa6';
 
 type Props = {
   post: PostData;

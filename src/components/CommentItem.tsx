@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { usePopUpContext } from '@/context/PopUpContext';
 import { Comment } from './Comments';
 import PopUp from './PopUp';
+import CommentForm from './CommentForm';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useAuthContext } from '@/context/AuthContext';
 
@@ -13,7 +14,7 @@ type Props = {
 
 export default function CommentItem({ comment }: Props) {
   const { user } = useAuthContext();
-  const { removeComment } = useCommentsContext();
+  const { edited, setEdited, removeComment } = useCommentsContext();
   const { setIsShow, value: deleted, setValue: setDeleted } = usePopUpContext();
 
   return (
@@ -43,6 +44,9 @@ export default function CommentItem({ comment }: Props) {
           </div>
           {user?.uid && user?.uid === comment.user.uid && (
             <div className='flex gap-2 text-gray-500 text-sm'>
+              <button onClick={() => setEdited(comment.id)} className='hover:underline'>
+                수정
+              </button>
               <button
                 onClick={() => {
                   setDeleted(comment.id);
@@ -55,7 +59,10 @@ export default function CommentItem({ comment }: Props) {
             </div>
           )}
         </div>
-        <p className='w-full min-h-[7rem] mt-6 bg-white whitespace-pre-line'>{comment.content}</p>
+        {(!edited || edited !== comment.id) && (
+          <p className='w-full min-h-[7rem] mt-6 bg-white whitespace-pre-line'>{comment.content}</p>
+        )}
+        {edited && <CommentForm commentId={comment.id} text={comment.content} />}
       </li>
     </>
   );
