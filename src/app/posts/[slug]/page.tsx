@@ -35,7 +35,7 @@ export default async function PostPage({ params: { slug } }: Props) {
           <Comments postId={post.id} />
         </div>
         <aside className='max-lg:hidden sticky top-44 left-0 p-2 w-1/5 h-full basis-0 shrink-0 grow'>
-          <TableOfContents />
+          <TableOfContents content={post.content} />
         </aside>
         <TopButton />
       </article>

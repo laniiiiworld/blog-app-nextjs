@@ -6,8 +6,11 @@ type Headings = {
   title: string;
   size: number;
 };
+type Props = {
+  content: string;
+};
 
-export default function TableOfContents() {
+export default function TableOfContents({ content }: Props) {
   const [headings, setHeadings] = useState<Headings[]>([]);
   const [current, setCurrent] = useState<string>('');
   const handleClick = (event: MouseEvent, id: string) => {
@@ -19,16 +22,20 @@ export default function TableOfContents() {
   };
 
   useEffect(() => {
-    const $nodes = document
-      .querySelector('article section')
-      ?.querySelectorAll('h2, h3') as NodeListOf<HTMLHeadingElement>;
-
     const observers: IntersectionObserver[] = [];
+    const headingRegex = /^(#{1,3})\s+(.*)/gm;
+    while (true) {
+      const match = headingRegex.exec(content);
 
-    for (const $node of $nodes) {
-      const title = $node.textContent as string;
+      if (!match) break;
+
+      const [, order, title] = match;
       const id = title.replaceAll(' ', '-');
-      const size = parseInt($node.nodeName[1]) - 1;
+      const size = order.length - 1;
+      const $node = document.querySelector(`[id="${id}"]`) as HTMLHeadingElement;
+
+      if (!$node) continue;
+
       setHeadings((prev) => {
         if (prev.some((v) => v.id === id)) return prev;
         return [...prev, { id, title, size }];
