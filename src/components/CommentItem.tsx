@@ -7,6 +7,7 @@ import PopUp from './PopUp';
 import CommentForm from './CommentForm';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useAuthContext } from '@/context/AuthContext';
+import { formatAgo } from '../util/date';
 
 type Props = {
   comment: Comment;
@@ -39,7 +40,7 @@ export default function CommentItem({ comment }: Props) {
             />
             <div className='pl-4'>
               <div className='font-semibold'>{comment.user.displayName}</div>
-              <div className='text-light text-sm'>{comment.createdAt}</div>
+              <div className='text-light text-sm'>{formatAgo(comment.createdAt)}</div>
             </div>
           </div>
           {user?.uid && user?.uid === comment.user.uid && (
