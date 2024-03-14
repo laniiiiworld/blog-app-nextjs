@@ -1,4 +1,4 @@
-markdown 기반의 블로그를 만들며 markdown을 예쁘게 보여주기 위해 react-markdown을 사용했다. react-markdown은 CommonMark 문법을 따르지만, XSS공격으로부터 안전하기 위하여 일반적으로 HTML을 무시하기 때문에 커스텀이 필요하다.\
+markdown 기반의 블로그를 만들며 markdown을 예쁘게 보여주기 위해 react-markdown을 사용했다. react-markdown은 CommonMark 문법을 따르지만, XSS공격으로부터 안전하기 위하여 일반적으로 HTML을 무시하기 때문에 커스터마이징이 필요하다.\
 react-markdown을 설치할 때는 취소선, 테이블 등도 올바르게 렌더링할 수 있도록 remark-gfm을 같이 설치하는 것이 좋다.
 
 ```bash
@@ -7,8 +7,8 @@ $ yarn add react-markdown remark-gfm
 
 ## 방법
 
-커스텀 하는 방법은 아래 코드와 같이 components 속성에 알맞는 {key: value} 값을 넣어주면 된다.
-여러 항목을 커스텀 한다면, {key1: value1, key2: value2, ...}와 같이 작성할 수 있다.
+커스터마이징 하는 방법은 아래 코드와 같이 components 속성에 알맞는 {key: value} 값을 넣어주면 된다.
+여러 항목을 커스터마이징 한다면, {key1: value1, key2: value2, ...}와 같이 작성할 수 있다.
 
 ```tsx
 import remarkGfm from 'remark-gfm';
@@ -49,7 +49,7 @@ import remarkGfm from 'remark-gfm';
 #### 일반적인 줄바꿈
 
 일반적으로 마크다운에서 줄바꿈을 원한다면 "br태그"를 사용할 수 있다. 하지만 react-markdown에서 "br태그"는 text로 출력된다.\
-줄바꿈을 원한다면 2번째 줄처럼 **"역 슬래시(\\)"를 문장 끝에** 붙여주면 된다.
+줄바꿈을 원한다면 2번째 줄처럼 **"역 슬래시(\\)"를 문장 끝**에 붙여주면 된다.
 
 ```text
 1. 나비야 나비야 이리 날아 오너라<br />
@@ -63,14 +63,14 @@ import remarkGfm from 'remark-gfm';
 
 #### 테이블 안에서의 줄바꿈
 
-테이블 안에서 줄바꿈을 원할 경우에는 커스텀이 필요하다. 아래 테이블이 있다고 가정하자.
+테이블 안에서 줄바꿈을 원할 경우에는 커스터마이징이 필요하다. 아래 테이블이 있다고 가정하자.
 
 | 가  | 나  |
 | :-: | :-: |
 |  A  | BC  |
 |  D  | EF  |
 
-이 경우 "나" 컬럼의 "EF"를 "E"와 "F"로 하나의 셀 안에서 줄바꿈하고 싶다면, td를 커스텀하는 코드를 추가할 수 있다.\
+이 경우 "나" 컬럼의 "EF"를 "E"와 "F"로 하나의 셀 안에서 줄바꿈하고 싶다면, td를 커스터마이징하는 코드를 추가할 수 있다.\
 주의할 점은 "...rest"를 명시해줘야 마크다운에서 설정한 정렬이 정상 작동한다.
 
 ```tsx
