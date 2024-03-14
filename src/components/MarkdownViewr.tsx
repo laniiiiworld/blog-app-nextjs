@@ -40,11 +40,11 @@ export default function MarkdownViewr({ content }: Props) {
         h3: ({ children }) => <h3 id={children?.toString().replaceAll(' ', '-')}>{children}</h3>,
         img: (image) => (
           <Image //
-            className='w-full max-h-60 object-cover'
+            className='w-full object-cover m-4'
             src={image.src || ''}
             alt={image.alt || ''}
-            width={500}
-            height={350}
+            width={parseInt(image.width as string)|| 500}
+            height={parseInt(image.height as string) || 350}
           />
         ),
         a: ({ href, children }) => (
