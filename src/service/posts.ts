@@ -1,6 +1,5 @@
 import path from 'path';
 import { promises } from 'fs';
-import { SELECT_ALL } from '@/components/FilterablePosts';
 import { cache } from 'react';
 import { getPosts } from '@/app/api/firebase';
 
@@ -49,14 +48,4 @@ export async function getPostData(fileName: string): Promise<PostData> {
   const nextPost = findIndex < posts.length - 1 ? posts[findIndex + 1] : null;
 
   return { ...post, content, prevPost, nextPost };
-}
-
-export function getTags(posts: Post[]): Map<string, number> {
-  const tags = new Map();
-  tags.set(SELECT_ALL, posts.length);
-  for (const { tag } of posts) {
-    const count = tags.get(tag) || 0;
-    tags.set(tag, count + 1);
-  }
-  return tags;
 }

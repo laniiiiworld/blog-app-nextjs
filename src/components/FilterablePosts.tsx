@@ -2,17 +2,19 @@
 
 import Tags from '@/components/Tags';
 import PostsGrid from '@/components/PostsGrid';
+import usePosts from '@/hooks/usePosts';
 import { Post } from '@/service/posts';
 import { useState } from 'react';
-
-type Props = {
-  posts: Post[];
-  tags: Map<string, number>;
-};
+import Loading from './loading/Loading';
 
 export const SELECT_ALL = 'All Posts';
 
-export default function FilterablePosts({ posts, tags }: Props) {
+export default function FilterablePosts() {
+  const {
+    postsQuery: { isLoading, data: posts = [] },
+    getTags,
+  } = usePosts();
+  const tags = getTags(posts);
   const [selected, setSelected] = useState(SELECT_ALL);
   const filtered =
     selected === SELECT_ALL //
@@ -29,7 +31,8 @@ export default function FilterablePosts({ posts, tags }: Props) {
         />
       </aside>
       <section className='grow md:basis-5/6'>
-        <PostsGrid posts={filtered} />
+        {isLoading && <Loading />}
+        {!isLoading && <PostsGrid posts={filtered} />}
       </section>
     </section>
   );
