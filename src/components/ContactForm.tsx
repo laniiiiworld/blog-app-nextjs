@@ -11,7 +11,9 @@ export type EmailContent = {
   message: string;
 };
 
-const TITLE_STYLE = 'w-16';
+const TITLE_STYLE = 'w-[6rem]';
+const REQUIRED_STYLE =
+  "after:content-[''] after:inline-block after:ml-2 after:w-2 after:h-2 after:rounded-full after:bg-orange-400";
 const CONTENT_STYLE = 'w-full rounded-md mt-1 px-2 py-1 outline-none border border-green-gray';
 const DEFAULT_DATA = {
   from: '',
@@ -50,9 +52,10 @@ export default function ContactForm() {
 
   return (
     <>
+      <h3 className='text-xl font-semibold'>메일 전송</h3>
       <form onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()} className='w-full pb-4'>
         <div className='flex gap-4 items-center'>
-          <label htmlFor='from' className={TITLE_STYLE}>
+          <label htmlFor='from' className={`${TITLE_STYLE} ${REQUIRED_STYLE}`}>
             From
           </label>
           <input
@@ -71,18 +74,10 @@ export default function ContactForm() {
           <label htmlFor='to' className={TITLE_STYLE}>
             To
           </label>
-          <input
-            type='email'
-            id='to'
-            name='to'
-            value='laniiiiworld@gmail.com'
-            disabled
-            onChange={handleChange}
-            className={CONTENT_STYLE}
-          />
+          <input type='email' id='to' name='to' value='laniiiiworld@gmail.com' disabled className={CONTENT_STYLE} />
         </div>
         <div className='flex gap-4 items-center'>
-          <label htmlFor='subject' className={TITLE_STYLE}>
+          <label htmlFor='subject' className={`${TITLE_STYLE} ${REQUIRED_STYLE}`}>
             Subject
           </label>
           <input //
@@ -96,7 +91,7 @@ export default function ContactForm() {
             className={CONTENT_STYLE}
           />
         </div>
-        <label htmlFor='message' className={TITLE_STYLE}>
+        <label htmlFor='message' className={`${TITLE_STYLE} ${REQUIRED_STYLE}`}>
           Message
         </label>
         <textarea
