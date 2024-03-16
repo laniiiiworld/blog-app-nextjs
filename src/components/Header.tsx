@@ -19,9 +19,6 @@ export default function Header({ font }: Props) {
           <Link href='/posts' className='hover:text-hover'>
             Posts
           </Link>
-          <Link href='/contact' className='hover:text-hover'>
-            Contact
-          </Link>
         </nav>
       </div>
     </header>
