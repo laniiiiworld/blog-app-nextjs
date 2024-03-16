@@ -14,10 +14,9 @@ export default function Hero() {
 
   return (
     <>
-      <PopUp //
-        width='w-full max-w-[40rem]'
-        children={<ContactForm />}
-      />
+      <PopUp width='w-full max-w-[40rem]'>
+        <ContactForm />
+      </PopUp>
       <section className='py-12 mt-4 flex flex-col items-center justify-center md:flex-row'>
         <Image //
           src={profile}
