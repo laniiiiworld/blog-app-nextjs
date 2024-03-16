@@ -17,7 +17,7 @@ export default function PopUpButtons({ wantToClose = true, handleConfirm }: Prop
   return (
     <div className='flex gap-4 justify-end mt-4'>
       <button
-        onClick={() => setIsShow(false)}
+        onClick={() => setTimeout(() => setIsShow(false), 0)}
         className='bg-white text-green-800 rounded-sm px-4 py-2 cursor-pointer hover:bg-gray-100'
       >
         취소
