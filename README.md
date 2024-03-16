@@ -12,7 +12,6 @@
 - 가독성을 높이기 위해 Markdown Viewer를 이용하여 상세 게시글 제공
 - 상세 게시글에서 IntersectionObserver을 이용하여 TOC(Table of contents) 제공
 - 상세 게시글에서 이전/다음 게시글로 이동 구현
-- Contact 메뉴에서 이메일 전송 기능 구현
 - 페이지 별로 적절한 metadata를 제공하여 SEO 최적화
 
 ## 사용 기술 및 라이브러리
@@ -43,8 +42,6 @@
 
 ## 개선사항
 
-- loading
-- error page
 - 게시글 tag 클릭시 해당 tag 관련 게시글을 조회
 - 게시글 tag 1개 → 여러개 작성 가능하도록 개선
 - 댓글 글자 수 제한
