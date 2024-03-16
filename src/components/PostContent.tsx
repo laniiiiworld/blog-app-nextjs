@@ -1,6 +1,9 @@
+'use client';
+
 import PostPageImage from '@/components/PostPageImage';
 import MarkdownViewr from '@/components/MarkdownViewr';
 import { PostData } from '@/service/posts';
+import { useEffect } from 'react';
 
 type Props = {
   post: PostData;
@@ -8,6 +11,12 @@ type Props = {
 
 export default function PostContent({ post }: Props) {
   const { title, description, date, content, isImage } = post;
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+    });
+  }, []);
 
   return (
     <section className='p-4'>

@@ -3,6 +3,7 @@ import PostsGrid from '@/components/PostsGrid';
 import usePosts from '@/hooks/usePosts';
 import { Post } from '@/service/posts';
 import { useEffect, useState } from 'react';
+import Loading from './loading/Loading';
 
 type Order = 'ASC' | 'DESC' | 'NAME';
 type OrderItem = { key: Order; name: string };
@@ -14,7 +15,7 @@ const orders: OrderItem[] = [
 
 export default function AllPosts() {
   const {
-    postsQuery: { data: posts = [] },
+    postsQuery: { isLoading, data: posts = [] },
   } = usePosts();
   const [selected, setSelected] = useState<Order>('DESC');
   let sorted = sortPosts(posts, selected);
@@ -38,7 +39,8 @@ export default function AllPosts() {
           </li>
         ))}
       </ul>
-      <PostsGrid posts={sorted} />
+      {isLoading && <Loading />}
+      {!isLoading && <PostsGrid posts={sorted} />}
     </section>
   );
 }

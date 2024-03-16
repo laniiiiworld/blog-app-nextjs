@@ -20,6 +20,11 @@ const config: Config = {
         test: '1000px',
       },
       keyframes: {
+        loading: {
+          '0': { transform: 'translate(0, 0)' },
+          '50%': { transform: 'translate(0, 20px)' },
+          '100%': { transform: 'translate(0, 0)' },
+        },
         'bounce-left': {
           '0%': { transform: 'translateX(0px)' },
           '50%': { transform: 'translateX(-8px)' },
@@ -39,12 +44,20 @@ const config: Config = {
           '75%': { opacity: '1', transform: 'translateY(-16px) scale(1)' },
           '100%': { opacity: '1', transform: 'translateY(0px)' },
         },
+        typing: {
+          from: { 'box-shadow': 'inset -3px 0px 0px #d2d2d2' },
+          to: { 'box-shadow': 'inset -3px 0px 0px transparent' },
+        },
       },
       animation: {
+        'loading-1': 'loading 0.6s 0.1s linear infinite',
+        'loading-2': 'loading 0.6s 0.3s linear infinite',
+        'loading-3': 'loading 0.6s 0.5s linear infinite',
         'bounce-left': 'bounce-left 1s ease 1',
         'bounce-right': 'bounce-right 1s ease 1',
         'popup-bg': '0.25s ease 0s 1 normal forwards running popup-bg',
         popup: '0.4s ease-in-out 0s 1 normal forwards running popup',
+        typing: 'typing .5s alternate infinite',
       },
     },
   },
