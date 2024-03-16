@@ -3,6 +3,7 @@
 import { sendContactEmail } from '@/service/email';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import Banner, { BannerData } from './Banner';
+import PopUpButtons from './popup/PopUpButtons';
 
 export type EmailContent = {
   from: string;
@@ -10,8 +11,10 @@ export type EmailContent = {
   message: string;
 };
 
-const TITLE_STYLE = 'block pt-2 text-white font-semibold';
-const CONTENT_STYLE = 'w-full rounded-sm mt-1 outline-none';
+const TITLE_STYLE = 'w-[6rem]';
+const REQUIRED_STYLE =
+  "after:content-[''] after:inline-block after:ml-2 after:w-2 after:h-2 after:rounded-full after:bg-orange-400";
+const CONTENT_STYLE = 'w-full rounded-md mt-1 px-2 py-1 outline-none border border-green-gray';
 const DEFAULT_DATA = {
   from: '',
   subject: '',
@@ -21,8 +24,15 @@ const DEFAULT_DATA = {
 export default function ContactForm() {
   const [form, setForm] = useState<EmailContent>(DEFAULT_DATA);
   const [banner, setBanner] = useState<BannerData | null>(null);
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleConfirm = () => {
+    if (banner) return;
+    if (!checkBeforeSubmit(form)) {
+      setBanner({ message: '유효하지 않은 포맷입니다.', state: 'error' });
+      setTimeout(() => setBanner(null), 3000);
+      return;
+    }
+    setBanner({ message: '전송중...', state: '' });
+
     sendContactEmail(form)
       .then((data) => {
         setForm(DEFAULT_DATA);
@@ -41,35 +51,47 @@ export default function ContactForm() {
   };
 
   return (
-    <section className='w-full max-w-md'>
-      {banner && <Banner banner={banner} />}
-      <form onSubmit={handleSubmit} className='w-full bg-gray-700 rounded-lg px-4 pb-4 my-2'>
-        <label htmlFor='from' className={TITLE_STYLE}>
-          Your Email
-        </label>
-        <input
-          type='email'
-          id='from'
-          name='from'
-          required
-          autoFocus
-          value={form.from}
-          onChange={handleChange}
-          className={CONTENT_STYLE}
-        />
-        <label htmlFor='subject' className={TITLE_STYLE}>
-          Subject
-        </label>
-        <input //
-          type='text'
-          id='subject'
-          name='subject'
-          required
-          value={form.subject}
-          onChange={handleChange}
-          className={CONTENT_STYLE}
-        />
-        <label htmlFor='message' className={TITLE_STYLE}>
+    <>
+      <h3 className='text-xl font-semibold'>메일 전송</h3>
+      <form onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()} className='w-full pb-4'>
+        <div className='flex gap-4 items-center'>
+          <label htmlFor='from' className={`${TITLE_STYLE} ${REQUIRED_STYLE}`}>
+            From
+          </label>
+          <input
+            type='email'
+            id='from'
+            name='from'
+            required
+            autoFocus
+            placeholder='이메일을 입력하세요'
+            value={form.from}
+            onChange={handleChange}
+            className={`${CONTENT_STYLE}`}
+          />
+        </div>
+        <div className='flex gap-4 items-center'>
+          <label htmlFor='to' className={TITLE_STYLE}>
+            To
+          </label>
+          <input type='email' id='to' name='to' value='laniiiiworld@gmail.com' disabled className={CONTENT_STYLE} />
+        </div>
+        <div className='flex gap-4 items-center'>
+          <label htmlFor='subject' className={`${TITLE_STYLE} ${REQUIRED_STYLE}`}>
+            Subject
+          </label>
+          <input //
+            type='text'
+            id='subject'
+            name='subject'
+            required
+            placeholder='제목을 입력하세요'
+            value={form.subject}
+            onChange={handleChange}
+            className={CONTENT_STYLE}
+          />
+        </div>
+        <label htmlFor='message' className={`${TITLE_STYLE} ${REQUIRED_STYLE}`}>
           Message
         </label>
         <textarea
@@ -77,12 +99,25 @@ export default function ContactForm() {
           id='message'
           name='message'
           required
+          placeholder='메세지를 입력하세요'
           value={form.message}
           onChange={handleChange}
           className={CONTENT_STYLE}
         ></textarea>
-        <button className='bg-yellow-400 text-black w-full rounded-sm py-1 mt-1 hover:bg-yellow-500'>Submit</button>
+        {banner && (
+          <div className='fixed mt-4 z-40 w-[calc(100%_-_2rem)] -translate-x-2 sm:w-8/12 sm:translate-x-0'>
+            <Banner banner={banner} />
+          </div>
+        )}
+        <PopUpButtons wantToClose={false} handleConfirm={handleConfirm} />
       </form>
-    </section>
+    </>
   );
+}
+
+function checkBeforeSubmit({ from, subject, message }: EmailContent) {
+  if (from.trim() === '' || !/\S+@\S+\.\S+/.test(from)) return false;
+  if (subject.trim() === '') return false;
+  if (message.trim() === '') return false;
+  return true;
 }

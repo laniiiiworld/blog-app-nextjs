@@ -1,18 +1,5 @@
-import path from 'path';
-import { promises as fs } from 'fs';
 import { EmailContent } from '@/components/ContactForm';
 import { createTransport } from 'nodemailer';
-
-export type ContactInfo = {
-  email: string;
-  githubUrl: string;
-};
-
-export async function getContactInfo(): Promise<ContactInfo> {
-  const filePath = path.join(process.cwd(), 'data', 'contact.json');
-  const data = await fs.readFile(filePath, 'utf-8');
-  return JSON.parse(data);
-}
 
 const transporter = createTransport({
   host: 'smtp.gmail.com',
