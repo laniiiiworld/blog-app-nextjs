@@ -5,6 +5,7 @@ import { Nanum_Gothic, Oswald } from 'next/font/google';
 import './globals.css';
 import { AuthContextProvider } from '@/context/AuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { PopUpContextProvider } from '@/context/PopUpContext';
 
 const oswald = Oswald({ subsets: ['latin'] });
 const gothic = Nanum_Gothic({ weight: ['400', '700'], subsets: ['latin'] });
@@ -16,8 +17,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${gothic.className} w-full h-screen leading-normal font-normal`}>
         <AuthContextProvider>
           <QueryClientProvider client={queryClient}>
-            <Header font={oswald} />
-            <main className='max-w-screen-xl mx-auto grow p-4 pt-12 pb-24'>{children}</main>
+            <PopUpContextProvider>
+              <Header font={oswald} />
+              <main className='max-w-screen-xl mx-auto grow p-4 pt-12 pb-24'>{children}</main>
+            </PopUpContextProvider>
           </QueryClientProvider>
         </AuthContextProvider>
       </body>

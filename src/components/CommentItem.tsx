@@ -3,11 +3,11 @@
 import Image from 'next/image';
 import { usePopUpContext } from '@/context/PopUpContext';
 import { Comment } from './Comments';
-import PopUp from './PopUp';
 import CommentForm from './CommentForm';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useAuthContext } from '@/context/AuthContext';
 import { formatAgo } from '../util/date';
+import PopUp from './popup/PopUp';
 
 type Props = {
   comment: Comment;
@@ -21,13 +21,19 @@ export default function CommentItem({ comment }: Props) {
   return (
     <>
       <PopUp
-        title='댓글 삭제'
-        message='댓글을 정말로 삭제하시겠습니까?'
         handleConfirm={() => {
           removeComment(deleted);
           setDeleted('');
         }}
+        children={
+          <>
+            <h3 className='text-xl font-semibold'>댓글 삭제</h3>
+            <span>댓글을 정말로 삭제하시겠습니까?</span>
+          </>
+        }
+        width={'w-80'}
       />
+
       <li className='border-b border-gray-200 py-6'>
         <div className='flex items-center justify-between'>
           <div className='flex'>
