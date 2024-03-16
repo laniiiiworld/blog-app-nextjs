@@ -25,15 +25,13 @@ export default function CommentItem({ comment }: Props) {
           removeComment(deleted);
           setDeleted('');
         }}
-        children={
-          <>
-            <h3 className='text-xl font-semibold'>댓글 삭제</h3>
-            <span>댓글을 정말로 삭제하시겠습니까?</span>
-          </>
-        }
         width={'w-80'}
-      />
-
+      >
+        <>
+          <h3 className='text-xl font-semibold'>댓글 삭제</h3>
+          <span>댓글을 정말로 삭제하시겠습니까?</span>
+        </>
+      </PopUp>
       <li className='border-b border-gray-200 py-6'>
         <div className='flex items-center justify-between'>
           <div className='flex'>
