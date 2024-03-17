@@ -1,5 +1,3 @@
-# [Project] 기술 블로그를 소개합니다👋🏻
-
 안녕하세요! 이 글에서는 현재 블로그에 구현된 기능 중 일부를 소개하려 합니다. 현재까지의 버전은 [v3.0.0](https://github.com/laniiiiworld/blog-app-nextjs/releases/tag/v3.0.0)입니다.
 
 ## 블로그(v3.0.0)의 특징
@@ -51,11 +49,17 @@
 - 댓글 삭제 시 확인을 받기 위한 팝업을 제공하여 실수로 삭제되는 일을 막았습니다.
 
 ### 댓글 기능 구현
+![댓글 기능 구현](/images/posts/introduce-blog-app/display-comment.png)
+- 여러 줄의 댓글을 입력한 경우에 스크롤이 자동 생성되지 않도록 구현하여 댓글을 보다 편리하게 읽을 수 있도록 하였습니다.
+- 사용자가 입력한 내용을 텍스트로 표시함으로써 크로스 사이트 스크립팅(XSS) 공격으로부터 안전한 환경을 제공했습니다.
 #### 댓글 등록
+![댓글 등록](/images/posts/introduce-blog-app/add-comment.gif)
 - 로그인한 사용자만 댓글을 등록할 수 있습니다.
 #### 댓글 수정
+![댓글 수정](/images/posts/introduce-blog-app/update-comment.gif)
 - 작성한 사용자만이 자신의 댓글을 수정할 수 있습니다.
 #### 댓글 삭제
+![댓글 삭제](/images/posts/introduce-blog-app/delete-comment.gif)
 - 작성한 사용자만이 자신의 댓글을 삭제할 수 있습니다.
 
 ## 구현 예정인 기능들
