@@ -3,9 +3,9 @@
 - Next.js와 TypeScript를 이용하여 Blog App 구현
 - Demo : [Blog App](https://blog-app-lani.vercel.app/)
 
-## 기능
+## 기능([상세](https://blog-app-lani.vercel.app/posts/introduce-blog-app))
 
-- Next.js 13 버전을 이용하여 app 폴더 하위에서 파일 시스템 기반 라우터를 구성
+- Next.js 14 버전을 이용하여 app 폴더 하위에서 파일 시스템 기반 라우터를 구성
 - Firebase의 Firestore Database 이용하여 Posts 제공 및 댓글 구현
 - Home에서 Posts를 최신순/오래된순/이름순 정렬하여 제공
 - Posts 메뉴에서 Tag별 게시물 제공
@@ -28,7 +28,6 @@
 
 ### 라이브러리
 
-- react-multi-carousel (v2.8.4)
 - react-markdown (v9.0.1)
 - remark-gfm (v4.0.0)
 - react-syntax-highlighter (v15.5.0)
@@ -39,10 +38,3 @@
 ### 클라우드 서비스
 
 - Firebase (v10.8.1)
-
-## 개선사항
-
-- 게시글 tag 클릭시 해당 tag 관련 게시글을 조회
-- 게시글 tag 1개 → 여러개 작성 가능하도록 개선
-- 댓글 글자 수 제한
-- 답글 기능
