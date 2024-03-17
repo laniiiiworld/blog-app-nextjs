@@ -67,7 +67,7 @@ export default function CommentItem({ comment }: Props) {
         {(!edited || edited !== comment.id) && (
           <p className='w-full min-h-[7rem] mt-6 bg-white whitespace-pre-line'>{comment.content}</p>
         )}
-        {edited && <CommentForm commentId={comment.id} text={comment.content} />}
+        {edited && edited === comment.id && <CommentForm commentId={comment.id} text={comment.content} />}
       </li>
     </>
   );
