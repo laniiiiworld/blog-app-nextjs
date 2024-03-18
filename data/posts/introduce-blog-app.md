@@ -23,17 +23,19 @@
 
 ### 반응형 디자인으로 구현된 메뉴들
 #### Home 메뉴
+![반응형 Home 페이지](/images/posts/introduce-blog-app/responsive-home.png)
 - 간단한 프로필과 전체 게시글을 보여줍니다.
 - 게시글을 최신순/오래된순/이름순으로 정렬하여 손쉽게 찾을 수 있습니다.
 - 각 게시글은 메인 이미지와 함께 표시됩니다. 이미지가 있는 경우에는 해당 이미지를, 없는 경우에는 검정 배경에 타이틀을 보여줍니다.
 #### Posts 메뉴
+![반응형 Posts 페이지](/images/posts/introduce-blog-app/responsive-posts.png)
 - 다양한 태그에 따라 분류된 게시글 목록을 제공합니다.
 - Posts 메뉴 또한 각 게시글은 메인 이미지와 함께 표시됩니다.
 #### Post 상세 페이지
 ##### [Desktop]
-![Post 상세 페이지-desktop](/images/posts/introduce-blog-app/responsive-post-desktop.gif)
+![반응형 Post 상세 페이지-desktop](/images/posts/introduce-blog-app/responsive-post-desktop.gif)
 ##### [Mobile]
-![Post 상세 페이지-desktop](/images/posts/introduce-blog-app/responsive-post-mobile.gif)
+![반응형 Post 상세 페이지-mobile](/images/posts/introduce-blog-app/responsive-post-mobile.gif)
 - TOC(Table of Contents)를 통해 사용자가 글의 내용을 효과적으로 탐색할 수 있습니다.
 - 페이지 상단으로 즉시 이동할 수 있는 Top 버튼을 제공하여 사용자 편의성을 높였습니다.
 - 이전글/다음글로의 이동 기능을 지원합니다.
