@@ -8,7 +8,7 @@ export type Post = {
   title: string;
   description: string;
   date: string;
-  tag: string;
+  tags: string[];
   path: string;
   featured: boolean;
   isImage: boolean;

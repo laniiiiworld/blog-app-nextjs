@@ -8,20 +8,22 @@ type Props = {
 };
 
 export default function PostCard({ post }: Props) {
-  const { title, date, tag, path, repliesCount } = post;
+  const { title, date, tags, path, repliesCount } = post;
   return (
     <Link href={`/posts/${path}`}>
       <article className='rounded-md cursor-pointer p-4 border-2 border-transparent hover:border-hover hover:-translate-y-2 transition-transform duration-300 select-none'>
         <PostCardImage post={post} width={400} height={300} />
-        <div className='h-32 flex flex-col items-start p-2 mb-3'>
+        <div className='h-32 flex flex-col items-start p-2 pb-0 mb-4'>
           <div className='flex items-center w-full text-light text-sm'>
             <span className='flex items-center'>
               <FaRegCommentAlt className='mr-1' /> {repliesCount}
             </span>
             <time className='w-full text-right'>{date}</time>
           </div>
-          <span className='text-xs bg-blue-200 rounded-md px-2 py-1'>{tag}</span>
-          <h3 className='text-xl leading-relaxed font-semibold w-full pt-2 pb-4'>{title}</h3>
+          <h3 className='text-xl leading-relaxed font-semibold w-full py-2'>{title}</h3>
+          <ul className='flex gap-2 flex-wrap'>
+            {tags.length && tags.map((tag) => <span className='text-xs bg-blue-200 rounded-md px-2 py-1'>{tag}</span>)}
+          </ul>
         </div>
       </article>
     </Link>

@@ -19,7 +19,7 @@ export default function FilterablePosts() {
   const filtered =
     selected === SELECT_ALL //
       ? posts
-      : posts.filter((post) => post.tag === selected);
+      : posts.filter((post) => post.tags.includes(selected));
 
   return (
     <section className='flex mt-4 md:mt-12 flex-col md:flex-row'>
