@@ -8,10 +8,11 @@ export type Post = {
   title: string;
   description: string;
   date: string;
-  tag: string;
+  tags: string[];
   path: string;
   featured: boolean;
   isImage: boolean;
+  repliesCount: number;
 };
 
 export type PostData = Post & {

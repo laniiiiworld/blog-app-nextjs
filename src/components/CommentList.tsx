@@ -2,9 +2,13 @@
 
 import { useCommentsContext } from '@/context/CommentsContext';
 import CommentItem from './CommentItem';
+import Loading from './loading/Loading';
 
 export default function CommentList() {
-  const { comments } = useCommentsContext();
+  const { isLoading, comments } = useCommentsContext();
+
+  if (isLoading) return <Loading />;
+
   return (
     <>
       <ul>

@@ -8,16 +8,19 @@ export default function usePosts() {
   const postsQuery = useQuery<Post[], Error>({
     queryKey: ['posts'],
     queryFn: getPosts,
+    staleTime: 1000 * 60,
   });
 
   const getTags = (posts: Post[]): Map<string, number> => {
-    const tags = new Map();
-    tags.set(SELECT_ALL, posts.length);
-    for (const { tag } of posts) {
-      const count = tags.get(tag) || 0;
-      tags.set(tag, count + 1);
+    const result = new Map();
+    result.set(SELECT_ALL, posts.length);
+    for (const { tags } of posts) {
+      for (const tag of tags) {
+        const count = result.get(tag) || 0;
+        result.set(tag, count + 1);
+      }
     }
-    return tags;
+    return result;
   };
 
   return { postsQuery, getTags };
