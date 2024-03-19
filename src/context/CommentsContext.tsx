@@ -17,11 +17,12 @@ const CommentsContext = createContext({
   addComment: ({ content, user }: { content: string; user: User }) => {},
   updateComment: ({ content }: { content: string }) => {},
   removeComment: (commentId: string) => {},
+  isLoading: false,
 });
 
 export function CommentsContextProvider({ postId, children }: Props) {
   const {
-    commentQuery: { data: comments },
+    commentQuery: { data: comments, isLoading },
     addComment: add,
     updateComment: update,
     removeComment: remove,
@@ -42,7 +43,9 @@ export function CommentsContextProvider({ postId, children }: Props) {
   };
 
   return (
-    <CommentsContext.Provider value={{ postId, comments, edited, setEdited, addComment, updateComment, removeComment }}>
+    <CommentsContext.Provider
+      value={{ postId, comments, edited, setEdited, addComment, updateComment, removeComment, isLoading }}
+    >
       {children}
     </CommentsContext.Provider>
   );
