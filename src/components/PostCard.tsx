@@ -22,7 +22,12 @@ export default function PostCard({ post }: Props) {
           </div>
           <h3 className='text-xl leading-relaxed font-semibold w-full py-2'>{title}</h3>
           <ul className='flex gap-2 flex-wrap'>
-            {tags.length && tags.map((tag) => <span className='text-xs bg-blue-200 rounded-md px-2 py-1'>{tag}</span>)}
+            {tags.length &&
+              tags.map((tag) => (
+                <li key={`${path} ${tag}`}>
+                  <span className='text-xs bg-blue-200 rounded-md px-2 py-1'>{tag}</span>
+                </li>
+              ))}
           </ul>
         </div>
       </article>
