@@ -17,11 +17,23 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 const database = getFirestore(app);
 
-export async function getPosts(): Promise<Post[]> {
-  const postsRef = collection(database, 'posts');
-  const postsQuery = query(postsRef, orderBy('date', 'asc'));
-  const datas = await getDocs(postsQuery);
-  return datas.docs.map((doc) => doc.data() as Post);
+export async function getPosts(): Promise<Post[] | []> {
+  try {
+    const postsRef = collection(database, 'posts');
+    const postsQuery = query(postsRef, orderBy('date', 'asc'));
+    const datas = await getDocs(postsQuery);
+    return Promise.all(
+      datas.docs.map(async (doc) => {
+        const post = doc.data() as Post;
+        const commentsRef = collection(doc.ref, 'comments');
+        const comments = await getDocs(commentsRef);
+        return { ...post, repliesCount: comments.size };
+      })
+    );
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
 }
 
 export function onUserStateChanged(callback: Dispatch<SetStateAction<User | null>>) {

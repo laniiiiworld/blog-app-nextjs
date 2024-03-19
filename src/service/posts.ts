@@ -12,6 +12,7 @@ export type Post = {
   path: string;
   featured: boolean;
   isImage: boolean;
+  repliesCount: number;
 };
 
 export type PostData = Post & {

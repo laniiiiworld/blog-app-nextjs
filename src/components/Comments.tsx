@@ -25,7 +25,6 @@ export default function Comments({ postId }: Props) {
   return (
     <CommentsContextProvider postId={postId}>
       <section className='mt-8 px-4'>
-        <h4 className='font-bold text-xl'>댓글</h4>
         <CommentForm commentId='' text='' />
         <CommentList />
       </section>

@@ -8,6 +8,7 @@ export default function usePosts() {
   const postsQuery = useQuery<Post[], Error>({
     queryKey: ['posts'],
     queryFn: getPosts,
+    staleTime: 1000 * 60,
   });
 
   const getTags = (posts: Post[]): Map<string, number> => {
