@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: 'FrontEnd 관련 블로그 글',
 };
 
-export default async function PostsPage() {
+export default function PostsPage() {
   return <FilterablePosts />;
 }

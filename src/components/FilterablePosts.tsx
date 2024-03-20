@@ -3,19 +3,19 @@
 import Tags from '@/components/Tags';
 import PostsGrid from '@/components/PostsGrid';
 import usePosts from '@/hooks/usePosts';
-import { Post } from '@/service/posts';
-import { useState } from 'react';
 import Loading from './loading/Loading';
+import { useSearchParams } from 'next/navigation';
 
 export const SELECT_ALL = 'All Posts';
 
 export default function FilterablePosts() {
+  const params = useSearchParams();
+  const selected = params.get('tag') || SELECT_ALL;
   const {
     postsQuery: { isLoading, data: posts = [] },
     getTags,
   } = usePosts();
   const tags = getTags(posts);
-  const [selected, setSelected] = useState(SELECT_ALL);
   const filtered =
     selected === SELECT_ALL //
       ? posts
@@ -27,7 +27,6 @@ export default function FilterablePosts() {
         <Tags //
           tags={tags}
           selected={selected}
-          onClick={setSelected}
         />
       </aside>
       <section className='grow md:basis-5/6'>
