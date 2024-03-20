@@ -9,11 +9,12 @@ type Props = {
 
 export default function PostCard({ post }: Props) {
   const { title, date, tags, path, repliesCount } = post;
+
   return (
-    <Link href={`/posts/${path}`}>
+    <Link href={`/posts/${path}`} legacyBehavior>
       <article className='rounded-md cursor-pointer p-4 border-2 border-transparent hover:border-hover hover:-translate-y-2 transition-transform duration-300 select-none'>
         <PostCardImage post={post} width={400} height={300} />
-        <div className='h-32 flex flex-col items-start p-2 pb-0 mb-4'>
+        <div className='h-36 flex flex-col items-start p-2 pb-0 mb-4'>
           <div className='flex items-center w-full text-light text-sm'>
             <span className='flex items-center'>
               <FaRegCommentAlt className='mr-1' /> {repliesCount}
@@ -25,7 +26,15 @@ export default function PostCard({ post }: Props) {
             {tags.length &&
               tags.map((tag) => (
                 <li key={`${path} ${tag}`}>
-                  <span className='text-xs bg-blue-200 rounded-md px-2 py-1'>{tag}</span>
+                  <Link
+                    href={{
+                      pathname: '/posts',
+                      query: { tag },
+                    }}
+                    className='text-xs bg-blue-200 rounded-md px-2 py-1 hover:brightness-105'
+                  >
+                    {tag}
+                  </Link>
                 </li>
               ))}
           </ul>
