@@ -4,19 +4,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePopUpContext } from '@/context/PopUpContext';
 import profile from '/public/images/profile.jpg';
-import PopUp from './popup/PopUp';
-import ContactForm from './ContactForm';
 import { FaGithub } from 'react-icons/fa';
 import { MdOutlineEmail } from 'react-icons/md';
+import EmailPopup from './popup/EmailPopup';
 
 export default function Hero() {
-  const { setIsShow } = usePopUpContext();
+  const { setPopupType } = usePopUpContext();
 
   return (
     <>
-      <PopUp width='w-full max-w-[40rem]'>
-        <ContactForm />
-      </PopUp>
+      <EmailPopup />
       <section className='py-12 mt-4 flex flex-col items-center justify-center md:flex-row'>
         <Image //
           src={profile}
@@ -34,7 +31,7 @@ export default function Hero() {
             <Link target='_blank' href='https://github.com/laniiiiworld' className='cursor-pointer'>
               <FaGithub className='hover:text-yellow-400' />
             </Link>
-            <button onClick={() => setIsShow(true)}>
+            <button onClick={() => setPopupType('email')}>
               <MdOutlineEmail className='hover:text-yellow-400' />
             </button>
           </div>

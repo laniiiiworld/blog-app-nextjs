@@ -2,30 +2,23 @@
 
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
+export type PopupType = '' | 'confirm' | 'email' | 'login';
 type Props = {
   children: ReactNode;
 };
 
 const PopUpContext = createContext({
-  isShow: false,
-  setIsShow: (value: boolean) => {},
+  popupType: '' as PopupType,
+  setPopupType: (value: PopupType) => {},
   value: '',
   setValue: (value: string) => {},
 });
 
 export function PopUpContextProvider({ children }: Props) {
-  const [isShow, setIsShow] = useState(false);
+  const [popupType, setPopupType] = useState<PopupType>('');
   const [value, setValue] = useState('');
 
-  useEffect(() => {
-    if (isShow) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'visible';
-    }
-  }, [isShow]);
-
-  return <PopUpContext.Provider value={{ isShow, setIsShow, value, setValue }}> {children} </PopUpContext.Provider>;
+  return <PopUpContext.Provider value={{ popupType, setPopupType, value, setValue }}>{children}</PopUpContext.Provider>;
 }
 
 export function usePopUpContext() {
