@@ -4,6 +4,8 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAuthContext } from '@/context/AuthContext';
 import Image from 'next/image';
 import { useCommentsContext } from '@/context/CommentsContext';
+import { usePopUpContext } from '@/context/PopUpContext';
+import LoginPopup from './popup/LoginPopup';
 
 type Props = {
   commentId: string;
@@ -12,8 +14,10 @@ type Props = {
 
 export default function CommentForm({ commentId, text }: Props) {
   const { postId, comments, edited, setEdited, addComment, updateComment } = useCommentsContext();
-  const { user, login, logout } = useAuthContext();
+  const { user, logout } = useAuthContext();
   const [content, setContent] = useState(text);
+  const { setPopupType } = usePopUpContext();
+
   const isCreating = !commentId;
   const isUpdating = edited && edited === commentId;
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -28,7 +32,7 @@ export default function CommentForm({ commentId, text }: Props) {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user?.uid) {
-      login();
+      setPopupType('login');
       return;
     }
     if (!postId) return;
@@ -44,7 +48,6 @@ export default function CommentForm({ commentId, text }: Props) {
         },
       });
     } else {
-      console.log('update');
       updateComment({ content });
       setEdited('');
     }
@@ -53,6 +56,7 @@ export default function CommentForm({ commentId, text }: Props) {
 
   return (
     <>
+      <LoginPopup />
       {isCreating && <h4 className='font-bold text-xl'>{comments?.length || 0}개의 댓글</h4>}
       <form onSubmit={onSubmit}>
         <div className='flex my-4 gap-4'>

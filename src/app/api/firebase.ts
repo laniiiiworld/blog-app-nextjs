@@ -1,6 +1,16 @@
 import { Post } from '@/service/posts';
 import { Comment } from '@/components/Comments';
-import { GoogleAuthProvider, User, getAuth, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { Login } from '@/components/popup/LoginPopup';
+import {
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  FacebookAuthProvider,
+  User,
+  getAuth,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { collection, deleteDoc, doc, getDocs, getFirestore, orderBy, query, setDoc } from 'firebase/firestore';
 import { Dispatch, SetStateAction } from 'react';
@@ -14,7 +24,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
 const database = getFirestore(app);
 
 export async function getPosts(): Promise<Post[] | []> {
@@ -45,13 +57,23 @@ export function onUserStateChanged(callback: Dispatch<SetStateAction<User | null
   }
 }
 
-export function login() {
+export function login(way: Login): boolean {
   try {
-    signInWithPopup(auth, provider);
+    if (way === 'Google') {
+      signInWithPopup(auth, googleProvider);
+      return true;
+    } else if (way === 'Github') {
+      signInWithPopup(auth, githubProvider);
+      return true;
+    } else if (way === 'Facebook') {
+      signInWithPopup(auth, facebookProvider);
+      return true;
+    }
   } catch (error: any) {
     const { code, message } = error;
     console.error(code, message);
   }
+  return false;
 }
 
 export function logout() {
