@@ -8,16 +8,16 @@ type Props = {
 };
 
 export default function PopUpButtons({ wantToClose = true, handleConfirm }: Props) {
-  const { setIsShow } = usePopUpContext();
+  const { setPopupType } = usePopUpContext();
   const handleClick = () => {
     handleConfirm();
-    wantToClose && setIsShow(false);
+    wantToClose && setPopupType('');
   };
 
   return (
     <div className='flex gap-4 justify-end mt-4'>
       <button
-        onClick={() => setTimeout(() => setIsShow(false), 0)}
+        onClick={() => setTimeout(() => setPopupType(''), 0)}
         className='bg-white text-green-800 rounded-sm px-4 py-2 cursor-pointer hover:bg-gray-100'
       >
         취소

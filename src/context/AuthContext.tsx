@@ -10,8 +10,8 @@ type Props = {
 
 const AuthContext = createContext({
   user: null as User | null,
-  login: () => {},
-  logout: () => {},
+  login,
+  logout,
 });
 
 export function AuthContextProvider({ children }: Props) {

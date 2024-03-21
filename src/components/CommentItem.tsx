@@ -7,7 +7,7 @@ import CommentForm from './CommentForm';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useAuthContext } from '@/context/AuthContext';
 import { formatAgo } from '../util/date';
-import PopUp from './popup/PopUp';
+import CommentDeletePopup from './popup/CommentDeletePopup';
 
 type Props = {
   comment: Comment;
@@ -15,23 +15,12 @@ type Props = {
 
 export default function CommentItem({ comment }: Props) {
   const { user } = useAuthContext();
-  const { edited, setEdited, removeComment } = useCommentsContext();
-  const { setIsShow, value: deleted, setValue: setDeleted } = usePopUpContext();
+  const { edited, setEdited } = useCommentsContext();
+  const { setPopupType, setValue: setDeleted } = usePopUpContext();
 
   return (
     <>
-      <PopUp
-        handleConfirm={() => {
-          removeComment(deleted);
-          setDeleted('');
-        }}
-        width={'w-80'}
-      >
-        <>
-          <h3 className='text-xl font-semibold'>댓글 삭제</h3>
-          <span>댓글을 정말로 삭제하시겠습니까?</span>
-        </>
-      </PopUp>
+      <CommentDeletePopup />
       <li className='border-b border-gray-200 py-6'>
         <div className='flex items-center justify-between'>
           <div className='flex'>
@@ -55,7 +44,7 @@ export default function CommentItem({ comment }: Props) {
               <button
                 onClick={() => {
                   setDeleted(comment.id);
-                  setIsShow(true);
+                  setPopupType('confirm');
                 }}
                 className='hover:underline'
               >
