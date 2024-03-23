@@ -19,7 +19,7 @@ export default function PostContent({ post }: Props) {
   }, []);
 
   return (
-    <section className='p-4'>
+    <section className='py-4'>
       <h1 className='text-4xl font-bold mb-2 text-center'>{title}</h1>
       <p className='text-center mt-6 mb-12'>{date}</p>
       {isImage && <PostPageImage post={post} width={760} height={420} />}

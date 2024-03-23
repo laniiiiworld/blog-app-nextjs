@@ -30,15 +30,15 @@ export default async function PostPage({ params: { slug } }: Props) {
 
     return (
       <article className='relative flex mt-10'>
-        <div className='w-full lg:basis-0 lg:grow-[4] lg:w-4/5'>
+        <div className='w-full lg:basis-0 lg:grow-[4] lg:w-4/5 px-4 lg:px-8'>
           <PostContent post={post} />
-          <section className='overflow-hidden flex flex-col px-4 md:flex-row'>
+          <section className='overflow-hidden flex flex-col md:flex-row'>
             {prevPost && <AdjacentPostCard type='prev' post={prevPost} />}
             {nextPost && <AdjacentPostCard type='next' post={nextPost} />}
           </section>
           <Comments postId={post.id} />
         </div>
-        <aside className='max-lg:hidden sticky top-44 left-0 p-2 w-1/5 h-full basis-0 shrink-0 grow'>
+        <aside className='max-lg:hidden sticky top-20 2xl:top-36 left-0 pl-2 w-1/5 h-full basis-0 shrink-0 grow'>
           <TableOfContents content={post.content} />
         </aside>
         <TopButton />

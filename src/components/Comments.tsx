@@ -24,7 +24,7 @@ export type Comment = {
 export default function Comments({ postId }: Props) {
   return (
     <CommentsContextProvider postId={postId}>
-      <section className='mt-8 px-4'>
+      <section className='mt-8'>
         <CommentForm commentId='' text='' />
         <CommentList />
       </section>
