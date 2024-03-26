@@ -58,12 +58,12 @@ export default function TableOfContents({ content }: Props) {
   }, []);
 
   return (
-    <ul>
+    <ul className='max-h-[520px] w-full overflow-y-auto border-l-2 border-gray-200'>
       {headings.map(({ id, title, size }) => (
         <li
           key={id}
           onClick={(e) => handleClick(e, id)}
-          className={`transition-all border-l-2 border-gray-200 ${size === 1 ? 'pl-3' : 'pl-6'} ${
+          className={`transition-all ${size === 1 ? 'pl-3' : 'pl-6'} ${
             current === title ? 'text-hover font-semibold' : 'text-light hover:text-hover'
           }`}
         >

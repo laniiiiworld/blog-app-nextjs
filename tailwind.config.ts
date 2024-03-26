@@ -25,6 +25,13 @@ const config: Config = {
           '50%': { transform: 'translate(0, 20px)' },
           '100%': { transform: 'translate(0, 0)' },
         },
+        palpitate: {
+          '0%': { transform: 'scale(1)' },
+          '25%': { transform: 'scale(1.3)' },
+          '50%': { transform: 'scale(1)' },
+          '75%': { transform: 'scale(1.2)' },
+          '100%': { transform: 'scale(1)' },
+        },
         'bounce-left': {
           '0%': { transform: 'translateX(0px)' },
           '50%': { transform: 'translateX(-8px)' },
@@ -53,6 +60,7 @@ const config: Config = {
         'loading-1': 'loading 0.6s 0.1s linear infinite',
         'loading-2': 'loading 0.6s 0.3s linear infinite',
         'loading-3': 'loading 0.6s 0.5s linear infinite',
+        palpitate: 'palpitate 0.8s ease 1',
         'bounce-left': 'bounce-left 1s ease 1',
         'bounce-right': 'bounce-right 1s ease 1',
         'popup-bg': '0.25s ease 0s 1 normal forwards running popup-bg',
