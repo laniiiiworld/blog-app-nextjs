@@ -14,7 +14,7 @@ export default function AsideIcons() {
   const { setPopupType } = usePopUpContext();
   const { likes, liked, updateLikes } = useLikesContext();
   const handleLikesClick = (updated: boolean) => {
-    if (!user) {
+    if (!user?.uid) {
       setPopupType('login');
       return;
     }
@@ -31,6 +31,7 @@ export default function AsideIcons() {
             onToggle={handleLikesClick}
             onIcon={<HeartFillIcon />}
             offIcon={<HeartIcon />}
+            ToggleClass='text-2xl p-2 rounded-full'
           />
           <span className='text-light p-1'>{likes?.length}</span>
         </div>

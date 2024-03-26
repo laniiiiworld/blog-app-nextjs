@@ -3,7 +3,7 @@ import { useLikesContext } from '@/context/LikesContext';
 import { useEffect } from 'react';
 import { PiHeartFill } from 'react-icons/pi';
 
-export default function HeartIcon() {
+export default function HeartFillIcon() {
   const { isUpdating, setIsUpdating } = useLikesContext();
 
   useEffect(() => {
