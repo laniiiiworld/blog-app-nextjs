@@ -45,8 +45,9 @@ export default function PostContent({ post }: Props) {
           onIcon={<HeartFillIcon />}
           offIcon={<HeartIcon />}
           ToggleClass='lg:hidden absolute right-0 flex mr-4 px-2 py-1 text-lg rounded-xl'
-          children={<span className='text-light text-sm pl-1'>{likes?.length}</span>}
-        />
+        >
+          <span className='text-light text-sm pl-1'>{likes?.length}</span>
+        </ToggleButton>
       </div>
       {isImage && <PostPageImage post={post} width={760} height={420} />}
       <p className='pt-2 mb-4 text-xl font-semibold'>{description}</p>
