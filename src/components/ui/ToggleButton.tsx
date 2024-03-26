@@ -16,7 +16,7 @@ export default function ToggleButton({ toggled, onToggle, onIcon, offIcon, Toggl
       className={`group ${ToggleClass} border-2 border-gray-200 hover:bg-gray-100 transition-all`}
     >
       {toggled ? onIcon : offIcon}
-      {children}
+      {children && children}
     </button>
   );
 }
