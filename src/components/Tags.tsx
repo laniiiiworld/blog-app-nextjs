@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 type Props = {
   tags: Map<string, number>;
@@ -9,10 +9,10 @@ type Props = {
 };
 
 export default function Tags({ tags, selected }: Props) {
+  const tagRef = useRef<HTMLLIElement>(null);
+
   useEffect(() => {
-    const $tags = document.querySelector('.tags:not(.hidden)')!;
-    const $tag = $tags.querySelector('.selected');
-    $tag && $tag.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    tagRef.current && tagRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, [selected]);
 
   return (
@@ -38,7 +38,7 @@ export default function Tags({ tags, selected }: Props) {
       </ul>
       <ul className='tags md:hidden flex gap-2 overflow-x-auto py-4'>
         {[...tags.keys()].map((tag) => (
-          <li key={tag} className={`${tag === selected && 'selected'}`}>
+          <li key={tag} ref={tag === selected ? tagRef : null}>
             <Link
               href={{
                 pathname: '/posts',
