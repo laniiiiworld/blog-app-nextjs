@@ -1,6 +1,6 @@
 'use client';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
-import { getPostComments, addPostComment, updatePostComment, removePostComment } from '@/app/api/firebase';
+import { getPostComments, addPostComment, updatePostComment, removePostComment } from '@/app/api/posts';
 import { User, Comment } from '@/components/Comments';
 import { v4 as uuidv4 } from 'uuid';
 

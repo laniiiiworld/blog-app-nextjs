@@ -1,6 +1,6 @@
 'use client';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
-import { getPostLikes, plusLikeCount, minusLikeCount } from '@/app/api/firebase';
+import { getPostLikes, plusLikeCount, minusLikeCount } from '@/app/api/posts';
 
 export default function useLikes(postId: string, userId: string) {
   const queryClient = useQueryClient();

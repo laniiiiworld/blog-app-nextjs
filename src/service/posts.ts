@@ -1,7 +1,7 @@
 import path from 'path';
 import { promises } from 'fs';
 import { cache } from 'react';
-import { getPosts } from '@/app/api/firebase';
+import { getPosts } from '@/app/api/posts';
 
 export type Post = {
   id: string;
@@ -24,17 +24,6 @@ export type PostData = Post & {
 export const getAllPosts = cache(async () => {
   return await getPosts();
 });
-
-export async function getFeaturedPosts(): Promise<Post[]> {
-  const posts = await getAllPosts();
-  return posts.filter((post) => post.featured);
-}
-
-// You May Like
-export async function getNoneFeaturedPosts(): Promise<Post[]> {
-  const posts = await getAllPosts();
-  return posts.filter((post) => !post.featured);
-}
 
 export async function getPostData(fileName: string): Promise<PostData> {
   const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);

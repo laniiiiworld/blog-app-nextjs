@@ -1,6 +1,6 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
-import { getPosts } from '@/app/api/firebase';
+import { getPosts } from '@/app/api/posts';
 import { Post } from '@/service/posts';
 import { SELECT_ALL } from '@/components/FilterablePosts';
 

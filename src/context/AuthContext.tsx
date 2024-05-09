@@ -1,6 +1,6 @@
 'use client';
 
-import { login, logout, onUserStateChanged } from '@/app/api/firebase';
+import { login, logout, onUserStateChanged } from '@/app/api/auth';
 import { User } from 'firebase/auth';
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 

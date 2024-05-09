@@ -1,19 +1,7 @@
 import { Post } from '@/service/posts';
 import { Comment } from '@/components/Comments';
-import { Login } from '@/components/popup/LoginPopup';
-import {
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  FacebookAuthProvider,
-  User,
-  getAuth,
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut,
-} from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { collection, deleteDoc, doc, getDocs, getFirestore, orderBy, query, setDoc } from 'firebase/firestore';
-import { Dispatch, SetStateAction } from 'react';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -23,10 +11,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const googleProvider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
 const database = getFirestore(app);
 
 export async function getPosts(): Promise<Post[] | []> {
@@ -46,43 +30,6 @@ export async function getPosts(): Promise<Post[] | []> {
     console.log(error);
   }
   return [];
-}
-
-export function onUserStateChanged(callback: Dispatch<SetStateAction<User | null>>) {
-  try {
-    onAuthStateChanged(auth, async (user) => callback(user));
-  } catch (error: any) {
-    const { code, message } = error;
-    console.error(code, message);
-  }
-}
-
-export function login(way: Login): boolean {
-  try {
-    if (way === 'Google') {
-      signInWithPopup(auth, googleProvider);
-      return true;
-    } else if (way === 'Github') {
-      signInWithPopup(auth, githubProvider);
-      return true;
-    } else if (way === 'Facebook') {
-      signInWithPopup(auth, facebookProvider);
-      return true;
-    }
-  } catch (error: any) {
-    const { code, message } = error;
-    console.error(code, message);
-  }
-  return false;
-}
-
-export function logout() {
-  try {
-    signOut(auth);
-  } catch (error: any) {
-    const { code, message } = error;
-    console.error(code, message);
-  }
 }
 
 export async function getPostComments(postId: string): Promise<[] | Comment[]> {

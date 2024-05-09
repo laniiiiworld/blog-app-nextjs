@@ -5,7 +5,7 @@ import PostContent from '@/components/PostContent';
 import TableOfContents from '@/components/TableOfContents';
 import TopButton from '@/components/ui/TopButton';
 import { LikesContextProvider } from '@/context/LikesContext';
-import { getFeaturedPosts, getPostData } from '@/service/posts';
+import { getPostData } from '@/service/posts';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -52,11 +52,4 @@ export default async function PostPage({ params: { slug } }: Props) {
   } catch (error) {
     notFound();
   }
-}
-
-export async function generateStaticParams() {
-  const posts = await getFeaturedPosts();
-  return posts.map((post) => ({
-    slug: post.path,
-  }));
 }
