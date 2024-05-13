@@ -20,6 +20,7 @@ export default function PostPageImage({ post, width, height }: Props) {
         alt={title}
         width={width}
         height={height}
+        priority={true}
       />
     </>
   );
