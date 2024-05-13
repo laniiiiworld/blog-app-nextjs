@@ -1,8 +1,9 @@
 'use client';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { getPostComments, addPostComment, updatePostComment, removePostComment } from '@/app/api/posts';
-import { User, Comment } from '@/components/Comments';
 import { v4 as uuidv4 } from 'uuid';
+import { Comment } from '@/model/post';
+import { User } from '@/model/user';
 
 export default function useComments(postId: string) {
   const queryClient = useQueryClient();

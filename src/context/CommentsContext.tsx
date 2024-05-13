@@ -1,6 +1,7 @@
 'use client';
 
-import { Comment, User } from '@/components/Comments';
+import { Comment } from '@/model/post';
+import { User } from '@/model/user';
 import useComments from '@/hooks/useComments';
 import { ReactNode, createContext, useContext, useState } from 'react';
 

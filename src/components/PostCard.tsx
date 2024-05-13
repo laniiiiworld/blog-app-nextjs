@@ -1,9 +1,9 @@
-import { Post } from '@/service/posts';
 import Link from 'next/link';
 import PostCardImage from './PostCardImage';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import { PiHeartFill } from 'react-icons/pi';
 import { useLikesContext } from '@/context/LikesContext';
+import { Post } from '@/model/post';
 
 type Props = {
   post: Post;

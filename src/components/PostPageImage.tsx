@@ -1,7 +1,5 @@
-'use client';
-import { useState } from 'react';
+import { Post } from '@/model/post';
 import Image from 'next/image';
-import { Post } from '@/service/posts';
 
 type Props = {
   post: Post;

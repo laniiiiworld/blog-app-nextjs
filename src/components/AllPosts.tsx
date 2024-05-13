@@ -1,8 +1,8 @@
 'use client';
+import { Post } from '@/model/post';
+import { useEffect, useState } from 'react';
 import PostsGrid from '@/components/PostsGrid';
 import usePosts from '@/hooks/usePosts';
-import { Post } from '@/service/posts';
-import { useEffect, useState } from 'react';
 import Loading from './loading/Loading';
 
 type Order = 'ASC' | 'DESC' | 'NAME';

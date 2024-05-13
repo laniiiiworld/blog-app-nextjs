@@ -1,6 +1,6 @@
 'use client';
 
-import { Post } from '@/service/posts';
+import { Post } from '@/model/post';
 import PostCard from './PostCard';
 import { LikesContextProvider } from '@/context/LikesContext';
 

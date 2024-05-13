@@ -1,5 +1,4 @@
-import { Post } from '@/service/posts';
-import { Comment } from '@/components/Comments';
+import { Comment, Post } from '@/model/post';
 import { initializeApp } from 'firebase/app';
 import { collection, deleteDoc, doc, getDocs, getFirestore, orderBy, query, setDoc } from 'firebase/firestore';
 

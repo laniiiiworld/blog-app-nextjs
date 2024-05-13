@@ -2,24 +2,7 @@ import path from 'path';
 import { promises } from 'fs';
 import { cache } from 'react';
 import { getPosts } from '@/app/api/posts';
-
-export type Post = {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  tags: string[];
-  path: string;
-  featured: boolean;
-  isImage: boolean;
-  repliesCount: number;
-};
-
-export type PostData = Post & {
-  content: string;
-  prevPost: Post | null;
-  nextPost: Post | null;
-};
+import { PostData } from '@/model/post';
 
 export const getAllPosts = cache(async () => {
   return await getPosts();

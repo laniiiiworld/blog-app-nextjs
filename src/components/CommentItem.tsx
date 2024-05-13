@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import { Comment } from '@/model/post';
 import { usePopUpContext } from '@/context/PopUpContext';
-import { Comment } from './Comments';
 import CommentForm from './CommentForm';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useAuthContext } from '@/context/AuthContext';

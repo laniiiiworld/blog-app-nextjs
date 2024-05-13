@@ -1,7 +1,7 @@
 'use client';
+import { Post } from '@/model/post';
 import { useQuery } from '@tanstack/react-query';
 import { getPosts } from '@/app/api/posts';
-import { Post } from '@/service/posts';
 import { SELECT_ALL } from '@/components/FilterablePosts';
 
 export default function usePosts() {

@@ -1,8 +1,8 @@
 'use client';
 
+import { PostData } from '@/model/post';
 import PostPageImage from '@/components/PostPageImage';
 import MarkdownViewr from '@/components/MarkdownViewr';
-import { PostData } from '@/service/posts';
 import { useEffect } from 'react';
 import { useAuthContext } from '@/context/AuthContext';
 import { usePopUpContext } from '@/context/PopUpContext';
