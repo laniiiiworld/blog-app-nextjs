@@ -1,8 +1,3 @@
-export type User = {
-  uid: string;
-  photoURL: string;
-  email: string;
-  displayName: string;
-};
+import { User } from 'firebase/auth';
 
-export type SimpleUser = Omit<User, 'email'>;
+export type FullUser = Pick<User, 'uid' | 'photoURL' | 'email' | 'displayName'>;

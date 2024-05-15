@@ -1,7 +1,7 @@
 'use client';
 
-import { login, logout, onUserStateChanged } from '@/app/api/auth';
-import { User } from 'firebase/auth';
+import { login, logout, onUserStateChanged } from '@/service/auth';
+import { FullUser } from '@/model/user';
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
 type Props = {
@@ -9,17 +9,18 @@ type Props = {
 };
 
 const AuthContext = createContext({
-  user: null as User | null,
+  user: null as FullUser | null,
   login,
   logout,
 });
 
 export function AuthContextProvider({ children }: Props) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FullUser | null>(null);
 
   useEffect(() => {
-    onUserStateChanged(setUser);
+    onUserStateChanged((successUser) => setUser(successUser));
   }, []);
+
   return <AuthContext.Provider value={{ user, login, logout }}> {children} </AuthContext.Provider>;
 }
 

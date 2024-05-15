@@ -1,4 +1,4 @@
-import { User } from './user';
+import { FullUser } from './user';
 
 export type Post = {
   id: string;
@@ -23,5 +23,5 @@ export type Comment = {
   id: string;
   content: string;
   createdAt: string;
-  user: User;
+  user: FullUser;
 };

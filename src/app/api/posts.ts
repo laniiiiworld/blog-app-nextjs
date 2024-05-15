@@ -1,6 +1,7 @@
 import { Comment, Post } from '@/model/post';
+import { FullUser } from '@/model/user';
 import { initializeApp } from 'firebase/app';
-import { collection, deleteDoc, doc, getDocs, getFirestore, orderBy, query, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -36,24 +37,43 @@ export async function getPostComments(postId: string): Promise<[] | Comment[]> {
     const commentsRef = collection(database, 'posts', postId, 'comments');
     const commentsQuery = query(commentsRef, orderBy('createdAt', 'asc'));
     const datas = await getDocs(commentsQuery);
-    return datas.docs.map((doc) => doc.data() as Comment);
+
+    return await Promise.all(
+      datas.docs.map(async (doc) => {
+        const data = doc.data();
+        const userRef = data.user;
+        if (userRef) {
+          const user = (await getDoc(userRef)).data() as FullUser;
+          return { ...data, user } as Comment;
+        }
+        return doc.data() as Comment;
+      })
+    );
   } catch (error) {
     console.log(error);
   }
   return [];
 }
 
-export async function addPostComment(postId: string, comment: Comment) {
+export async function addPostComment(postId: string, comment: Comment, user: FullUser) {
   try {
-    return await setDoc(doc(database, 'posts', postId, 'comments', comment.id), comment);
+    const userRef = doc(database, 'users', user.uid);
+    return await setDoc(doc(database, 'posts', postId, 'comments', comment.id), {
+      ...comment,
+      user: userRef,
+    });
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function updatePostComment(postId: string, comment: Comment) {
+export async function updatePostComment(postId: string, comment: Comment, user: FullUser) {
   try {
-    return await setDoc(doc(database, 'posts', postId, 'comments', comment.id), comment);
+    const userRef = doc(database, 'users', user.uid);
+    return await setDoc(doc(database, 'posts', postId, 'comments', comment.id), {
+      ...comment,
+      user: userRef,
+    });
   } catch (error) {
     console.log(error);
   }

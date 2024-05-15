@@ -38,15 +38,7 @@ export default function CommentForm({ commentId, text }: Props) {
     if (!postId) return;
 
     if (!commentId) {
-      addComment({
-        content,
-        user: {
-          uid: user.uid,
-          photoURL: user.photoURL || '',
-          email: user.email || '',
-          displayName: user.displayName || '',
-        },
-      });
+      addComment({ content });
     } else {
       updateComment({ content });
       setEdited('');

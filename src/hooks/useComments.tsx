@@ -3,7 +3,7 @@ import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { getPostComments, addPostComment, updatePostComment, removePostComment } from '@/app/api/posts';
 import { v4 as uuidv4 } from 'uuid';
 import { Comment } from '@/model/post';
-import { User } from '@/model/user';
+import { useAuthContext } from '@/context/AuthContext';
 
 export default function useComments(postId: string) {
   const queryClient = useQueryClient();
@@ -11,9 +11,11 @@ export default function useComments(postId: string) {
     queryKey: ['comments', postId || ''],
     queryFn: () => getPostComments(postId || ''),
   });
+  const { user } = useAuthContext();
 
   const addComment = useMutation({
-    mutationFn: async ({ postId, content, user }: { postId: string; content: string; user: User }) => {
+    mutationFn: async ({ postId, content }: { postId: string; content: string }) => {
+      if (!user) throw new Error('fail...');
       const comment: Comment = {
         postId,
         id: uuidv4(),
@@ -29,7 +31,7 @@ export default function useComments(postId: string) {
         }),
         user,
       };
-      await addPostComment(postId, comment);
+      await addPostComment(postId, comment, user);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', postId || ''] });
@@ -37,8 +39,10 @@ export default function useComments(postId: string) {
   });
 
   const updateComment = useMutation({
-    mutationFn: async ({ postId, comment }: { postId: string; comment: Comment }) =>
-      await updatePostComment(postId, comment),
+    mutationFn: async ({ postId, comment }: { postId: string; comment: Comment }) => {
+      if (!user) throw new Error('fail...');
+      await updatePostComment(postId, comment, user);
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comments', postId || ''] }),
   });
 

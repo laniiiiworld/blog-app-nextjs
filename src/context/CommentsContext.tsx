@@ -1,7 +1,6 @@
 'use client';
 
 import { Comment } from '@/model/post';
-import { User } from '@/model/user';
 import useComments from '@/hooks/useComments';
 import { ReactNode, createContext, useContext, useState } from 'react';
 
@@ -15,7 +14,7 @@ const CommentsContext = createContext({
   comments: [] as Comment[] | undefined,
   edited: '',
   setEdited: (value: string) => {},
-  addComment: ({ content, user }: { content: string; user: User }) => {},
+  addComment: ({ content }: { content: string }) => {},
   updateComment: ({ content }: { content: string }) => {},
   removeComment: (commentId: string) => {},
   isLoading: false,
@@ -30,8 +29,8 @@ export function CommentsContextProvider({ postId, children }: Props) {
   } = useComments(postId);
   const [edited, setEdited] = useState('');
 
-  const addComment = ({ content, user }: { content: string; user: User }) => {
-    add.mutate({ postId, content, user });
+  const addComment = ({ content }: { content: string }) => {
+    add.mutate({ postId, content });
   };
 
   const updateComment = ({ content }: { content: string }) => {

@@ -25,8 +25,8 @@ export default function CommentItem({ comment }: Props) {
         <div className='flex items-center justify-between'>
           <div className='flex'>
             <Image //
-              src={comment.user.photoURL}
-              alt={comment.user.email}
+              src={comment.user.photoURL || ''}
+              alt={comment.user.email || ''}
               width={45}
               height={45}
               className='rounded-full'
