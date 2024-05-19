@@ -3,7 +3,7 @@ import { Post } from '@/model/post';
 import { useEffect, useState } from 'react';
 import PostsGrid from '@/components/PostsGrid';
 import usePosts from '@/hooks/usePosts';
-import Loading from './loading/Loading';
+import DotFalling from './loading/DotFalling';
 
 type Order = 'ASC' | 'DESC' | 'NAME';
 type OrderItem = { key: Order; name: string };
@@ -39,8 +39,8 @@ export default function AllPosts() {
           </li>
         ))}
       </ul>
-      {isLoading && <Loading />}
       {!isLoading && <PostsGrid posts={sorted} />}
+      {isLoading && <DotFalling />}
     </section>
   );
 }
