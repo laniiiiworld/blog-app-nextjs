@@ -3,10 +3,10 @@
 import Tags from '@/components/Tags';
 import PostsGrid from '@/components/PostsGrid';
 import usePosts from '@/hooks/usePosts';
-import Loading from './loading/Loading';
 import { useSearchParams } from 'next/navigation';
 
 export const SELECT_ALL = 'All Posts';
+import DotFalling from './loading/DotFalling';
 
 export default function FilterablePosts() {
   const params = useSearchParams();
@@ -30,8 +30,8 @@ export default function FilterablePosts() {
         />
       </aside>
       <section className='grow md:basis-5/6'>
-        {isLoading && <Loading />}
         {!isLoading && <PostsGrid posts={filtered} />}
+        {isLoading && <DotFalling />}
       </section>
     </section>
   );

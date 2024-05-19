@@ -2,12 +2,12 @@
 
 import { useCommentsContext } from '@/context/CommentsContext';
 import CommentItem from './CommentItem';
-import Loading from './loading/Loading';
+import DotFalling from './loading/DotFalling';
 
 export default function CommentList() {
   const { isLoading, comments } = useCommentsContext();
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <DotFalling />;
 
   return (
     <>
