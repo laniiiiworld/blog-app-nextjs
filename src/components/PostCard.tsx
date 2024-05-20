@@ -3,10 +3,10 @@ import PostCardImage from './PostCardImage';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import { PiHeartFill } from 'react-icons/pi';
 import { useLikesContext } from '@/context/LikesContext';
-import { Post } from '@/model/post';
+import { PostCardData } from '@/model/post';
 
 type Props = {
-  post: Post;
+  post: PostCardData;
 };
 
 export default function PostCard({ post }: Props) {

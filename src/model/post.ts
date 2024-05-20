@@ -1,6 +1,6 @@
 import { FullUser } from './user';
 
-export type Post = {
+type SimplePostData = {
   id: string;
   title: string;
   description: string;
@@ -9,10 +9,13 @@ export type Post = {
   path: string;
   featured: boolean;
   isImage: boolean;
+};
+
+export type PostCardData = SimplePostData & {
   repliesCount: number;
 };
 
-export type PostData = Post & {
+export type FullPostData = SimplePostData & {
   content: string;
   prevPost: Post | null;
   nextPost: Post | null;

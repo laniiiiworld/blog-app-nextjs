@@ -1,6 +1,6 @@
 'use client';
 
-import { PostData } from '@/model/post';
+import { FullPostData } from '@/model/post';
 import PostPageImage from '@/components/PostPageImage';
 import MarkdownViewr from '@/components/MarkdownViewr';
 import { useEffect } from 'react';
@@ -12,7 +12,7 @@ import HeartFillIcon from './ui/HeartFillIcon';
 import HeartIcon from './ui/HeartIcon';
 
 type Props = {
-  post: PostData;
+  post: FullPostData;
 };
 
 export default function PostContent({ post }: Props) {

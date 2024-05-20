@@ -1,11 +1,11 @@
 'use client';
 
-import { Post } from '@/model/post';
+import { PostCardData } from '@/model/post';
 import PostCard from './PostCard';
 import { LikesContextProvider } from '@/context/LikesContext';
 
 type Props = {
-  posts: Post[];
+  posts: PostCardData[];
 };
 
 export default function PostsGrid({ posts }: Props) {

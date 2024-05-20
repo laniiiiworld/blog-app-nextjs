@@ -1,10 +1,10 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { Post } from '@/model/post';
+import { PostCardData } from '@/model/post';
 
 type Props = {
-  post: Post;
+  post: PostCardData;
   width: number;
   height: number;
 };

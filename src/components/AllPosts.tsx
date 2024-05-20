@@ -1,9 +1,9 @@
 'use client';
-import { Post } from '@/model/post';
 import { useEffect, useState } from 'react';
 import PostsGrid from '@/components/PostsGrid';
 import usePosts from '@/hooks/usePosts';
 import DotFalling from './loading/DotFalling';
+import { PostCardData } from '@/model/post';
 
 type Order = 'ASC' | 'DESC' | 'NAME';
 type OrderItem = { key: Order; name: string };
@@ -45,7 +45,7 @@ export default function AllPosts() {
   );
 }
 
-function sortPosts(posts: Post[], selected: Order) {
+function sortPosts(posts: PostCardData[], selected: Order) {
   if (posts.length === 0) return [];
   if (selected === 'NAME') return posts.sort((a, b) => sortTitle(a, b));
   return posts.sort((a, b) => {
@@ -56,7 +56,7 @@ function sortPosts(posts: Post[], selected: Order) {
   });
 }
 
-function sortTitle(a: Post, b: Post) {
+function sortTitle(a: PostCardData, b: PostCardData) {
   const titleA = a.title.toUpperCase();
   const titleB = b.title.toUpperCase();
   if (titleA < titleB) {

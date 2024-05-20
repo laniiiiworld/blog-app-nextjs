@@ -1,8 +1,8 @@
-import { Post } from '@/model/post';
+import { FullPostData } from '@/model/post';
 import Image from 'next/image';
 
 type Props = {
-  post: Post;
+  post: FullPostData;
   width: number;
   height: number;
 };

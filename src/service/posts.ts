@@ -2,13 +2,13 @@ import path from 'path';
 import { promises } from 'fs';
 import { cache } from 'react';
 import { getPosts } from '@/app/api/posts';
-import { PostData } from '@/model/post';
+import { FullPostData } from '@/model/post';
 
 export const getAllPosts = cache(async () => {
   return await getPosts();
 });
 
-export async function getPostData(fileName: string): Promise<PostData> {
+export async function getPostData(fileName: string): Promise<FullPostData> {
   const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
   const posts = await getAllPosts();
   const findIndex = posts.findIndex((post) => post.path === fileName);
