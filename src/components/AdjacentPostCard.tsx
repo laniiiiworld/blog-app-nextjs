@@ -1,13 +1,13 @@
 'use client';
 
-import { PostCardData } from '@/model/post';
+import { AdjacentPostData } from '@/model/post';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiArrowLeftCircle, FiArrowRightCircle } from 'react-icons/fi';
 
 type Props = {
   type: 'prev' | 'next';
-  post: PostCardData;
+  post: AdjacentPostData;
 };
 
 const ARROW_CLASS = 'text-5xl md:text-7xl m-4 text-yellow-300 transition-all';

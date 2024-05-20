@@ -11,14 +11,16 @@ type SimplePostData = {
   isImage: boolean;
 };
 
+export type AdjacentPostData = Pick<SimplePostData, 'title' | 'path' | 'isImage'>;
+
 export type PostCardData = SimplePostData & {
   repliesCount: number;
 };
 
 export type FullPostData = SimplePostData & {
   content: string;
-  prevPost: Post | null;
-  nextPost: Post | null;
+  prevPost: AdjacentPostData | null;
+  nextPost: AdjacentPostData | null;
 };
 
 export type Comment = {
