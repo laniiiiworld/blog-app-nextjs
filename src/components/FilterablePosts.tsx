@@ -15,7 +15,6 @@ export default function FilterablePosts() {
   const {
     postsQuery: { isLoading, data: posts = [] },
   } = usePosts();
-  const tags = getTags(posts);
   const { tags } = useTags({ initialData: new Map().set(SELECT_ALL, 0) });
   const filtered =
     selected === SELECT_ALL //
