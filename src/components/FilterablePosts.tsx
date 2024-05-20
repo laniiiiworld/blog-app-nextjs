@@ -5,17 +5,18 @@ import PostsGrid from '@/components/PostsGrid';
 import usePosts from '@/hooks/usePosts';
 import { useSearchParams } from 'next/navigation';
 
-export const SELECT_ALL = 'All Posts';
 import DotFalling from './loading/DotFalling';
+import { useTags } from '@/hooks/useTags';
+import { SELECT_ALL } from '@/service/tags';
 
 export default function FilterablePosts() {
   const params = useSearchParams();
   const selected = params.get('tag') || SELECT_ALL;
   const {
     postsQuery: { isLoading, data: posts = [] },
-    getTags,
   } = usePosts();
   const tags = getTags(posts);
+  const { tags } = useTags({ initialData: new Map().set(SELECT_ALL, 0) });
   const filtered =
     selected === SELECT_ALL //
       ? posts
