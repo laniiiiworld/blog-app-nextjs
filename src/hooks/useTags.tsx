@@ -18,8 +18,7 @@ export function useTags({ initialData }: Props) {
         .then((res) => res.json())
         .then((jsonData) => jsonToMap(jsonData)),
     initialData,
-    staleTime: 1000 * 60 * 3,
-    refetchInterval: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 3,
   });
 
   return { tags, isLoading, isError };
