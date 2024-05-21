@@ -1,28 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import { useState } from 'react';
 import PostsGrid from '@/components/PostsGrid';
-import usePosts from '@/hooks/usePosts';
-import DotFalling from './loading/DotFalling';
+import { Order, OrderItem } from '@/hooks/usePosts';
 import { PostCardData } from '@/model/post';
 
-type Order = 'ASC' | 'DESC' | 'NAME';
-type OrderItem = { key: Order; name: string };
-const orders: OrderItem[] = [
-  { key: 'DESC', name: '최신순' },
-  { key: 'ASC', name: '오래된순' },
-  { key: 'NAME', name: '이름순' },
+export const orders: OrderItem[] = [
+  { key: 'desc', name: '최신순' },
+  { key: 'asc', name: '오래된순' },
+  { key: 'name', name: '이름순' },
 ];
 
 export default function AllPosts() {
-  const {
-    postsQuery: { isLoading, data: posts = [] },
-  } = usePosts();
-  const [selected, setSelected] = useState<Order>('DESC');
-  let sorted = sortPosts(posts, selected);
-
-  useEffect(() => {
-    sorted = sortPosts(posts, selected);
-  }, [selected]);
+  const [selected, setSelected] = useState<Order>('desc');
 
   return (
     <section>
@@ -39,31 +29,7 @@ export default function AllPosts() {
           </li>
         ))}
       </ul>
-      {!isLoading && <PostsGrid posts={sorted} />}
-      {isLoading && <DotFalling />}
+      <PostsGrid order={selected} />
     </section>
   );
-}
-
-function sortPosts(posts: PostCardData[], selected: Order) {
-  if (posts.length === 0) return [];
-  if (selected === 'NAME') return posts.sort((a, b) => sortTitle(a, b));
-  return posts.sort((a, b) => {
-    const date1 = parseInt(a.date.replaceAll('-', ''));
-    const date2 = parseInt(b.date.replaceAll('-', ''));
-    if (date1 === date2) return sortTitle(a, b);
-    return selected === 'ASC' ? date1 - date2 : date2 - date1;
-  });
-}
-
-function sortTitle(a: PostCardData, b: PostCardData) {
-  const titleA = a.title.toUpperCase();
-  const titleB = b.title.toUpperCase();
-  if (titleA < titleB) {
-    return -1;
-  }
-  if (titleA > titleB) {
-    return 1;
-  }
-  return 0;
 }

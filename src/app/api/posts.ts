@@ -1,26 +1,7 @@
-import { Comment, PostCardData } from '@/model/post';
+import { Comment } from '@/model/post';
 import { FullUser } from '@/model/user';
 import { firebaseDB } from '@/service/firebase';
 import { collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc } from 'firebase/firestore';
-
-export async function getPosts(): Promise<PostCardData[] | []> {
-  try {
-    const postsRef = collection(firebaseDB, 'posts');
-    const postsQuery = query(postsRef, orderBy('date', 'asc'));
-    const datas = await getDocs(postsQuery);
-    return Promise.all(
-      datas.docs.map(async (doc) => {
-        const post = doc.data() as PostCardData;
-        const commentsRef = collection(doc.ref, 'comments');
-        const comments = await getDocs(commentsRef);
-        return { ...post, repliesCount: comments.size };
-      })
-    );
-  } catch (error) {
-    console.log(error);
-  }
-  return [];
-}
 
 export async function getPostComments(postId: string): Promise<[] | Comment[]> {
   try {
