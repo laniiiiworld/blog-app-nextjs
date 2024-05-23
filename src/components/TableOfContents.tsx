@@ -1,61 +1,78 @@
 'use client';
-import { MouseEvent, useEffect, useState } from 'react';
+import { parseHeadingsFrom } from '@/util/parse';
+import { MouseEvent, MutableRefObject, useCallback, useEffect, useState } from 'react';
 
-type Headings = {
+export type Headings = {
   id: string;
   title: string;
   size: number;
 };
+
 type Props = {
   content: string;
+  contentRef: MutableRefObject<HTMLElement | null>;
 };
 
-export default function TableOfContents({ content }: Props) {
+export default function TableOfContents({ content, contentRef }: Props) {
   const [headings, setHeadings] = useState<Headings[]>([]);
   const [current, setCurrent] = useState<string>('');
-  const handleClick = (event: MouseEvent, id: string) => {
-    event.preventDefault();
-    const $target = document.querySelector(`[id="${id}"]`);
-    if (!$target) return;
-    const { top, left } = $target.getBoundingClientRect();
-    window.scrollBy({ top: top - 80, left, behavior: 'smooth' });
-  };
+
+  const handleClick = useCallback(
+    (event: MouseEvent, id: string) => {
+      event.preventDefault();
+      const $target = contentRef.current?.querySelector(`:is(h1, h2, h3)[id="${id}"]`) as HTMLHeadingElement;
+      if (!$target) return;
+      const { top, left } = $target.getBoundingClientRect();
+      window.scrollBy({ top: top - 80, left, behavior: 'smooth' });
+    },
+    [contentRef]
+  );
+  const intersectionCallback = useCallback((entries: IntersectionObserverEntry[]) => {
+    const visibleEntries = entries //
+      .filter(({ isIntersecting }) => isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+    if (visibleEntries.length > 0) {
+      setCurrent(visibleEntries[0].target.textContent || '');
+    }
+  }, []);
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    const headingRegex = /^(#{1,3})\s+(.*)/gm;
-    while (true) {
-      const match = headingRegex.exec(content);
+    setHeadings(parseHeadingsFrom(content));
+  }, [content]);
 
-      if (!match) break;
+  useEffect(() => {
+    const io = new IntersectionObserver(intersectionCallback, {
+      threshold: 0.5,
+    });
+    const mo = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type !== 'childList') continue;
+        observeHeadingsWithIO();
+      }
+    });
+    const observeHeadingsWithIO = () => {
+      for (const { id } of headings) {
+        const $node = contentRef.current?.querySelector(`:is(h1, h2, h3)[id="${id}"]`) as HTMLHeadingElement;
+        if (!$node) continue;
+        io.observe($node);
+      }
+    };
 
-      const [, order, title] = match;
-      const id = title.replaceAll(' ', '-');
-      const size = order.length - 1;
-      const $node = document.querySelector(`[id="${id}"]`) as HTMLHeadingElement;
+    observeHeadingsWithIO();
 
-      if (!$node) continue;
-
-      setHeadings((prev) => {
-        if (prev.some((v) => v.id === id)) return prev;
-        return [...prev, { id, title, size }];
+    contentRef.current &&
+      mo.observe(contentRef.current, {
+        subtree: true,
+        childList: true,
+        attributeFilter: ['h1', 'h2', 'h3'],
       });
 
-      let observer = new IntersectionObserver(
-        ([
-          {
-            isIntersecting,
-            target: { textContent },
-          },
-        ]) => isIntersecting && setCurrent(textContent || ''),
-        { threshold: 0.5 }
-      );
-      observer.observe($node);
-      observers.push(observer);
-    }
-
-    return () => observers.forEach((observer) => observer.disconnect());
-  }, []);
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
+  }, [headings, contentRef, intersectionCallback]);
 
   return (
     <ul className='max-h-[520px] w-full overflow-y-auto border-l-2 border-gray-200'>
