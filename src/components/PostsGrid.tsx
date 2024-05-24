@@ -14,10 +14,10 @@ export default function PostsGrid({ order = 'desc', tag }: Props) {
 
   return (
     <ul className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4'>
-      {posts.map((post) => (
+      {posts.map((post, index) => (
         <li key={post.path}>
           <LikesContextProvider postId={post.id}>
-            <PostCard post={post} />
+            <PostCard post={post} isPriority={index < 3} />
           </LikesContextProvider>
         </li>
       ))}

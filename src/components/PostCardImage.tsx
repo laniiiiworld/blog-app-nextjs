@@ -7,9 +7,10 @@ type Props = {
   post: PostCardData;
   width: number;
   height: number;
+  isPriority: boolean;
 };
 
-export default function PostCardImage({ post, width, height }: Props) {
+export default function PostCardImage({ post, width, height, isPriority }: Props) {
   const { path, title } = post;
   const [isImage, setIsImage] = useState(post.isImage);
 
@@ -23,6 +24,7 @@ export default function PostCardImage({ post, width, height }: Props) {
           width={width}
           height={height}
           onError={() => setIsImage(false)}
+          priority={isPriority}
         />
       )}
       {!isImage && (
