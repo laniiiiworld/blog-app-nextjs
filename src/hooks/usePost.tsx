@@ -1,5 +1,5 @@
 'use client';
-import { FullPostData } from '@/model/post';
+import { PostWithAdjacents } from '@/model/post';
 import { useQuery } from '@tanstack/react-query';
 
 type Props = {
@@ -8,18 +8,18 @@ type Props = {
 
 export function usePost({ path }: Props) {
   const {
-    data: post,
+    data: { post, prevPost, nextPost },
     isLoading,
     isError,
     error,
-  } = useQuery<FullPostData, Error>({
+  } = useQuery<PostWithAdjacents, Error>({
     queryKey: ['posts', path],
     queryFn: () =>
       fetch(`/api/posts/${path}`, {
         method: 'GET',
       }).then((res) => res.json()),
-    staleTime: 1000 * 60,
+    initialData: { post: null, prevPost: null, nextPost: null },
   });
 
-  return { post, isLoading, isError, error };
+  return { post, prevPost, nextPost, isLoading, isError, error };
 }

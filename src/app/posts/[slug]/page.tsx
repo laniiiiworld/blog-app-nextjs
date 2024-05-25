@@ -1,6 +1,6 @@
 'use client';
 
-import AdjacentPostCard from '@/components/AdjacentPostCard';
+import AdjacentPosts from '@/components/AdjacentPosts';
 import AsideIcons from '@/components/AsideIcons';
 import Comments from '@/components/Comments';
 import PostContent from '@/components/PostContent';
@@ -17,21 +17,18 @@ type Props = {
 };
 
 export default function PostPage({ params: { slug } }: Props) {
-  const { post, isLoading, isError } = usePost({ path: slug });
+  const { post, prevPost, nextPost, isLoading, isError } = usePost({ path: slug });
   const contentRef = useRef<HTMLElement | null>(null);
 
-  if (isLoading) return <Spinner />;
-  if (isError || !post) notFound();
-  const { id, content, prevPost, nextPost } = post;
+  if (isLoading || !post) return <Spinner />;
+  if (isError) notFound();
+  const { id, content } = post;
 
   return (
     <LikesContextProvider postId={id}>
       <div className='w-full lg:basis-0 lg:grow-[4] lg:w-4/5 px-4 lg:px-8'>
         <PostContent post={post} ref={contentRef} />
-        <section className='overflow-hidden flex flex-col md:flex-row'>
-          {prevPost && <AdjacentPostCard type='prev' post={prevPost} />}
-          {nextPost && <AdjacentPostCard type='next' post={nextPost} />}
-        </section>
+        <AdjacentPosts prevPost={prevPost} nextPost={nextPost} />
         <Comments postId={id} />
       </div>
       <aside className='max-lg:hidden sticky top-20 2xl:top-36 left-0 pl-2 w-1/5 h-full basis-0 shrink-0 grow'>

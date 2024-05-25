@@ -19,6 +19,10 @@ export type PostCardData = SimplePostData & {
 
 export type FullPostData = SimplePostData & {
   content: string;
+};
+
+export type PostWithAdjacents = {
+  post: FullPostData | null;
   prevPost: AdjacentPostData | null;
   nextPost: AdjacentPostData | null;
 };
