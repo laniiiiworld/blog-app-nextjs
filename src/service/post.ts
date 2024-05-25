@@ -1,8 +1,7 @@
 import path from 'path';
 import { promises } from 'fs';
-import { getAllPosts } from './posts';
-import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { firebaseDB } from './firebase';
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { AdjacentPostData, FullPostData, PostWithAdjacents } from '@/model/post';
 
 export async function getPostWithAdjacents(path: string): Promise<PostWithAdjacents | null> {
@@ -24,13 +23,11 @@ export async function getPostWithAdjacents(path: string): Promise<PostWithAdjace
 
 export async function getPost(path: string): Promise<FullPostData | null> {
   try {
-    const posts = await getAllPosts({ order: 'desc', tag: null });
-    const findIndex = posts.findIndex((post) => post.path === path);
-
-    if (findIndex === -1) throw new Error(`${path}에 해당하는 게시글을 찾을 수 없습니다.`);
-
-    const post = posts[findIndex];
-    const content = await getPostContent(path);
+    const postsRef = collection(firebaseDB, 'posts');
+    const postsPromise = getDocs(query(postsRef, where('path', '==', path)));
+    const contentPromise = getPostContent(path);
+    const [postsSnap, content] = await Promise.all([postsPromise, contentPromise]);
+    const post = postsSnap.docs[0].data() as FullPostData;
     return { ...post, content };
   } catch (error) {
     console.log(error);
