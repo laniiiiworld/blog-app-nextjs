@@ -1,32 +1,33 @@
 'use client';
-import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
-import { getPostLikes, plusLikeCount, minusLikeCount } from '@/app/api/posts';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export default function useLikes(postId: string, userId: string) {
+type Props = {
+  path: string;
+};
+
+export function useLikes({ path }: Props) {
   const queryClient = useQueryClient();
-  const likesQuery = useQuery<string[], Error>({
-    queryKey: ['likes', postId || ''],
-    queryFn: () => getPostLikes(postId || ''),
-    staleTime: 1000 * 60,
+  const {
+    data: { likes },
+    isLoading,
+    isError,
+  } = useQuery<{ likes: string[] }, Error>({
+    queryKey: ['posts', path, 'likes'],
+    queryFn: () =>
+      fetch(`/api/posts/${path}/likes`, {
+        method: 'GET',
+      }).then((res) => res.json()),
+    initialData: { likes: [] },
   });
 
-  const likePost = useMutation({
-    mutationFn: async () => {
-      await plusLikeCount(postId, userId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['likes', postId || ''] });
-    },
+  const updateLikes = useMutation({
+    mutationFn: ({ postId, userId, like }: { postId: string; userId: string; like: boolean }) =>
+      fetch(`/api/posts/${path}/likes`, {
+        method: 'PUT',
+        body: JSON.stringify({ postId, userId, like }),
+      }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path, 'likes'] }),
   });
 
-  const dislikePost = useMutation({
-    mutationFn: async () => await minusLikeCount(postId, userId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['likes', postId || ''] }),
-  });
-
-  const updateLikes = (liked: boolean) => {
-    return liked ? likePost.mutate() : dislikePost.mutate();
-  };
-
-  return { likesQuery, updateLikes };
+  return { likes, isLoading, isError, updateLikes };
 }

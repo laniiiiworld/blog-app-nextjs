@@ -25,7 +25,7 @@ export default function PostPage({ params: { slug } }: Props) {
   const { id, content } = post;
 
   return (
-    <LikesContextProvider postId={id}>
+    <LikesContextProvider postId={id} path={slug}>
       <div className='w-full lg:basis-0 lg:grow-[4] lg:w-4/5 px-4 lg:px-8'>
         <PostContent post={post} ref={contentRef} />
         <AdjacentPosts prevPost={prevPost} nextPost={nextPost} />

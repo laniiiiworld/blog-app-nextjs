@@ -1,14 +1,14 @@
 import path from 'path';
 import { promises } from 'fs';
 import { firebaseDB } from './firebase';
-import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, setDoc, where } from 'firebase/firestore';
 import { AdjacentPostData, FullPostData, PostWithAdjacents } from '@/model/post';
 
 export async function getPostWithAdjacents(path: string): Promise<PostWithAdjacents | null> {
   try {
     const post = await getPost(path);
 
-    if (!post) return null;
+    if (!post) return { post: null, prevPost: null, nextPost: null };
 
     const prevPostPromise = getAdjacentPost(post.id, post.date, true);
     const nextPostPromise = getAdjacentPost(post.id, post.date, false);
@@ -18,7 +18,7 @@ export async function getPostWithAdjacents(path: string): Promise<PostWithAdjace
   } catch (error) {
     console.log(error);
   }
-  return null;
+  return { post: null, prevPost: null, nextPost: null };
 }
 
 export async function getPost(path: string): Promise<FullPostData | null> {
@@ -61,4 +61,33 @@ function makeAdjacentPostsQuery(postId: string, date: string, isPrev: boolean) {
     where('id', '!=', postId),
     limit(1),
   ];
+}
+
+export async function getLikesCount(path: string) {
+  try {
+    const postQuery = query(collection(firebaseDB, 'posts'), where('path', '==', path));
+    const postRef = (await getDocs(postQuery)).docs[0].ref;
+    const likesRef = collection(postRef, 'likes');
+    const likes = (await getDocs(likesRef)).docs.map((doc) => doc.id);
+    return { likes };
+  } catch (error) {
+    console.log(error);
+  }
+  return { likes: [] };
+}
+
+export async function plusLikeCount(postId: string, userId: string) {
+  try {
+    await setDoc(doc(firebaseDB, 'posts', postId, 'likes', userId), { userId });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function minusLikeCount(postId: string, userId: string) {
+  try {
+    await deleteDoc(doc(firebaseDB, 'posts', postId, 'likes', userId));
+  } catch (error) {
+    console.log(error);
+  }
 }

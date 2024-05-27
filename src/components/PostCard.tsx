@@ -2,7 +2,6 @@ import Link from 'next/link';
 import PostCardImage from './PostCardImage';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import { PiHeartFill } from 'react-icons/pi';
-import { useLikesContext } from '@/context/LikesContext';
 import { PostCardData } from '@/model/post';
 
 type Props = {
@@ -11,8 +10,7 @@ type Props = {
 };
 
 export default function PostCard({ post, isPriority }: Props) {
-  const { title, date, tags, path, repliesCount } = post;
-  const { likes } = useLikesContext();
+  const { title, date, tags, path, repliesCount, likesCount } = post;
 
   return (
     <Link href={`/posts/${path}`} legacyBehavior>
@@ -21,7 +19,7 @@ export default function PostCard({ post, isPriority }: Props) {
         <div className='h-36 flex flex-col items-start p-2 pb-0 mb-4'>
           <div className='flex gap-2 items-center w-full text-light text-sm'>
             <span className='flex items-center'>
-              <PiHeartFill className='text-lg mr-1' /> {likes?.length}
+              <PiHeartFill className='text-lg mr-1' /> {likesCount}
             </span>
             <span className='flex items-center'>
               <FaRegCommentAlt className='mr-1' /> {repliesCount}

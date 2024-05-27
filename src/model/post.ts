@@ -14,6 +14,7 @@ type SimplePostData = {
 export type AdjacentPostData = Pick<SimplePostData, 'title' | 'path' | 'isImage'>;
 
 export type PostCardData = SimplePostData & {
+  likesCount: number;
   repliesCount: number;
 };
 

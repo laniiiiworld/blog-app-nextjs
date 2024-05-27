@@ -1,5 +1,4 @@
 import PostCard from './PostCard';
-import { LikesContextProvider } from '@/context/LikesContext';
 import { Order, usePosts } from '@/hooks/usePosts';
 import DotFalling from './loading/DotFalling';
 
@@ -16,9 +15,7 @@ export default function PostsGrid({ order = 'desc', tag }: Props) {
     <ul className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4'>
       {posts.map((post, index) => (
         <li key={post.path}>
-          <LikesContextProvider postId={post.id}>
-            <PostCard post={post} isPriority={index < 3} />
-          </LikesContextProvider>
+          <PostCard post={post} isPriority={index < 3} />
         </li>
       ))}
     </ul>

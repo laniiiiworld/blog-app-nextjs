@@ -14,8 +14,13 @@ export async function getAllPosts({ order, tag }: AllPostsProps): Promise<PostCa
       datas.docs.map(async (doc) => {
         const post = doc.data() as PostCardData;
         const commentsRef = collection(doc.ref, 'comments');
-        const comments = await getDocs(commentsRef);
-        return { ...post, repliesCount: comments.size };
+        const likesRef = collection(doc.ref, 'likes');
+        const [commentsSnap, likesSnap] = await Promise.all([getDocs(commentsRef), getDocs(likesRef)]);
+        return {
+          ...post,
+          likesCount: likesSnap.size,
+          repliesCount: commentsSnap.size,
+        };
       })
     );
   } catch (error) {

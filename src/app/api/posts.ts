@@ -53,34 +53,3 @@ export async function updatePostComment(postId: string, comment: Comment, user: 
 export async function removePostComment(postId: string, commentId: string) {
   return await deleteDoc(doc(firebaseDB, 'posts', postId, 'comments', commentId));
 }
-
-export async function getPostLikes(postId: string): Promise<[] | string[]> {
-  try {
-    const likesRef = collection(firebaseDB, 'posts', postId, 'likes');
-    const datas = await getDocs(likesRef);
-    return datas?.docs.map((doc) => doc.data()?.userId);
-  } catch (error) {
-    console.log(error);
-  }
-  return [];
-}
-
-export async function plusLikeCount(postId: string, userId: string) {
-  try {
-    const likes: string[] = await getPostLikes(postId);
-    if (likes.includes(userId)) return;
-    await setDoc(doc(firebaseDB, 'posts', postId, 'likes', userId), { userId });
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function minusLikeCount(postId: string, userId: string) {
-  try {
-    const likes: string[] = await getPostLikes(postId);
-    if (!likes.includes(userId)) return;
-    await deleteDoc(doc(firebaseDB, 'posts', postId, 'likes', userId));
-  } catch (error) {
-    console.log(error);
-  }
-}
