@@ -28,7 +28,7 @@ export type PostWithAdjacents = {
   nextPost: AdjacentPostData | null;
 };
 
-export type Comment = {
+export type CommentData = {
   postId: string;
   id: string;
   content: string;

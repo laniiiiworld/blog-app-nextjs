@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Comment } from '@/model/post';
+import { CommentData } from '@/model/post';
 import { usePopUpContext } from '@/context/PopUpContext';
 import CommentForm from './CommentForm';
 import { useCommentsContext } from '@/context/CommentsContext';
@@ -10,7 +10,7 @@ import { formatAgo } from '../util/date';
 import CommentDeletePopup from './popup/CommentDeletePopup';
 
 type Props = {
-  comment: Comment;
+  comment: CommentData;
 };
 
 export default function CommentItem({ comment }: Props) {

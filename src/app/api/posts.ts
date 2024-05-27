@@ -1,9 +1,9 @@
-import { Comment } from '@/model/post';
+import { CommentData } from '@/model/post';
 import { FullUser } from '@/model/user';
 import { firebaseDB } from '@/service/firebase';
 import { collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc } from 'firebase/firestore';
 
-export async function getPostComments(postId: string): Promise<[] | Comment[]> {
+export async function getPostComments(postId: string): Promise<[] | CommentData[]> {
   try {
     const commentsRef = collection(firebaseDB, 'posts', postId, 'comments');
     const commentsQuery = query(commentsRef, orderBy('createdAt', 'asc'));
@@ -15,9 +15,9 @@ export async function getPostComments(postId: string): Promise<[] | Comment[]> {
         const userRef = data.user;
         if (userRef) {
           const user = (await getDoc(userRef)).data() as FullUser;
-          return { ...data, user } as Comment;
+          return { ...data, user } as CommentData;
         }
-        return doc.data() as Comment;
+        return doc.data() as CommentData;
       })
     );
   } catch (error) {
@@ -26,7 +26,7 @@ export async function getPostComments(postId: string): Promise<[] | Comment[]> {
   return [];
 }
 
-export async function addPostComment(postId: string, comment: Comment, user: FullUser) {
+export async function addPostComment(postId: string, comment: CommentData, user: FullUser) {
   try {
     const userRef = doc(firebaseDB, 'users', user.uid);
     return await setDoc(doc(firebaseDB, 'posts', postId, 'comments', comment.id), {
@@ -38,7 +38,7 @@ export async function addPostComment(postId: string, comment: Comment, user: Ful
   }
 }
 
-export async function updatePostComment(postId: string, comment: Comment, user: FullUser) {
+export async function updatePostComment(postId: string, comment: CommentData, user: FullUser) {
   try {
     const userRef = doc(firebaseDB, 'users', user.uid);
     return await setDoc(doc(firebaseDB, 'posts', postId, 'comments', comment.id), {
