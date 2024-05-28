@@ -81,6 +81,7 @@ export async function plusLikeCount(postId: string, userId: string) {
     await setDoc(doc(firebaseDB, 'posts', postId, 'likes', userId), { userId });
   } catch (error) {
     console.log(error);
+    throw new Error('Failed to add like');
   }
 }
 
@@ -89,5 +90,6 @@ export async function minusLikeCount(postId: string, userId: string) {
     await deleteDoc(doc(firebaseDB, 'posts', postId, 'likes', userId));
   } catch (error) {
     console.log(error);
+    throw new Error('Failed to remove like');
   }
 }

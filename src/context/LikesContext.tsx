@@ -38,7 +38,7 @@ export function LikesContextProvider({ postId, path, children }: Props) {
         updateLikes: (updated) => {
           setIsUpdating(true);
           setLiked(updated);
-          updateLikes.mutate({ postId, userId: user?.uid || '', like: updated });
+          updateLikes.mutate({ postId, like: updated });
         },
       }}
     >

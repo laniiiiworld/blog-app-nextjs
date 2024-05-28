@@ -26,8 +26,6 @@ export function usePosts({ order, tag }: Props) {
       fetch(`/api/posts?${queryString}`, {
         method: 'GET',
       }).then((res) => res.json()),
-    staleTime: 1000 * 60,
-    refetchInterval: 1000 * 60 * 3,
   });
 
   return { posts, isLoading, isError };

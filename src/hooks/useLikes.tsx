@@ -1,4 +1,5 @@
 'use client';
+import { getIdTokenAsync } from '@/service/auth';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 type Props = {
@@ -21,11 +22,17 @@ export function useLikes({ path }: Props) {
   });
 
   const updateLikes = useMutation({
-    mutationFn: ({ postId, userId, like }: { postId: string; userId: string; like: boolean }) =>
-      fetch(`/api/posts/${path}/likes`, {
+    mutationFn: async ({ postId, like }: { postId: string; like: boolean }) => {
+      const token = await getIdTokenAsync();
+      return fetch(`/api/posts/${path}/likes`, {
         method: 'PUT',
-        body: JSON.stringify({ postId, userId, like }),
-      }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ postId, like }),
+      });
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path, 'likes'] }),
   });
 

@@ -5,6 +5,25 @@ import { FullUser } from '@/model/user';
 import { addUser } from '@/service/users';
 import { firebaseAuth, providers } from './firebase';
 
+export async function getIdTokenAsync(): Promise<string | null> {
+  try {
+    return await new Promise((resolve, _) =>
+      onAuthStateChanged(firebaseAuth, async (user) => {
+        if (user) {
+          const idToken = await user.getIdToken();
+          resolve(idToken);
+        } else {
+          resolve(null);
+        }
+      })
+    );
+  } catch (error: any) {
+    const { code, message } = error;
+    console.error(code, message);
+  }
+  return null;
+}
+
 export function onUserStateChanged(callback: Dispatch<SetStateAction<FullUser | null>>) {
   try {
     onAuthStateChanged(firebaseAuth, (user) => {
