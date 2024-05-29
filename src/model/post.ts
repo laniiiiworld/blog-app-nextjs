@@ -35,3 +35,5 @@ export type CommentData = {
   createdAt: string;
   user: FullUser;
 };
+
+export type SimpleCommentData = Omit<CommentData, 'user'>;

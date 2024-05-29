@@ -1,22 +1,28 @@
 'use client';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
-import { getPostComments, addPostComment, updatePostComment, removePostComment } from '@/app/api/posts';
 import { v4 as uuidv4 } from 'uuid';
-import { CommentData } from '@/model/post';
-import { useAuthContext } from '@/context/AuthContext';
+import { CommentData, SimpleCommentData } from '@/model/post';
+import { getIdTokenAsync } from '@/service/auth';
 
-export default function useComments(postId: string) {
+export default function useComments(postId: string, path: string) {
   const queryClient = useQueryClient();
-  const commentQuery = useQuery<CommentData[], Error>({
-    queryKey: ['comments', postId || ''],
-    queryFn: () => getPostComments(postId || ''),
+  const {
+    data: comments,
+    isLoading,
+    isError,
+  } = useQuery<CommentData[], Error>({
+    queryKey: ['posts', path, 'comments'],
+    queryFn: () =>
+      fetch(`/api/posts/${path}/comments`, {
+        method: 'GET',
+      }).then((res) => res.json()),
+    initialData: [],
   });
-  const { user } = useAuthContext();
 
   const addComment = useMutation({
-    mutationFn: async ({ postId, content }: { postId: string; content: string }) => {
-      if (!user) throw new Error('fail...');
-      const comment: CommentData = {
+    mutationFn: async ({ content }: { content: string }) => {
+      const token = await getIdTokenAsync();
+      const comment: SimpleCommentData = {
         postId,
         id: uuidv4(),
         content,
@@ -29,28 +35,48 @@ export default function useComments(postId: string) {
           second: '2-digit',
           hour12: false,
         }),
-        user,
       };
-      await addPostComment(postId, comment, user);
+      return fetch(`/api/posts/${path}/comments`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ postId, comment }),
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', postId || ''] });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path, 'comments'] }),
   });
 
   const updateComment = useMutation({
-    mutationFn: async ({ postId, comment }: { postId: string; comment: CommentData }) => {
-      if (!user) throw new Error('fail...');
-      await updatePostComment(postId, comment, user);
+    mutationFn: async ({ comment }: { comment: CommentData }) => {
+      const token = await getIdTokenAsync();
+      return fetch(`/api/posts/${path}/comments`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ postId, comment }),
+      });
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comments', postId || ''] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path, 'comments'] }),
   });
 
   const removeComment = useMutation({
-    mutationFn: async ({ postId, commentId }: { postId: string; commentId: string }) =>
-      await removePostComment(postId, commentId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comments', postId || ''] }),
+    mutationFn: async ({ commentId }: { commentId: string }) => {
+      const token = await getIdTokenAsync();
+      return fetch(`/api/posts/${path}/comments`, {
+        method: 'DELETE',
+        body: JSON.stringify({ postId, commentId }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path, 'comments'] }),
   });
 
-  return { commentQuery, addComment, updateComment, removeComment };
+  return { comments, isLoading, isError, addComment, updateComment, removeComment };
 }

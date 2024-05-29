@@ -4,11 +4,12 @@ import CommentList from './CommentList';
 
 type Props = {
   postId: string;
+  path: string;
 };
 
-export default function Comments({ postId }: Props) {
+export default function Comments({ postId, path }: Props) {
   return (
-    <CommentsContextProvider postId={postId}>
+    <CommentsContextProvider postId={postId} path={path}>
       <section id='comments' className='mt-8'>
         <CommentForm commentId='' text='' />
         <CommentList />

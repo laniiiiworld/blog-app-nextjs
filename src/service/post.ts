@@ -2,7 +2,8 @@ import path from 'path';
 import { promises } from 'fs';
 import { firebaseDB } from './firebase';
 import { collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, setDoc, where } from 'firebase/firestore';
-import { AdjacentPostData, FullPostData, PostWithAdjacents } from '@/model/post';
+import { AdjacentPostData, CommentData, FullPostData, PostWithAdjacents, SimpleCommentData } from '@/model/post';
+import { FullUser } from '@/model/user';
 
 export async function getPostWithAdjacents(path: string): Promise<PostWithAdjacents | null> {
   try {
@@ -92,4 +93,44 @@ export async function minusLikeCount(postId: string, userId: string) {
     console.log(error);
     throw new Error('Failed to remove like');
   }
+}
+
+export async function getPostComments(path: string): Promise<[] | CommentData[]> {
+  try {
+    const postQuery = query(collection(firebaseDB, 'posts'), where('path', '==', path));
+    const postRef = (await getDocs(postQuery)).docs[0].ref;
+    const commentsQuery = query(collection(postRef, 'comments'), orderBy('createdAt', 'asc'));
+    const datas = await getDocs(commentsQuery);
+
+    return await Promise.all(
+      datas.docs.map(async (doc) => {
+        const data = doc.data();
+        const userRef = data.user;
+        if (userRef) {
+          const user = (await getDoc(userRef)).data() as FullUser;
+          return { ...data, user } as CommentData;
+        }
+        return doc.data() as CommentData;
+      })
+    );
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}
+
+export async function addOrUpdatePostComment(postId: string, userId: string, comment: SimpleCommentData) {
+  try {
+    const userRef = doc(firebaseDB, 'users', userId);
+    await setDoc(doc(firebaseDB, 'posts', postId, 'comments', comment.id), {
+      ...comment,
+      user: userRef,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function removePostComment(postId: string, commentId: string) {
+  await deleteDoc(doc(firebaseDB, 'posts', postId, 'comments', commentId));
 }

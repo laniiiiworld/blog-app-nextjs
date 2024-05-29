@@ -6,12 +6,13 @@ import { ReactNode, createContext, useContext, useState } from 'react';
 
 type Props = {
   postId: string;
+  path: string;
   children: ReactNode;
 };
 
 const CommentsContext = createContext({
   postId: '',
-  comments: [] as CommentData[] | undefined,
+  comments: [] as CommentData[],
   edited: '',
   setEdited: (value: string) => {},
   addComment: ({ content }: { content: string }) => {},
@@ -20,26 +21,27 @@ const CommentsContext = createContext({
   isLoading: false,
 });
 
-export function CommentsContextProvider({ postId, children }: Props) {
+export function CommentsContextProvider({ postId, path, children }: Props) {
   const {
-    commentQuery: { data: comments, isLoading },
+    comments,
+    isLoading,
     addComment: add,
     updateComment: update,
     removeComment: remove,
-  } = useComments(postId);
+  } = useComments(postId, path);
   const [edited, setEdited] = useState('');
 
   const addComment = ({ content }: { content: string }) => {
-    add.mutate({ postId, content });
+    add.mutate({ content });
   };
 
   const updateComment = ({ content }: { content: string }) => {
     const comment = comments?.find((item) => item.id === edited) as CommentData;
-    update.mutate({ postId, comment: { ...comment, content } });
+    update.mutate({ comment: { ...comment, content } });
   };
 
   const removeComment = (commentId: string) => {
-    remove.mutate({ postId, commentId });
+    remove.mutate({ commentId });
   };
 
   return (
