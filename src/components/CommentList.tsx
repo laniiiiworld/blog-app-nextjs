@@ -1,20 +1,20 @@
 'use client';
 
-import { useCommentsContext } from '@/context/CommentsContext';
+import useComments from '@/hooks/useComments';
 import CommentItem from './CommentItem';
 import DotFalling from './loading/DotFalling';
+import { useCommentsContext } from '@/context/CommentsContext';
 
 export default function CommentList() {
-  const { isLoading, comments } = useCommentsContext();
+  const { postId, path } = useCommentsContext();
+  const { isLoading, comments } = useComments(postId, path);
 
   if (isLoading) return <DotFalling />;
 
   return (
-    <>
-      <ul>
-        {comments && //
-          comments.map((comment) => <CommentItem key={comment.id} comment={comment} />)}
-      </ul>
-    </>
+    <ul>
+      {comments && //
+        comments.map((comment) => <CommentItem key={comment.id} comment={comment} />)}
+    </ul>
   );
 }

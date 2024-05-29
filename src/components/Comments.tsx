@@ -11,7 +11,7 @@ export default function Comments({ postId, path }: Props) {
   return (
     <CommentsContextProvider postId={postId} path={path}>
       <section id='comments' className='mt-8'>
-        <CommentForm commentId='' text='' />
+        <CommentForm comment={null} />
         <CommentList />
       </section>
     </CommentsContextProvider>
