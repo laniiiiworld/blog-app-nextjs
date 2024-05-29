@@ -8,7 +8,7 @@ export default function HeartFillIcon() {
 
   useEffect(() => {
     isUpdating && setTimeout(() => setIsUpdating(false), 800);
-  }, [isUpdating]);
+  }, [isUpdating, setIsUpdating]);
 
   return <PiHeartFill className={`text-red-500 ${isUpdating && 'animate-palpitate'} group-hover:scale-110`} />;
 }

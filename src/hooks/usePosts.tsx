@@ -1,27 +1,32 @@
 'use client';
+import { PostCardData } from '@/model/post';
 import { useQuery } from '@tanstack/react-query';
-import { getPosts } from '@/app/api/firebase';
-import { Post } from '@/service/posts';
-import { SELECT_ALL } from '@/components/FilterablePosts';
 
-export default function usePosts() {
-  const postsQuery = useQuery<Post[], Error>({
-    queryKey: ['posts'],
-    queryFn: getPosts,
-    staleTime: 1000 * 60,
+export type Order = 'asc' | 'desc' | 'name';
+export type OrderItem = { key: Order; name: string };
+
+type Props = {
+  order?: Order;
+  tag?: string;
+};
+
+export function usePosts({ order, tag }: Props) {
+  const queryString = new URLSearchParams({
+    order: order || '',
+    tag: tag || '',
+  }).toString();
+
+  const {
+    data: posts = [],
+    isLoading,
+    isError,
+  } = useQuery<PostCardData[], Error>({
+    queryKey: ['posts', order, tag],
+    queryFn: () =>
+      fetch(`/api/posts?${queryString}`, {
+        method: 'GET',
+      }).then((res) => res.json()),
   });
 
-  const getTags = (posts: Post[]): Map<string, number> => {
-    const result = new Map();
-    result.set(SELECT_ALL, posts.length);
-    for (const { tags } of posts) {
-      for (const tag of tags) {
-        const count = result.get(tag) || 0;
-        result.set(tag, count + 1);
-      }
-    }
-    return result;
-  };
-
-  return { postsQuery, getTags };
+  return { posts, isLoading, isError };
 }

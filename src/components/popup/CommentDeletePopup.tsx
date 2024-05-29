@@ -1,9 +1,11 @@
 import { useCommentsContext } from '@/context/CommentsContext';
 import { PopupType, usePopUpContext } from '@/context/PopUpContext';
 import PopUp from './PopUp';
+import useComments from '@/hooks/useComments';
 
 export default function CommentDeletePopup() {
-  const { removeComment } = useCommentsContext();
+  const { postId, path } = useCommentsContext();
+  const { removeComment } = useComments(postId, path);
   const { popupType, value: deleted, setValue: setDeleted } = usePopUpContext();
 
   if (popupType !== ('confirm' as PopupType)) return <></>;
@@ -11,7 +13,7 @@ export default function CommentDeletePopup() {
   return (
     <PopUp
       handleConfirm={() => {
-        removeComment(deleted);
+        removeComment.mutate({ commentId: deleted });
         setDeleted('');
       }}
       width={'w-80'}

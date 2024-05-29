@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import { CommentData } from '@/model/post';
 import { usePopUpContext } from '@/context/PopUpContext';
-import { Comment } from './Comments';
 import CommentForm from './CommentForm';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useAuthContext } from '@/context/AuthContext';
@@ -10,7 +10,7 @@ import { formatAgo } from '../util/date';
 import CommentDeletePopup from './popup/CommentDeletePopup';
 
 type Props = {
-  comment: Comment;
+  comment: CommentData;
 };
 
 export default function CommentItem({ comment }: Props) {
@@ -25,8 +25,8 @@ export default function CommentItem({ comment }: Props) {
         <div className='flex items-center justify-between'>
           <div className='flex'>
             <Image //
-              src={comment.user.photoURL}
-              alt={comment.user.email}
+              src={comment.user.photoURL || ''}
+              alt={comment.user.email || ''}
               width={45}
               height={45}
               className='rounded-full'
@@ -56,7 +56,7 @@ export default function CommentItem({ comment }: Props) {
         {(!edited || edited !== comment.id) && (
           <p className='w-full min-h-[7rem] mt-6 bg-white whitespace-pre-line'>{comment.content}</p>
         )}
-        {edited && edited === comment.id && <CommentForm commentId={comment.id} text={comment.content} />}
+        {edited && edited === comment.id && <CommentForm comment={comment} />}
       </li>
     </>
   );

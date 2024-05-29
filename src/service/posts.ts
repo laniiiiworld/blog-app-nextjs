@@ -1,52 +1,52 @@
-import path from 'path';
-import { promises } from 'fs';
-import { cache } from 'react';
-import { getPosts } from '@/app/api/firebase';
+import { PostCardData } from '@/model/post';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { Order } from '@/hooks/usePosts';
+import { firebaseDB } from './firebase';
+import { SELECT_ALL } from './tags';
 
-export type Post = {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  tags: string[];
-  path: string;
-  featured: boolean;
-  isImage: boolean;
-  repliesCount: number;
-};
+type AllPostsProps = { order?: Order; tag: string | null };
 
-export type PostData = Post & {
-  content: string;
-  prevPost: Post | null;
-  nextPost: Post | null;
-};
-
-export const getAllPosts = cache(async () => {
-  return await getPosts();
-});
-
-export async function getFeaturedPosts(): Promise<Post[]> {
-  const posts = await getAllPosts();
-  return posts.filter((post) => post.featured);
+export async function getAllPosts({ order, tag }: AllPostsProps): Promise<PostCardData[] | []> {
+  try {
+    const postsRef = collection(firebaseDB, 'posts');
+    const datas = await getDocs(query(postsRef, ...makeAllPostsQuery({ order, tag })));
+    return Promise.all(
+      datas.docs.map(async (doc) => {
+        const post = doc.data() as PostCardData;
+        const commentsRef = collection(doc.ref, 'comments');
+        const likesRef = collection(doc.ref, 'likes');
+        const [commentsSnap, likesSnap] = await Promise.all([getDocs(commentsRef), getDocs(likesRef)]);
+        return {
+          ...post,
+          likesCount: likesSnap.size,
+          repliesCount: commentsSnap.size,
+        };
+      })
+    );
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
 }
 
-// You May Like
-export async function getNoneFeaturedPosts(): Promise<Post[]> {
-  const posts = await getAllPosts();
-  return posts.filter((post) => !post.featured);
+function makeAllPostsQuery({ order, tag }: AllPostsProps) {
+  if (tag) {
+    return tag === SELECT_ALL //
+      ? [orderBy('date', 'desc')]
+      : [where('tags', 'array-contains', tag), orderBy('date', 'desc')];
+  }
+  return order === 'name' //
+    ? [orderBy('title', 'asc'), orderBy('date', 'desc')]
+    : [orderBy('date', order)];
 }
 
-export async function getPostData(fileName: string): Promise<PostData> {
-  const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
-  const posts = await getAllPosts();
-  const findIndex = posts.findIndex((post) => post.path === fileName);
-
-  if (findIndex === -1) throw new Error(`${fileName}에 해당하는 게시글을 찾을 수 없습니다.`);
-
-  const post = posts[findIndex];
-  const content = await promises.readFile(filePath, 'utf-8');
-  const prevPost = findIndex > 0 ? posts[findIndex - 1] : null;
-  const nextPost = findIndex < posts.length - 1 ? posts[findIndex + 1] : null;
-
-  return { ...post, content, prevPost, nextPost };
+export async function getAllPostsSize() {
+  try {
+    const postsRef = collection(firebaseDB, 'posts');
+    const datas = await getDocs(query(postsRef));
+    return datas.size;
+  } catch (error) {
+    console.log(error);
+  }
+  return 0;
 }

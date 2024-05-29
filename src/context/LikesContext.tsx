@@ -2,10 +2,11 @@
 
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { useAuthContext } from './AuthContext';
-import useLikes from '@/hooks/useLikes';
+import { useLikes } from '@/hooks/useLikes';
 
 type Props = {
   postId: string;
+  path: string;
   children: ReactNode;
 };
 
@@ -13,17 +14,13 @@ const LikesContext = createContext({
   isUpdating: false,
   setIsUpdating: (value: boolean) => {},
   liked: false,
-  setLiked: (value: boolean) => {},
   likes: [] as String[],
   updateLikes: (value: boolean) => {},
 });
 
-export function LikesContextProvider({ postId, children }: Props) {
+export function LikesContextProvider({ postId, path, children }: Props) {
   const { user } = useAuthContext();
-  const {
-    likesQuery: { data: likes },
-    updateLikes,
-  } = useLikes(postId, user?.uid || '');
+  const { likes, updateLikes } = useLikes({ path });
   const [liked, setLiked] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -37,12 +34,11 @@ export function LikesContextProvider({ postId, children }: Props) {
         isUpdating,
         setIsUpdating,
         liked,
-        setLiked,
-        likes: likes as string[],
+        likes,
         updateLikes: (updated) => {
           setIsUpdating(true);
           setLiked(updated);
-          updateLikes(updated);
+          updateLikes.mutate({ postId, like: updated });
         },
       }}
     >

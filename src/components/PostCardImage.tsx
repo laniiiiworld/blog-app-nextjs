@@ -1,15 +1,16 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { Post } from '@/service/posts';
+import { PostCardData } from '@/model/post';
 
 type Props = {
-  post: Post;
+  post: PostCardData;
   width: number;
   height: number;
+  isPriority: boolean;
 };
 
-export default function PostCardImage({ post, width, height }: Props) {
+export default function PostCardImage({ post, width, height, isPriority }: Props) {
   const { path, title } = post;
   const [isImage, setIsImage] = useState(post.isImage);
 
@@ -23,6 +24,7 @@ export default function PostCardImage({ post, width, height }: Props) {
           width={width}
           height={height}
           onError={() => setIsImage(false)}
+          priority={isPriority}
         />
       )}
       {!isImage && (

@@ -6,18 +6,21 @@ import Image from 'next/image';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { usePopUpContext } from '@/context/PopUpContext';
 import LoginPopup from './popup/LoginPopup';
+import useComments from '@/hooks/useComments';
+import { CommentData } from '@/model/post';
 
 type Props = {
-  commentId: string;
-  text: string;
+  comment: CommentData | null;
 };
 
-export default function CommentForm({ commentId, text }: Props) {
-  const { postId, comments, edited, setEdited, addComment, updateComment } = useCommentsContext();
+export default function CommentForm({ comment }: Props) {
   const { user, logout } = useAuthContext();
-  const [content, setContent] = useState(text);
   const { setPopupType } = usePopUpContext();
+  const { postId, path, edited, setEdited } = useCommentsContext();
+  const { comments, addComment, updateComment } = useComments(postId, path);
 
+  const commentId = comment?.id;
+  const [content, setContent] = useState(comment?.content || '');
   const isCreating = !commentId;
   const isUpdating = edited && edited === commentId;
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -38,17 +41,9 @@ export default function CommentForm({ commentId, text }: Props) {
     if (!postId) return;
 
     if (!commentId) {
-      addComment({
-        content,
-        user: {
-          uid: user.uid,
-          photoURL: user.photoURL || '',
-          email: user.email || '',
-          displayName: user.displayName || '',
-        },
-      });
+      addComment.mutate({ content });
     } else {
-      updateComment({ content });
+      updateComment.mutate({ comment: { ...comment, content } });
       setEdited('');
     }
     setContent('');

@@ -1,5 +1,5 @@
 const CIRCLE_CLASS = 'inline-block w-6 h-6 m-1 rounded-full';
-export default function Loading() {
+export default function DotFalling() {
   return (
     <div className='p-24 text-center'>
       <div className={`${CIRCLE_CLASS} bg-green-light animate-loading-1`}></div>

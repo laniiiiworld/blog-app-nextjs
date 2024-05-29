@@ -1,10 +1,8 @@
-'use client';
-import { useState } from 'react';
+import { FullPostData } from '@/model/post';
 import Image from 'next/image';
-import { Post } from '@/service/posts';
 
 type Props = {
-  post: Post;
+  post: FullPostData;
   width: number;
   height: number;
 };
@@ -20,6 +18,7 @@ export default function PostPageImage({ post, width, height }: Props) {
         alt={title}
         width={width}
         height={height}
+        priority={true}
       />
     </>
   );

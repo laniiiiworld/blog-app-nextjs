@@ -1,21 +1,21 @@
 'use client';
 
+import { FullPostData } from '@/model/post';
 import PostPageImage from '@/components/PostPageImage';
 import MarkdownViewr from '@/components/MarkdownViewr';
-import { PostData } from '@/service/posts';
-import { useEffect } from 'react';
 import { useAuthContext } from '@/context/AuthContext';
 import { usePopUpContext } from '@/context/PopUpContext';
 import { useLikesContext } from '@/context/LikesContext';
 import ToggleButton from './ui/ToggleButton';
 import HeartFillIcon from './ui/HeartFillIcon';
 import HeartIcon from './ui/HeartIcon';
+import { forwardRef } from 'react';
 
 type Props = {
-  post: PostData;
+  post: FullPostData;
 };
 
-export default function PostContent({ post }: Props) {
+const PostContent = forwardRef<HTMLElement | null, Props>(({ post }, ref) => {
   const { title, description, date, content, isImage } = post;
   const { user } = useAuthContext();
   const { setPopupType } = usePopUpContext();
@@ -28,14 +28,8 @@ export default function PostContent({ post }: Props) {
     updateLikes(updated);
   };
 
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-    });
-  }, []);
-
   return (
-    <section className='py-4'>
+    <section ref={ref} className='py-4'>
       <h1 className='text-4xl font-bold mb-2 text-center'>{title}</h1>
       <div className='flex justify-center items-center mt-6 mb-8 lg:mb-12'>
         <p className='text-center'>{date}</p>
@@ -55,4 +49,7 @@ export default function PostContent({ post }: Props) {
       <MarkdownViewr content={content} />
     </section>
   );
-}
+});
+
+PostContent.displayName = 'PostContent';
+export default PostContent;
