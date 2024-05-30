@@ -37,7 +37,7 @@ export async function getPost(path: string): Promise<FullPostData | null> {
 }
 
 async function getPostContent(fileName: string) {
-  const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
+  const filePath = path.join(process.cwd(), 'public', 'data', 'posts', `${fileName}.md`);
   const content = await promises.readFile(filePath, 'utf-8');
   return content;
 }
