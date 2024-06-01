@@ -25,21 +25,13 @@ export async function getPostWithAdjacents(path: string): Promise<PostWithAdjace
 export async function getPost(path: string): Promise<FullPostData | null> {
   try {
     const postsRef = collection(firebaseDB, 'posts');
-    const postsPromise = getDocs(query(postsRef, where('path', '==', path)));
-    const contentPromise = getPostContent(path);
-    const [postsSnap, content] = await Promise.all([postsPromise, contentPromise]);
-    const post = postsSnap.docs[0].data() as FullPostData;
-    return { ...post, content };
+    const posts = await getDocs(query(postsRef, where('path', '==', path)));
+    const post = posts.docs[0].data() as FullPostData;
+    return { ...post };
   } catch (error) {
     console.log(error);
   }
   return null;
-}
-
-async function getPostContent(fileName: string) {
-  const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
-  const content = await promises.readFile(filePath, 'utf-8');
-  return content;
 }
 
 async function getAdjacentPost(postId: string, date: string, isPrev: boolean) {
