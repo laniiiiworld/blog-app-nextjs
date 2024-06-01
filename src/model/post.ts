@@ -1,4 +1,4 @@
-import { FullUser } from './user';
+import { SimpleUser } from './user';
 
 type SimplePostData = {
   id: string;
@@ -33,7 +33,7 @@ export type CommentData = {
   id: string;
   content: string;
   createdAt: string;
-  user: FullUser;
+  user: SimpleUser;
 };
 
 export type SimpleCommentData = Omit<CommentData, 'user'>;

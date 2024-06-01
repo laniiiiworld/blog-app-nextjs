@@ -2,7 +2,7 @@ import { Login } from '@/components/popup/LoginPopup';
 import { onAuthStateChanged, signInWithPopup, signOut, UserCredential } from 'firebase/auth';
 import { Dispatch, SetStateAction } from 'react';
 import { FullUser } from '@/model/user';
-import { addUser } from '@/service/users';
+import { addUser, isAdmin } from '@/service/users';
 import { firebaseAuth, providers } from './firebase';
 
 export async function getIdTokenAsync(): Promise<string | null> {
@@ -26,10 +26,10 @@ export async function getIdTokenAsync(): Promise<string | null> {
 
 export function onUserStateChanged(callback: Dispatch<SetStateAction<FullUser | null>>) {
   try {
-    onAuthStateChanged(firebaseAuth, (user) => {
+    onAuthStateChanged(firebaseAuth, async (user) => {
       if (user) {
         const { uid, photoURL, email, displayName } = user;
-        callback({ uid, photoURL, email, displayName });
+        callback({ uid, photoURL, email, displayName, isAdmin: await isAdmin(uid) });
       } else {
         callback(null);
       }

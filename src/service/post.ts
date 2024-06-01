@@ -1,9 +1,7 @@
-import path from 'path';
-import { promises } from 'fs';
 import { firebaseDB } from './firebase';
 import { collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, setDoc, where } from 'firebase/firestore';
 import { AdjacentPostData, CommentData, FullPostData, PostWithAdjacents, SimpleCommentData } from '@/model/post';
-import { FullUser } from '@/model/user';
+import { SimpleUser } from '@/model/user';
 
 export async function getPostWithAdjacents(path: string): Promise<PostWithAdjacents | null> {
   try {
@@ -99,7 +97,7 @@ export async function getPostComments(path: string): Promise<[] | CommentData[]>
         const data = doc.data();
         const userRef = data.user;
         if (userRef) {
-          const user = (await getDoc(userRef)).data() as FullUser;
+          const user = (await getDoc(userRef)).data() as SimpleUser;
           return { ...data, user } as CommentData;
         }
         return doc.data() as CommentData;
