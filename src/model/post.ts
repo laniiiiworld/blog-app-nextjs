@@ -22,6 +22,8 @@ export type FullPostData = SimplePostData & {
   content: string;
 };
 
+export type PostFormData = Omit<FullPostData, 'tags'> & { newTag: string };
+
 export type PostWithAdjacents = {
   post: FullPostData | null;
   prevPost: AdjacentPostData | null;
@@ -37,3 +39,15 @@ export type CommentData = {
 };
 
 export type SimpleCommentData = Omit<CommentData, 'user'>;
+
+export const POST_DEFAULT_DATA: PostFormData = {
+  id: '',
+  title: '',
+  description: '',
+  date: '',
+  newTag: '',
+  path: '',
+  featured: false,
+  isImage: false,
+  content: '',
+};

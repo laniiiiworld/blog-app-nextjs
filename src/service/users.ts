@@ -15,7 +15,7 @@ export async function isAdmin(userId: string) {
     const userRef = doc(firebaseDB, 'users', userId);
     const adminsRef = collection(firebaseDB, 'admins');
     const admin = await getDocs(query(adminsRef, where('user', '==', userRef)));
-    return Boolean(admin.size);
+    return admin.size > 0;
   } catch (error) {
     console.log(error);
   }

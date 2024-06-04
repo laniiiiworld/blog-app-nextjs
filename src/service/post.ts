@@ -54,6 +54,15 @@ function makeAdjacentPostsQuery(postId: string, date: string, isPrev: boolean) {
   ];
 }
 
+export async function addOrUpdatePost(post: FullPostData) {
+  try {
+    await setDoc(doc(firebaseDB, 'posts', post.id), post);
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to update post');
+  }
+}
+
 export async function getLikesCount(path: string) {
   try {
     const postQuery = query(collection(firebaseDB, 'posts'), where('path', '==', path));
