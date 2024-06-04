@@ -25,3 +25,17 @@ export async function POST(req: NextRequest) {
       .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
   });
 }
+
+export async function PUT(req: NextRequest) {
+  return onlyAdminUserSession(req, async () => {
+    const { post } = await req.json();
+
+    if (!post) {
+      return new Response('Bad Request', { status: 400 });
+    }
+
+    return addOrUpdatePost(post)
+      .then(() => new Response(JSON.stringify({ success: true }), { status: 200 }))
+      .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+  });
+}

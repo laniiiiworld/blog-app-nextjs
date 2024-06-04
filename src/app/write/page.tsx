@@ -1,5 +1,5 @@
 import PostForm from '@/components/PostForm';
 
-export default function WritePage() {
+export default function AddPage() {
   return <PostForm />;
 }

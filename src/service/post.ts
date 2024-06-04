@@ -53,10 +53,10 @@ function makeAdjacentPostsQuery(postId: string, date: string, isPrev: boolean) {
     limit(1),
   ];
 }
-
 export async function addOrUpdatePost(post: FullPostData) {
   try {
-    await setDoc(doc(firebaseDB, 'posts', post.id), post);
+    const userRef = doc(firebaseDB, 'users', post.writer);
+    await setDoc(doc(firebaseDB, 'posts', post.id), { ...post, writer: userRef });
   } catch (error) {
     console.log(error);
     throw new Error('Failed to update post');

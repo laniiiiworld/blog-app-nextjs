@@ -1,14 +1,17 @@
+import { DocumentReference } from 'firebase/firestore';
 import { SimpleUser } from './user';
 
 type SimplePostData = {
   id: string;
   title: string;
   description: string;
-  date: string;
   tags: string[];
   path: string;
   featured: boolean;
   isImage: boolean;
+  writer: string;
+  date: string;
+  lastUpdatedAt: string;
 };
 
 export type AdjacentPostData = Pick<SimplePostData, 'title' | 'path' | 'isImage'>;
@@ -44,10 +47,12 @@ export const POST_DEFAULT_DATA: PostFormData = {
   id: '',
   title: '',
   description: '',
-  date: '',
   newTag: '',
   path: '',
   featured: false,
   isImage: false,
   content: '',
+  writer: '',
+  date: '',
+  lastUpdatedAt: '',
 };
