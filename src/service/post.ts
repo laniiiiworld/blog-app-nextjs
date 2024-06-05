@@ -63,6 +63,15 @@ export async function addOrUpdatePost(post: FullPostData) {
   }
 }
 
+export async function removePost(postId: string) {
+  try {
+    await deleteDoc(doc(firebaseDB, 'posts', postId));
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to remove post');
+  }
+}
+
 export async function getLikesCount(path: string) {
   try {
     const postQuery = query(collection(firebaseDB, 'posts'), where('path', '==', path));

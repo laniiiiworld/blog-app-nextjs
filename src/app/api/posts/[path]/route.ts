@@ -1,6 +1,6 @@
 import { PostWithAdjacents } from '@/model/post';
 import { onlyAdminUserSession } from '@/service/firebaseAdmin';
-import { getPostWithAdjacents, addOrUpdatePost } from '@/service/post';
+import { getPostWithAdjacents, addOrUpdatePost, removePost } from '@/service/post';
 import { NextRequest, NextResponse } from 'next/server';
 
 type Context = {
@@ -35,6 +35,20 @@ export async function PUT(req: NextRequest) {
     }
 
     return addOrUpdatePost(post)
+      .then(() => new Response(JSON.stringify({ success: true }), { status: 200 }))
+      .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+  });
+}
+
+export function DELETE(req: NextRequest) {
+  return onlyAdminUserSession(req, async () => {
+    const { postId } = await req.json();
+
+    if (!postId) {
+      return new Response('Bad Request', { status: 400 });
+    }
+
+    return removePost(postId)
       .then(() => new Response(JSON.stringify({ success: true }), { status: 200 }))
       .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
   });

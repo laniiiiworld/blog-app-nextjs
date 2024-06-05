@@ -93,5 +93,24 @@ export function usePost({ path, enabled = true }: Props) {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path] }),
   });
 
-  return { post, prevPost, nextPost, isLoading, isError, addPost, updatePost };
+  const removePost = useMutation({
+    mutationFn: async ({ postId }: { postId: string }) => {
+      const token = await getIdTokenAsync();
+      const response = await fetch(`/api/posts/${path}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ postId }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to remove post');
+      }
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path] }),
+  });
+
+  return { post, prevPost, nextPost, isLoading, isError, addPost, updatePost, removePost };
 }
