@@ -9,8 +9,8 @@ export async function getPostWithAdjacents(path: string): Promise<PostWithAdjace
 
     if (!post) return { post: null, prevPost: null, nextPost: null };
 
-    const prevPostPromise = getAdjacentPost(post.id, post.date, true);
-    const nextPostPromise = getAdjacentPost(post.id, post.date, false);
+    const prevPostPromise = getAdjacentPost(post.id, post.createdAt, true);
+    const nextPostPromise = getAdjacentPost(post.id, post.createdAt, false);
     const [prevPost, nextPost] = await Promise.all([prevPostPromise, nextPostPromise]);
 
     return { post, prevPost, nextPost };
@@ -32,10 +32,10 @@ export async function getPost(path: string): Promise<FullPostData | null> {
   return null;
 }
 
-async function getAdjacentPost(postId: string, date: string, isPrev: boolean) {
+async function getAdjacentPost(postId: string, createdAt: string, isPrev: boolean) {
   try {
     const postsRef = collection(firebaseDB, 'posts');
-    const postsQuery = query(postsRef, ...makeAdjacentPostsQuery(postId, date, isPrev));
+    const postsQuery = query(postsRef, ...makeAdjacentPostsQuery(postId, createdAt, isPrev));
     const data = await getDocs(postsQuery);
     return (data.docs[0]?.data() as AdjacentPostData) || null;
   } catch (error) {
@@ -44,11 +44,11 @@ async function getAdjacentPost(postId: string, date: string, isPrev: boolean) {
   return null;
 }
 
-function makeAdjacentPostsQuery(postId: string, date: string, isPrev: boolean) {
+function makeAdjacentPostsQuery(postId: string, createdAt: string, isPrev: boolean) {
   return [
-    orderBy('date', isPrev ? 'asc' : 'desc'), //
+    orderBy('createdAt', isPrev ? 'asc' : 'desc'), //
     orderBy('id', 'asc'),
-    where('date', isPrev ? '>' : '<', date),
+    where('createdAt', isPrev ? '>' : '<', createdAt),
     where('id', '!=', postId),
     limit(1),
   ];

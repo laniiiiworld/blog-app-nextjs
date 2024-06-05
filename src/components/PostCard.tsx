@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function PostCard({ post, isPriority }: Props) {
-  const { title, date, tags, path, repliesCount, likesCount } = post;
+  const { title, createdAt, tags, path, repliesCount, likesCount } = post;
 
   return (
     <Link href={`/posts/${path}`} legacyBehavior>
@@ -24,7 +24,7 @@ export default function PostCard({ post, isPriority }: Props) {
             <span className='flex items-center'>
               <FaRegCommentAlt className='mr-1' /> {repliesCount}
             </span>
-            <time className='w-full text-right'>{date}</time>
+            <time className='w-full text-right'>{createdAt}</time>
           </div>
           <h3 className='text-xl leading-relaxed font-semibold w-full py-2'>{title}</h3>
           <ul className='flex gap-2 flex-wrap'>

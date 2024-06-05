@@ -32,12 +32,12 @@ export async function getAllPosts({ order, tag }: AllPostsProps): Promise<PostCa
 function makeAllPostsQuery({ order, tag }: AllPostsProps) {
   if (tag) {
     return tag === SELECT_ALL //
-      ? [orderBy('date', 'desc')]
-      : [where('tags', 'array-contains', tag), orderBy('date', 'desc')];
+      ? [orderBy('createdAt', 'desc')]
+      : [where('tags', 'array-contains', tag), orderBy('createdAt', 'desc')];
   }
   return order === 'name' //
-    ? [orderBy('title', 'asc'), orderBy('date', 'desc')]
-    : [orderBy('date', order)];
+    ? [orderBy('title', 'asc'), orderBy('createdAt', 'desc')]
+    : [orderBy('createdAt', order)];
 }
 
 export async function getAllPostsSize() {

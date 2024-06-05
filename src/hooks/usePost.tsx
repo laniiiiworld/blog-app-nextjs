@@ -32,7 +32,7 @@ export function usePost({ path, enabled = true }: Props) {
       const post: FullPostData = {
         ...rest,
         tags,
-        date: new Date().toLocaleDateString('ko', {
+        createdAt: new Date().toLocaleDateString('ko', {
           year: 'numeric',
           month: '2-digit',
           day: '2-digit',

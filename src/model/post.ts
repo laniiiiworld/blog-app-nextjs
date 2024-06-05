@@ -1,4 +1,3 @@
-import { DocumentReference } from 'firebase/firestore';
 import { SimpleUser } from './user';
 
 type SimplePostData = {
@@ -10,7 +9,7 @@ type SimplePostData = {
   featured: boolean;
   isImage: boolean;
   writer: string;
-  date: string;
+  createdAt: string;
   lastUpdatedAt: string;
 };
 
@@ -53,6 +52,6 @@ export const POST_DEFAULT_DATA: PostFormData = {
   isImage: false,
   content: '',
   writer: '',
-  date: '',
+  createdAt: '',
   lastUpdatedAt: '',
 };

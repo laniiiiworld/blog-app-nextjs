@@ -19,7 +19,7 @@ type Props = {
 
 const PostContent = forwardRef<HTMLElement | null, Props>(({ post }, ref) => {
   const router = useRouter();
-  const { id, path, title, description, date, content, isImage } = post;
+  const { id, path, title, description, createdAt, content, isImage } = post;
   const { user } = useAuthContext();
   const { setPopupType } = usePopUpContext();
   const { likes, liked, updateLikes } = useLikesContext();
@@ -37,7 +37,7 @@ const PostContent = forwardRef<HTMLElement | null, Props>(({ post }, ref) => {
       <section ref={ref} className='py-4'>
         <h1 className='text-4xl font-bold mb-2 text-center'>{title}</h1>
         <div className='relative flex justify-center items-center mt-6 mb-8 lg:mb-12'>
-          <p className='text-center'>{date}</p>
+          <p className='text-center'>{createdAt}</p>
           <div className='absolute right-0 flex gap-2'>
             {user?.isAdmin && (
               <>
