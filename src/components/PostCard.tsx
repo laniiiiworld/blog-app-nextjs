@@ -3,6 +3,7 @@ import PostCardImage from './PostCardImage';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import { PiHeartFill } from 'react-icons/pi';
 import { PostCardData } from '@/model/post';
+import { formatToISODate } from '@/util/date';
 
 type Props = {
   post: PostCardData;
@@ -24,7 +25,7 @@ export default function PostCard({ post, isPriority }: Props) {
             <span className='flex items-center'>
               <FaRegCommentAlt className='mr-1' /> {repliesCount}
             </span>
-            <time className='w-full text-right'>{createdAt}</time>
+            <time className='w-full text-right'>{formatToISODate(createdAt)}</time>
           </div>
           <h3 className='text-xl leading-relaxed font-semibold w-full py-2'>{title}</h3>
           <ul className='flex gap-2 flex-wrap'>
