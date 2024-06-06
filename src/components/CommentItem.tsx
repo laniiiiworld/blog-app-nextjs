@@ -17,6 +17,8 @@ export default function CommentItem({ comment }: Props) {
   const { user } = useAuthContext();
   const { edited, setEdited } = useCommentsContext();
   const { setPopupType, setValue: setDeleted } = usePopUpContext();
+  const isMyComment = user?.uid && user?.uid === comment.user.uid;
+  const isEditing = edited && edited === comment.id;
 
   return (
     <>
@@ -36,7 +38,7 @@ export default function CommentItem({ comment }: Props) {
               <div className='text-light text-sm'>{formatAgo(comment.createdAt)}</div>
             </div>
           </div>
-          {user?.uid && user?.uid === comment.user.uid && (
+          {isMyComment && (
             <div className='flex gap-2 text-gray-500 text-sm'>
               <button onClick={() => setEdited(comment.id)} className='hover:underline'>
                 수정
@@ -53,10 +55,8 @@ export default function CommentItem({ comment }: Props) {
             </div>
           )}
         </div>
-        {(!edited || edited !== comment.id) && (
-          <p className='w-full min-h-[7rem] mt-6 bg-white whitespace-pre-line'>{comment.content}</p>
-        )}
-        {edited && edited === comment.id && <CommentFormToUpdate comment={comment} />}
+        {!isEditing && <p className='w-full min-h-[7rem] mt-6 bg-white whitespace-pre-line'>{comment.content}</p>}
+        {isEditing && <CommentFormToUpdate comment={comment} />}
       </li>
     </>
   );
