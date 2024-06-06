@@ -3,11 +3,11 @@
 import Image from 'next/image';
 import { CommentData } from '@/model/post';
 import { usePopUpContext } from '@/context/PopUpContext';
-import CommentForm from './CommentForm';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useAuthContext } from '@/context/AuthContext';
 import { formatAgo } from '../util/date';
 import CommentDeletePopup from './popup/CommentDeletePopup';
+import CommentFormToUpdate from './CommentFormToUpdate';
 
 type Props = {
   comment: CommentData;
@@ -56,7 +56,7 @@ export default function CommentItem({ comment }: Props) {
         {(!edited || edited !== comment.id) && (
           <p className='w-full min-h-[7rem] mt-6 bg-white whitespace-pre-line'>{comment.content}</p>
         )}
-        {edited && edited === comment.id && <CommentForm comment={comment} />}
+        {edited && edited === comment.id && <CommentFormToUpdate comment={comment} />}
       </li>
     </>
   );
