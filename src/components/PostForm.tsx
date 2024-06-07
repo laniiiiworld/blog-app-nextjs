@@ -5,9 +5,10 @@ import PostFormTagList from './PostFormTagList';
 import { usePost } from '@/hooks/usePost';
 import { pushNotification } from '@/util/notification';
 import { useRouter } from 'next/navigation';
+import TextEditor from './TextEditor';
 
 const LABEL_STYLE = 'block mb-2 text-slate-900 text-lg';
-const INPUT_STYPE = 'block mx-auto p-2 text-base rounded border border-border-light w-full max-w-2xl outline-none';
+const INPUT_STYPE = 'block mx-auto p-2 text-base rounded border border-border-light w-full outline-none';
 const REQUIRED_STYLE =
   "after:content-[''] after:inline-block after:ml-2 after:w-2 after:h-2 after:rounded-full after:bg-orange-400";
 
@@ -32,12 +33,12 @@ export default function PostForm({ post }: Props) {
     e.preventDefault();
     const mutation = isAdding ? addPost : updatePost;
     mutation.mutate(
-        { form, tags },
-        {
-          onSuccess: handleSubmitSuccess,
-          onError: handleSubmitError,
-        }
-      );
+      { form, tags },
+      {
+        onSuccess: handleSubmitSuccess,
+        onError: handleSubmitError,
+      }
+    );
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -59,7 +60,7 @@ export default function PostForm({ post }: Props) {
   };
 
   return (
-    <form onSubmit={onSubmit} className='mt-10 mx-auto max-w-2xl p-5'>
+    <form onSubmit={onSubmit} className='w-full mt-10 px-4'>
       <div className='mt-5'>
         <label className={`${LABEL_STYLE} ${REQUIRED_STYLE}`} htmlFor='title'>
           제목
@@ -125,15 +126,7 @@ export default function PostForm({ post }: Props) {
         <label className={`${LABEL_STYLE} ${REQUIRED_STYLE}`} htmlFor='content'>
           내용
         </label>
-        <textarea
-          className={`${INPUT_STYPE} min-h-80`}
-          name='content'
-          id='content'
-          required
-          onChange={handleChange}
-          placeholder='내용을 입력하세요'
-          value={form.content}
-        ></textarea>
+        <TextEditor content={form.content} handleChange={handleChange} INPUT_STYPE={INPUT_STYPE} />
       </div>
       <div className='mt-5 text-right'>
         <input
