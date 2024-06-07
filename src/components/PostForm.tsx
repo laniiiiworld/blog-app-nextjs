@@ -1,5 +1,5 @@
 'use client';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, KeyboardEvent, useState } from 'react';
 import { FullPostData, POST_DEFAULT_DATA, PostFormData } from '@/model/post';
 import PostFormTagList from './PostFormTagList';
 import { usePost } from '@/hooks/usePost';
@@ -30,27 +30,29 @@ export default function PostForm({ post }: Props) {
   };
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isAdding) {
-      addPost.mutate(
+    const mutation = isAdding ? addPost : updatePost;
+    mutation.mutate(
         { form, tags },
         {
           onSuccess: handleSubmitSuccess,
           onError: handleSubmitError,
         }
       );
-    } else {
-      updatePost.mutate(
-        { form, tags },
-        {
-          onSuccess: handleSubmitSuccess,
-          onError: handleSubmitError,
-        }
-      );
-    }
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleTagAdd = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (tags.length === 5) {
+        pushNotification('warning', '태그는 5개까지 입력 가능합니다.');
+        return;
+      }
+      !tags.includes(form.newTag) && setTags((prev) => [...prev, form.newTag]);
+      setForm((prev) => ({ ...prev, newTag: '' }));
+    }
   };
   const handleTagDelete = (tag: string) => {
     setTags((prev) => prev.filter((v) => v !== tag));
@@ -99,17 +101,7 @@ export default function PostForm({ post }: Props) {
           name='newTag'
           id='newTag'
           onChange={handleChange}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              if (tags.length === 5) {
-                pushNotification('warning', '태그는 5개까지 입력 가능합니다.');
-                return;
-              }
-              !tags.includes(form.newTag) && setTags((prev) => [...prev, form.newTag]);
-              setForm((prev) => ({ ...prev, newTag: '' }));
-            }
-          }}
+          onKeyDown={handleTagAdd}
           placeholder='태그를 입력하세요'
           value={form.newTag}
         />
