@@ -3,11 +3,11 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import MarkdownViewr from './MarkdownViewr';
 import TextEditorTab from './TextEditorTab';
+import { INPUT_STYPE } from './PostFormItem';
 
 type Props = {
   content: string;
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  INPUT_STYPE: string;
 };
 export type ViewType = 'write' | 'preview' | 'all';
 const viewTypes: { [key in ViewType]: ViewType } = {
@@ -19,7 +19,7 @@ const MAX_WIDTH_TO_SHOW_TABS = 1024;
 const BORDER_BOTTOM_STYLE = 'after:content-"" after:w-full after:h-[1px] after:mt-12 after:bg-border-light';
 const HEIGHT_STYLE = 'h-96 md:h-[480px] lg:h-[720px]';
 
-export default function TextEditor({ content, handleChange, INPUT_STYPE }: Props) {
+export default function TextEditor({ content, handleChange }: Props) {
   const [clicked, setClicked] = useState<ViewType>('all');
   const handleTabClick = (e: MouseEvent<HTMLElement>) => {
     const target = e.target;

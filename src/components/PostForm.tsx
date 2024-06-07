@@ -5,12 +5,7 @@ import PostFormTagList from './PostFormTagList';
 import { usePost } from '@/hooks/usePost';
 import { pushNotification } from '@/util/notification';
 import { useRouter } from 'next/navigation';
-import TextEditor from './TextEditor';
-
-const LABEL_STYLE = 'block mb-2 text-slate-900 text-lg';
-const INPUT_STYPE = 'block mx-auto p-2 text-base rounded border border-border-light w-full outline-none';
-const REQUIRED_STYLE =
-  "after:content-[''] after:inline-block after:ml-2 after:w-2 after:h-2 after:rounded-full after:bg-orange-400";
+import PostFormItem from './PostFormItem';
 
 type Props = {
   post?: FullPostData;
@@ -61,73 +56,49 @@ export default function PostForm({ post }: Props) {
 
   return (
     <form onSubmit={onSubmit} className='w-full mt-10 px-4'>
-      <div className='mt-5'>
-        <label className={`${LABEL_STYLE} ${REQUIRED_STYLE}`} htmlFor='title'>
-          제목
-        </label>
-        <input
-          className={`${INPUT_STYPE}`}
-          type='text'
-          name='title'
-          id='title'
-          required
-          onChange={handleChange}
-          placeholder='제목을 입력하세요'
-          value={form.title}
-        />
-      </div>
-      <div className='mt-5'>
-        <label className={`${LABEL_STYLE} ${REQUIRED_STYLE}`} htmlFor='title'>
-          path
-        </label>
-        <input
-          className={`${INPUT_STYPE}`}
-          type='text'
-          name='path'
-          id='path'
-          required
-          disabled={!isAdding}
-          onChange={handleChange}
-          placeholder='path를 입력하세요'
-          value={form.path}
-        />
-      </div>
-      <div className='mt-5'>
-        <label className={`${LABEL_STYLE}`} htmlFor='tags'>
-          Tags
-        </label>
-        <input
-          className={`${INPUT_STYPE}`}
-          type='text'
-          name='newTag'
-          id='newTag'
-          onChange={handleChange}
-          onKeyDown={handleTagAdd}
-          placeholder='태그를 입력하세요'
-          value={form.newTag}
-        />
-        {tags.length > 0 && <PostFormTagList tags={tags} handleTagDelete={handleTagDelete} />}
-      </div>
-      <div className='mt-5'>
-        <label className={`${LABEL_STYLE}`} htmlFor='description'>
-          설명
-        </label>
-        <input
-          className={`${INPUT_STYPE}`}
-          type='text'
-          name='description'
-          id='description'
-          onChange={handleChange}
-          placeholder='포스트를 짧게 소개해보세요'
-          value={form.description}
-        />
-      </div>
-      <div className='mt-5'>
-        <label className={`${LABEL_STYLE} ${REQUIRED_STYLE}`} htmlFor='content'>
-          내용
-        </label>
-        <TextEditor content={form.content} handleChange={handleChange} INPUT_STYPE={INPUT_STYPE} />
-      </div>
+      <PostFormItem
+        type='input'
+        labelName='제목'
+        tagName='title'
+        text={form.title}
+        required={true}
+        handleChange={handleChange}
+      />
+      <PostFormItem
+        type='input'
+        labelName='path'
+        tagName='path'
+        text={form.path}
+        disabled={!isAdding}
+        required={true}
+        handleChange={handleChange}
+      />
+      <PostFormItem
+        type='input'
+        labelName='Tags'
+        tagName='newTag'
+        text={form.newTag}
+        placeholderText='태그를 입력하세요'
+        handleChange={handleChange}
+        handleKeyDown={handleTagAdd}
+      />
+      {tags.length > 0 && <PostFormTagList tags={tags} handleTagDelete={handleTagDelete} />}
+      <PostFormItem
+        type='input'
+        labelName='설명'
+        tagName='description'
+        text={form.description}
+        placeholderText='포스트를 짧게 소개해보세요'
+        handleChange={handleChange}
+      />
+      <PostFormItem
+        type='textarea'
+        labelName='내용'
+        tagName='content'
+        text={form.content}
+        required={true}
+        handleChange={handleChange}
+      />
       <div className='mt-5 text-right'>
         <input
           type='submit'
