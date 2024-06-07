@@ -69,6 +69,7 @@ export default function PostForm({ post }: Props) {
           id='title'
           required
           onChange={handleChange}
+          placeholder='제목을 입력하세요'
           value={form.title}
         />
       </div>
@@ -84,6 +85,7 @@ export default function PostForm({ post }: Props) {
           required
           disabled={!isAdding}
           onChange={handleChange}
+          placeholder='path를 입력하세요'
           value={form.path}
         />
       </div>
@@ -108,6 +110,7 @@ export default function PostForm({ post }: Props) {
               setForm((prev) => ({ ...prev, newTag: '' }));
             }
           }}
+          placeholder='태그를 입력하세요'
           value={form.newTag}
         />
         {tags.length > 0 && <PostFormTagList tags={tags} handleTagDelete={handleTagDelete} />}
@@ -122,6 +125,7 @@ export default function PostForm({ post }: Props) {
           name='description'
           id='description'
           onChange={handleChange}
+          placeholder='포스트를 짧게 소개해보세요'
           value={form.description}
         />
       </div>
@@ -135,6 +139,7 @@ export default function PostForm({ post }: Props) {
           id='content'
           required
           onChange={handleChange}
+          placeholder='내용을 입력하세요'
           value={form.content}
         ></textarea>
       </div>
