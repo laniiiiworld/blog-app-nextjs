@@ -1,12 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAuthContext } from '@/context/AuthContext';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { usePopUpContext } from '@/context/PopUpContext';
 import LoginPopup from './popup/LoginPopup';
 import useComments from '@/hooks/useComments';
+import CommentUser from './CommentUser';
 
 export default function CommentFormToAdd() {
   const { user, logout } = useAuthContext();
@@ -34,18 +34,7 @@ export default function CommentFormToAdd() {
       <h4 className='font-bold text-xl'>{comments?.length || 0}개의 댓글</h4>
       <form onSubmit={onSubmit}>
         <div className='flex my-4 gap-4'>
-          {user && (
-            <div>
-              <Image //
-                src={user.photoURL || ''}
-                alt={user.email || ''}
-                width={50}
-                height={50}
-                className='rounded-full'
-              />
-              <div className='font-semibold text-center'>{user.displayName}</div>
-            </div>
-          )}
+          {user && <CommentUser user={user} size={50} />}
           <textarea
             name='content' //
             id='content'

@@ -1,13 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import { CommentData } from '@/model/post';
 import { usePopUpContext } from '@/context/PopUpContext';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useAuthContext } from '@/context/AuthContext';
-import { formatAgo } from '../util/date';
 import CommentDeletePopup from './popup/CommentDeletePopup';
 import CommentFormToUpdate from './CommentFormToUpdate';
+import CommentUser from './CommentUser';
 
 type Props = {
   comment: CommentData;
@@ -25,19 +24,7 @@ export default function CommentItem({ comment }: Props) {
       <CommentDeletePopup />
       <li className='border-b border-gray-200 py-6'>
         <div className='flex items-center justify-between'>
-          <div className='flex'>
-            <Image //
-              src={comment.user.photoURL || ''}
-              alt={comment.user.email || ''}
-              width={45}
-              height={45}
-              className='rounded-full'
-            />
-            <div className='pl-4'>
-              <div className='font-semibold'>{comment.user.displayName}</div>
-              <div className='text-light text-sm'>{formatAgo(comment.createdAt)}</div>
-            </div>
-          </div>
+          <CommentUser size={45} user={comment.user} createdAt={comment.createdAt} />
           {isMyComment && (
             <div className='flex gap-2 text-gray-500 text-sm'>
               <button onClick={() => setEdited(comment.id)} className='hover:underline'>
