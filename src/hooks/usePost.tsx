@@ -3,7 +3,6 @@ import { useAuthContext } from '@/context/AuthContext';
 import { FullPostData, PostFormData, PostWithAdjacents } from '@/model/post';
 import { getIdTokenAsync } from '@/service/auth';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   path: string;
@@ -42,7 +41,6 @@ export function usePost({ path, enabled = true }: Props) {
           hour12: false,
         }),
         writer: user?.uid || '',
-        id: uuidv4(),
       };
       const token = await getIdTokenAsync();
       const response = await fetch(`/api/posts/${post.path}`, {

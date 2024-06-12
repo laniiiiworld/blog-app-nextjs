@@ -1,25 +1,24 @@
 'use client';
-import { ChangeEvent, FormEvent, KeyboardEvent, useState } from 'react';
-import { FullPostData, POST_DEFAULT_DATA, PostFormData } from '@/model/post';
+import { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import PostFormTagList from './PostFormTagList';
 import { usePost } from '@/hooks/usePost';
 import { pushNotification } from '@/util/notification';
 import { useRouter } from 'next/navigation';
 import PostFormItem from './PostFormItem';
+import { usePostFormContext } from '@/context/PostFormContext';
 
 type Props = {
-  post?: FullPostData;
+  isAdding: boolean;
+  path: string;
 };
 
-export default function PostForm({ post }: Props) {
+export default function PostForm({ isAdding, path }: Props) {
   const router = useRouter();
-  const isAdding = post?.path ? false : true;
-  const { addPost, updatePost } = usePost({ path: post?.path || '-', enabled: false });
-  const [form, setForm] = useState<PostFormData>(post ? { ...post, newTag: '' } : POST_DEFAULT_DATA);
-  const [tags, setTags] = useState<string[]>(post?.tags || []);
+  const { form, handleForm, tags, handleTags } = usePostFormContext();
+  const { addPost, updatePost } = usePost({ path, enabled: false });
   const handleSubmitSuccess = () => {
     router.push(`/posts/${form.path}`);
-    setForm(POST_DEFAULT_DATA);
+    handleForm({});
   };
   const handleSubmitError = (error: Error) => {
     pushNotification('error', error.message);
@@ -37,7 +36,7 @@ export default function PostForm({ post }: Props) {
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    handleForm({ name, value });
   };
   const handleTagAdd = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -46,13 +45,11 @@ export default function PostForm({ post }: Props) {
         pushNotification('warning', '태그는 5개까지 입력 가능합니다.');
         return;
       }
-      !tags.includes(form.newTag) && setTags((prev) => [...prev, form.newTag]);
-      setForm((prev) => ({ ...prev, newTag: '' }));
+      !tags.includes(form.newTag) && handleTags('add');
+      handleForm({ name: 'newTag', value: '' });
     }
   };
-  const handleTagDelete = (tag: string) => {
-    setTags((prev) => prev.filter((v) => v !== tag));
-  };
+  const handleTagDelete = (tag: string) => handleTags('delete', tag);
 
   return (
     <form onSubmit={onSubmit} className='w-full mt-10 px-4'>

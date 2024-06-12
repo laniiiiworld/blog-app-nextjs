@@ -2,6 +2,7 @@
 
 import PostForm from '@/components/PostForm';
 import Spinner from '@/components/loading/Spinner';
+import { PostFormContextProvider } from '@/context/PostFormContext';
 import { usePost } from '@/hooks/usePost';
 import { notFound } from 'next/navigation';
 
@@ -15,5 +16,9 @@ export default function UpdatePage({ params: { slug } }: Props) {
   if (isLoading || !post) return <Spinner />;
   if (isError) notFound();
 
-  return <PostForm post={post} />;
+  return (
+    <PostFormContextProvider post={post}>
+      <PostForm isAdding={false} path={post.path} />
+    </PostFormContextProvider>
+  );
 }

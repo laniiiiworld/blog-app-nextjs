@@ -41,17 +41,3 @@ export type CommentData = {
 };
 
 export type SimpleCommentData = Omit<CommentData, 'user'>;
-
-export const POST_DEFAULT_DATA: PostFormData = {
-  id: '',
-  title: '',
-  description: '',
-  newTag: '',
-  path: '',
-  featured: false,
-  isImage: false,
-  content: '',
-  writer: '',
-  createdAt: '',
-  lastUpdatedAt: '',
-};
