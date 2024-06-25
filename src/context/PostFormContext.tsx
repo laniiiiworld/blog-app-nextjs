@@ -4,17 +4,6 @@ import { FullPostData, PostFormData } from '@/model/post';
 import { ReactNode, createContext, useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-type ContextProps = {
-  form: PostFormData;
-  handleForm: ({ name, value }: { name?: string; value?: string }) => void;
-  tags: string[];
-  handleTags: (type: 'add' | 'delete', deleted?: string) => void;
-};
-type Props = {
-  post?: FullPostData;
-  children: ReactNode;
-};
-
 const POST_DEFAULT_DATA: PostFormData = {
   id: '',
   title: '',
@@ -29,11 +18,33 @@ const POST_DEFAULT_DATA: PostFormData = {
   lastUpdatedAt: '',
 };
 
+type HandleFormParams = {
+  name?: keyof PostFormData;
+  value?: string;
+};
+
+type HandleTagsParams = {
+  type: 'add' | 'delete';
+  deleted?: string;
+};
+
+type ContextProps = {
+  form: PostFormData;
+  handleForm: ({ name, value }: HandleFormParams) => void;
+  tags: string[];
+  handleTags: ({ type, deleted }: HandleTagsParams) => void;
+};
+
+type Props = {
+  post?: FullPostData;
+  children: ReactNode;
+};
+
 const PostFormContext = createContext<ContextProps>({
   form: POST_DEFAULT_DATA,
-  handleForm: ({ name, value }: { name?: string; value?: string }) => {},
+  handleForm: ({ name, value }: HandleFormParams) => {},
   tags: [],
-  handleTags: (type: 'add' | 'delete', deleted?: string) => {},
+  handleTags: ({ type, deleted }: HandleTagsParams) => {},
 });
 
 export function PostFormContextProvider({ post, children }: Props) {
@@ -41,14 +52,14 @@ export function PostFormContextProvider({ post, children }: Props) {
     post ? { ...post, newTag: '' } : { ...POST_DEFAULT_DATA, id: uuidv4() }
   );
   const [tags, setTags] = useState<string[]>(post?.tags || []);
-  const handleForm = ({ name, value }: { name?: string; value?: string }) => {
+  const handleForm = ({ name, value }: HandleFormParams) => {
     if (name === undefined) {
       setForm(POST_DEFAULT_DATA);
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));
     }
   };
-  const handleTags = (type: 'add' | 'delete', deleted?: string) => {
+  const handleTags = ({ type, deleted }: HandleTagsParams) => {
     if (type === 'add') {
       setTags((prev) => [...prev, form.newTag]);
     } else {

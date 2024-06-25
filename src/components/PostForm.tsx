@@ -6,6 +6,7 @@ import { pushNotification } from '@/util/notification';
 import { useRouter } from 'next/navigation';
 import PostFormItem from './PostFormItem';
 import { usePostFormContext } from '@/context/PostFormContext';
+import { PostFormData } from '@/model/post';
 
 type Props = {
   isAdding: boolean;
@@ -36,7 +37,7 @@ export default function PostForm({ isAdding, path }: Props) {
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    handleForm({ name, value });
+    handleForm({ name: name as keyof PostFormData, value });
   };
   const handleTagAdd = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -45,11 +46,11 @@ export default function PostForm({ isAdding, path }: Props) {
         pushNotification('warning', '태그는 5개까지 입력 가능합니다.');
         return;
       }
-      !tags.includes(form.newTag) && handleTags('add');
+      !tags.includes(form.newTag) && handleTags({ type: 'add' });
       handleForm({ name: 'newTag', value: '' });
     }
   };
-  const handleTagDelete = (tag: string) => handleTags('delete', tag);
+  const handleTagDelete = (deleted: string) => handleTags({ type: 'delete', deleted });
 
   return (
     <form onSubmit={onSubmit} className='w-full mt-10 px-4'>
