@@ -1,8 +1,13 @@
 import { useListButtonContext } from '@/context/ListButtonContext';
-import { ChangeEvent, MouseEvent, MutableRefObject, ReactNode } from 'react';
+import { ChangeEvent, MouseEvent, MutableRefObject, ReactNode, useRef } from 'react';
+import { ButtonType } from './TextEditorButtons';
+import { addPostImage } from '@/service/postImage';
+import { usePostFormContext } from '@/context/PostFormContext';
+import { pushNotification } from '@/util/notification';
 
-export type SelectionType = 'line' | 'part' | 'link' | 'code';
+export type SelectionType = 'line' | 'part' | 'link' | 'image' | 'code';
 type Props = {
+  type: ButtonType;
   icon: ReactNode;
   contentRef: MutableRefObject<HTMLTextAreaElement | null>;
   selectionType: SelectionType;
@@ -13,6 +18,7 @@ type Props = {
 };
 
 export default function TextEditorButton({
+  type,
   icon,
   contentRef,
   selectionType,
@@ -21,8 +27,10 @@ export default function TextEditorButton({
   handleChange,
   hasLine = false,
 }: Props) {
+  const { form, handleForm } = usePostFormContext();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { isList, handleToggle } = useListButtonContext();
-  const handleTextAreaEl = () => {
+  const handleTextAreaEl = (placeholder: string) => {
     const textareaEl = contentRef.current;
     if (!textareaEl) return;
 
@@ -30,7 +38,8 @@ export default function TextEditorButton({
       selectionType,
       textareaEl,
       regexp,
-      markdown
+      markdown,
+      placeholder
     );
 
     textareaEl.setRangeText(newText, startRange, endRange, 'end');
@@ -39,15 +48,48 @@ export default function TextEditorButton({
     handleChange({ target: textareaEl } as ChangeEvent<HTMLTextAreaElement>);
     textareaEl.focus();
   };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+
+    if (!file) return;
+    if (!checkFileExtension(file.type) || !checkMaxFileSize(file.size)) {
+      e.target.value = '';
+      return;
+    }
+
+    uploadImage(file);
+  };
+
+  const uploadImage = async (file: File) => {
+    const [fileName, fileExtension] = file.name.split('.');
+
+    //업로드중인 파일 인지할 수 있도록 표시
+    const placeholder = `${fileName}.${fileExtension} 업로드중...`;
+    handleTextAreaEl(placeholder);
+
+    //업로드
+    const downloadURL = await addPostImage(form.id, file);
+
+    //업로드한 파일 preview에 display
+    handleForm({
+      name: 'content',
+      value: `![${placeholder}]()`,
+      replacedValue: `![${fileName}](${downloadURL})`,
+    });
+  };
+
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    handleTextAreaEl();
+    type === 'image' && fileInputRef.current && fileInputRef.current.click();
+    type !== 'image' && handleTextAreaEl('');
     handleToggle();
   };
 
   return (
     <>
       <li>
+        {type === 'image' && <input ref={fileInputRef} type='file' onChange={handleFileSelect} className='hidden' />}
         <button onClick={onClick} className='w-8 h-8 p-2 rounded text-lg font-bold hover:bg-gray-200'>
           {icon}
         </button>
@@ -63,23 +105,44 @@ export default function TextEditorButton({
   );
 }
 
+function checkFileExtension(type: string) {
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'image/svg+xml'];
+  const isImageFile = allowedTypes.includes(type);
+
+  if (isImageFile) return true;
+
+  pushNotification('error', '이미지 파일(jpg, jpeg, png, gif)만 업로드 가능합니다.');
+  return false;
+}
+
+function checkMaxFileSize(size: number) {
+  const maxFileSizeMB = 8;
+  const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024;
+
+  if (size <= maxFileSizeBytes) return true;
+
+  pushNotification('error', `이미지 파일 크기는 ${maxFileSizeMB}MB를 초과할 수 없습니다.`);
+  return false;
+}
+
 function getNewFormatInfo(
   selectionType: SelectionType,
   textareaEl: HTMLTextAreaElement,
   regexp: RegExp,
-  markdown: string
+  markdown: string,
+  placeholder: string
 ) {
   const { value } = textareaEl;
   const startRange = findStartRangeIndex(selectionType, textareaEl);
   const endRange = findEndRangeIndex(selectionType, textareaEl);
   const selectedText = value.slice(startRange, endRange);
-  const newText = formatSelectedText(selectionType, selectedText, regexp, markdown);
+  const newText = formatSelectedText(selectionType, selectedText, regexp, markdown, placeholder);
 
   return {
     newText,
     startRange,
     endRange,
-    selectionStart: startRange + (selectionType !== 'line' ? 0 : newText.length),
+    selectionStart: startRange + (selectionType !== 'line' && selectionType !== 'image' ? 0 : newText.length),
     selectionEnd: startRange + newText.length,
   };
 }
@@ -98,7 +161,13 @@ function findEndRangeIndex(selectionType: SelectionType, textareaEl: HTMLTextAre
   return lineEnd === -1 ? value.length : lineEnd;
 }
 
-function formatSelectedText(selectionType: SelectionType, selectedText: string, regexp: RegExp, markdown: string) {
+function formatSelectedText(
+  selectionType: SelectionType,
+  selectedText: string,
+  regexp: RegExp,
+  markdown: string,
+  placeholder: string
+) {
   const replacedText = selectedText.replace(regexp, '');
   switch (selectionType) {
     case 'line':
@@ -107,6 +176,8 @@ function formatSelectedText(selectionType: SelectionType, selectedText: string, 
       return selectedText === replacedText ? `${markdown}${selectedText || '텍스트'}${markdown}` : replacedText;
     case 'link':
       return markdown.replace('텍스트', selectedText || '');
+    case 'image':
+      return markdown.replace('fileName', placeholder);
     case 'code':
       return `${markdown}js\n${selectedText || '코드를 입력하세요'}\n${markdown}`;
     default:

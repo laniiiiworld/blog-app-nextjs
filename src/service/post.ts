@@ -32,6 +32,18 @@ export async function getPost(path: string): Promise<FullPostData | null> {
   return null;
 }
 
+export async function getPostContent(postId: string): Promise<string> {
+  try {
+    const postsRef = collection(firebaseDB, 'posts');
+    const posts = await getDocs(query(postsRef, where('id', '==', postId)));
+    const post = posts.docs[0].data() as FullPostData;
+    return post.content;
+  } catch (error) {
+    console.log(error);
+  }
+  return '';
+}
+
 async function getAdjacentPost(postId: string, createdAt: string, isPrev: boolean) {
   try {
     const postsRef = collection(firebaseDB, 'posts');

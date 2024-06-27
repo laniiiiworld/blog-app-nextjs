@@ -8,7 +8,18 @@ type Props = {
   contentRef: MutableRefObject<HTMLTextAreaElement | null>;
   handleChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 };
-type ButtonType = 'h1' | 'h2' | 'h3' | 'h4' | 'bold' | 'italic' | 'strikethrough' | 'quote' | 'link' | 'image' | 'code';
+export type ButtonType =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'bold'
+  | 'italic'
+  | 'strikethrough'
+  | 'quote'
+  | 'link'
+  | 'image'
+  | 'code';
 type ButtonConfig = {
   type: ButtonType;
   icon: ReactNode;
@@ -35,7 +46,13 @@ const buttonConfigs: ButtonConfig[] = [
   },
   { type: 'quote', icon: <FaQuoteRight />, selectionType: 'line', regexp: /^>\s*/g, markdown: '> ' },
   { type: 'link', icon: <FaLink />, selectionType: 'link', regexp: /^\[.*\]\(.*\)$/g, markdown: '[텍스트](url)' },
-  { type: 'image', icon: <FaImage />, selectionType: 'link', regexp: /^\[.*\]\(.*\)$/g, markdown: '![텍스트]()' },
+  {
+    type: 'image',
+    icon: <FaImage />,
+    selectionType: 'image',
+    regexp: /^\[.*\]\(.*\)$/g,
+    markdown: '![fileName]()',
+  },
   { type: 'code', icon: <FaCode />, selectionType: 'code', regexp: /^\`\`\`+|\`\`\`+$/g, markdown: '```' },
 ];
 
@@ -51,6 +68,7 @@ export default function TextEditorButtons({ contentRef, handleChange }: Props) {
       {buttonConfigs.map(({ type, icon, selectionType, regexp, markdown, hasLine }) => (
         <TextEditorButton
           key={type}
+          type={type}
           icon={icon}
           contentRef={contentRef}
           selectionType={selectionType}

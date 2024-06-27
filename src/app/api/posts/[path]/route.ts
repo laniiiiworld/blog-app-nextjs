@@ -1,6 +1,7 @@
 import { PostWithAdjacents } from '@/model/post';
 import { onlyAdminUserSession } from '@/service/firebaseAdmin';
 import { getPostWithAdjacents, addOrUpdatePost, removePost } from '@/service/post';
+import { removeAllImages } from '@/service/postImage';
 import { NextRequest, NextResponse } from 'next/server';
 
 type Context = {
@@ -49,6 +50,7 @@ export function DELETE(req: NextRequest) {
     }
 
     return removePost(postId)
+      .then(async () => await removeAllImages(postId))
       .then(() => new Response(JSON.stringify({ success: true }), { status: 200 }))
       .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
   });
