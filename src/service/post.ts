@@ -34,9 +34,9 @@ export async function getPost(path: string): Promise<FullPostData | null> {
 
 export async function getPostContent(postId: string): Promise<string> {
   try {
-    const postsRef = collection(firebaseDB, 'posts');
-    const posts = await getDocs(query(postsRef, where('id', '==', postId)));
-    const post = posts.docs[0].data() as FullPostData;
+    const postRef = doc(firebaseDB, 'posts', postId);
+    const postDoc = await getDoc(postRef);
+    const post = postDoc.data() as FullPostData;
     return post.content;
   } catch (error) {
     console.log(error);
