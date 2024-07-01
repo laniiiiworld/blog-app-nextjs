@@ -6,6 +6,7 @@ import { FaGithub } from 'react-icons/fa';
 import { useAuthContext } from '@/context/AuthContext';
 import { PopupType, usePopUpContext } from '@/context/PopUpContext';
 import PopUp from './PopUp';
+import PopUpButton from '../ui/PopUpButton';
 
 export type Login = 'Facebook' | 'Google' | 'Github';
 
@@ -36,12 +37,7 @@ export default function LoginPopup() {
             <FaFacebook className='rounded-full bg-white text-blue-600' />
           </button>
         </div>
-        <button
-          onClick={() => setTimeout(() => setPopupType(''), 0)}
-          className='bg-white text-green-800 rounded-sm px-4 py-2 cursor-pointer hover:bg-slate-100'
-        >
-          취소
-        </button>
+        <PopUpButton type='cancle' name='취소' handleClick={() => setTimeout(() => setPopupType(''), 0)} />
       </>
     </PopUp>
   );
