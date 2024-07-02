@@ -87,7 +87,6 @@ export default function TextEditor({ content, handleChange }: Props) {
               className={`${INPUT_STYPE} h-full resize-none lg:border-0 lg:border-r`}
               name='content'
               id='content'
-              required
               onChange={handleChange}
               placeholder='내용을 입력하세요'
               value={content}

@@ -2,7 +2,7 @@
 
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
-export type PopupType = '' | 'confirm' | 'email' | 'login';
+export type PopupType = '' | 'confirm' | 'email' | 'login' | 'postWrite';
 type Props = {
   children: ReactNode;
 };

@@ -42,7 +42,6 @@ export default function PostFormItem({
           name={tagName}
           id={tagName}
           disabled={disabled}
-          required={required}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}

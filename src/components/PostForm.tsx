@@ -1,12 +1,13 @@
 'use client';
-import { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
+import { ChangeEvent, KeyboardEvent } from 'react';
 import PostFormTagList from './PostFormTagList';
-import { usePost } from '@/hooks/usePost';
 import { pushNotification } from '@/util/notification';
-import { useRouter } from 'next/navigation';
 import PostFormItem from './PostFormItem';
 import { usePostFormContext } from '@/context/PostFormContext';
 import { PostFormData } from '@/model/post';
+import PostFinalizationPopup from './popup/PostFinalizationPopup';
+import { usePopUpContext } from '@/context/PopUpContext';
+import PopUpButton from './ui/PopUpButton';
 
 type Props = {
   isAdding: boolean;
@@ -14,27 +15,8 @@ type Props = {
 };
 
 export default function PostForm({ isAdding, path }: Props) {
-  const router = useRouter();
+  const { setPopupType } = usePopUpContext();
   const { form, handleForm, tags, handleTags } = usePostFormContext();
-  const { addPost, updatePost } = usePost({ path, enabled: false });
-  const handleSubmitSuccess = () => {
-    router.push(`/posts/${form.path}`);
-    handleForm({});
-  };
-  const handleSubmitError = (error: Error) => {
-    pushNotification('error', error.message);
-  };
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const mutation = isAdding ? addPost : updatePost;
-    mutation.mutate(
-      { form, tags },
-      {
-        onSuccess: handleSubmitSuccess,
-        onError: handleSubmitError,
-      }
-    );
-  };
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     handleForm({ name: name as keyof PostFormData, value });
@@ -53,21 +35,13 @@ export default function PostForm({ isAdding, path }: Props) {
   const handleTagDelete = (deleted: string) => handleTags({ type: 'delete', deleted });
 
   return (
-    <form onSubmit={onSubmit} className='w-full mt-10 px-4'>
+    <form onSubmit={(e) => e.preventDefault()} className='w-full mt-10 px-4'>
+      <PostFinalizationPopup isAdding={isAdding} path={path} handleChange={handleChange} />
       <PostFormItem
         type='input'
         labelName='제목'
         tagName='title'
         text={form.title}
-        required={true}
-        handleChange={handleChange}
-      />
-      <PostFormItem
-        type='input'
-        labelName='path'
-        tagName='path'
-        text={form.path}
-        disabled={!isAdding}
         required={true}
         handleChange={handleChange}
       />
@@ -82,14 +56,6 @@ export default function PostForm({ isAdding, path }: Props) {
       />
       {tags.length > 0 && <PostFormTagList tags={tags} handleTagDelete={handleTagDelete} />}
       <PostFormItem
-        type='input'
-        labelName='설명'
-        tagName='description'
-        text={form.description}
-        placeholderText='포스트를 짧게 소개해보세요'
-        handleChange={handleChange}
-      />
-      <PostFormItem
         type='textarea'
         labelName='내용'
         tagName='content'
@@ -98,10 +64,10 @@ export default function PostForm({ isAdding, path }: Props) {
         handleChange={handleChange}
       />
       <div className='mt-5 text-right'>
-        <input
-          type='submit'
-          value={`${isAdding ? '작성' : '수정'}`}
-          className='bg-green-800 text-white rounded-sm px-4 py-2 cursor-pointer hover:brightness-125'
+        <PopUpButton
+          type='confirm'
+          name={`${isAdding ? '작성' : '수정'}`}
+          handleClick={() => setPopupType('postWrite')}
         />
       </div>
     </form>
