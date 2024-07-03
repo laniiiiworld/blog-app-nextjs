@@ -20,7 +20,7 @@ type Props = {
 
 const PostContent = forwardRef<HTMLElement | null, Props>(({ post }, ref) => {
   const router = useRouter();
-  const { id, path, title, description, createdAt, content, isImage } = post;
+  const { id, path, title, description, createdAt, content, thumbnail } = post;
   const { user } = useAuthContext();
   const { setPopupType } = usePopUpContext();
   const { likes, liked, updateLikes } = useLikesContext();
@@ -61,7 +61,7 @@ const PostContent = forwardRef<HTMLElement | null, Props>(({ post }, ref) => {
             </ToggleButton>
           </div>
         </div>
-        {isImage && <PostPageImage post={post} width={760} height={420} />}
+        {thumbnail && <PostPageImage post={post} width={760} height={420} />}
         <p className='pt-2 mb-4 text-xl font-semibold'>{description}</p>
         <div className='w-44 h-1 bg-green-800 mt-2 mb-4'></div>
         <MarkdownViewr content={content} />

@@ -7,13 +7,13 @@ type SimplePostData = {
   tags: string[];
   path: string;
   featured: boolean;
-  isImage: boolean;
+  thumbnail: string;
   writer: string;
   createdAt: string;
   lastUpdatedAt: string;
 };
 
-export type AdjacentPostData = Pick<SimplePostData, 'title' | 'path' | 'isImage'>;
+export type AdjacentPostData = Pick<SimplePostData, 'id' | 'title' | 'path' | 'thumbnail'>;
 
 export type PostCardData = SimplePostData & {
   likesCount: number;

@@ -12,7 +12,7 @@ const POST_DEFAULT_DATA: PostFormData = {
   newTag: '',
   path: '',
   featured: false,
-  isImage: false,
+  thumbnail: '',
   content: '',
   writer: '',
   createdAt: '',
