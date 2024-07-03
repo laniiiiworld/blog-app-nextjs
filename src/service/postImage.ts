@@ -3,6 +3,18 @@ import { storage } from './firebase';
 import { findImageUrls } from '@/util/parse';
 import { getPostContent } from './post';
 
+export async function getPostImage(type: 'content' | 'thumbnail', postId: string, name: string) {
+  try {
+    const url = type === 'content' ? `images/${postId}/` : `images/${postId}/thumbnail/`;
+    const storageRef = ref(storage, url + name);
+    const downloadURL = await getDownloadURL(storageRef);
+    return downloadURL;
+  } catch (error) {
+    console.log(error);
+  }
+  return '';
+}
+
 export async function addPostImage(postId: string, file: File) {
   try {
     const metadata = {
