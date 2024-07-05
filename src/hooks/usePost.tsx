@@ -3,6 +3,7 @@ import { useAuthContext } from '@/context/AuthContext';
 import { FullPostData, PostFormData, PostWithAdjacents } from '@/model/post';
 import { getIdTokenAsync } from '@/service/auth';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 
 type Props = {
   path: string;
@@ -12,6 +13,14 @@ type Props = {
 export function usePost({ path, enabled = true }: Props) {
   const queryClient = useQueryClient();
   const { user } = useAuthContext();
+  const onSuccess = useCallback(
+    (postId: string) => {
+      queryClient.invalidateQueries({ queryKey: ['posts', 'desc'] });
+      queryClient.invalidateQueries({ queryKey: ['posts', path] });
+      queryClient.invalidateQueries({ queryKey: ['thumbnail', postId] });
+    },
+    [queryClient, path]
+  );
   const {
     data: { post, prevPost, nextPost },
     isLoading,
@@ -27,7 +36,15 @@ export function usePost({ path, enabled = true }: Props) {
   });
 
   const addPost = useMutation({
-    mutationFn: async ({ form: { newTag, ...rest }, tags }: { form: PostFormData; tags: string[] }) => {
+    mutationFn: async ({
+      form: { newTag, ...rest },
+      tags,
+      thumbnail,
+    }: {
+      form: PostFormData;
+      tags: string[];
+      thumbnail?: File;
+    }) => {
       const post: FullPostData = {
         ...rest,
         tags,
@@ -42,24 +59,37 @@ export function usePost({ path, enabled = true }: Props) {
         }),
         writer: user?.uid || '',
       };
+
+      const formData = new FormData();
+      formData.append('post', JSON.stringify(post));
+      thumbnail && formData.append('thumbnail', thumbnail);
+
       const token = await getIdTokenAsync();
       const response = await fetch(`/api/posts/${post.path}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ post }),
+        body: formData,
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to add post');
       }
+      return post.id;
     },
   });
 
   const updatePost = useMutation({
-    mutationFn: async ({ form: { newTag, ...rest }, tags }: { form: PostFormData; tags: string[] }) => {
+    mutationFn: async ({
+      form: { newTag, ...rest },
+      tags,
+      thumbnail,
+    }: {
+      form: PostFormData;
+      tags: string[];
+      thumbnail?: File;
+    }) => {
       const post: FullPostData = {
         ...rest,
         tags,
@@ -74,21 +104,25 @@ export function usePost({ path, enabled = true }: Props) {
           hour12: false,
         }),
       };
+      const formData = new FormData();
+      formData.append('post', JSON.stringify(post));
+      thumbnail && formData.append('thumbnail', thumbnail);
+
       const token = await getIdTokenAsync();
       const response = await fetch(`/api/posts/${path}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ post }),
+        body: formData,
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to update post');
       }
+      return post.id;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path] }),
+    onSuccess,
   });
 
   const removePost = useMutation({
@@ -106,8 +140,9 @@ export function usePost({ path, enabled = true }: Props) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to remove post');
       }
+      return postId;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', path] }),
+    onSuccess,
   });
 
   return { post, prevPost, nextPost, isLoading, isError, addPost, updatePost, removePost };

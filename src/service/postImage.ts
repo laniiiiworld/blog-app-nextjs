@@ -15,13 +15,17 @@ export async function getPostImage(type: 'content' | 'thumbnail', postId: string
   return '';
 }
 
-export async function addPostImage(postId: string, file: File) {
+export async function addPostImage(type: 'content' | 'thumbnail', postId: string, file: File) {
   try {
+    if (type === 'thumbnail') {
+      await removeThumbnail(postId);
+    }
     const metadata = {
       contentType: file.type,
       cacheControl: 'public, max-age=300', // 5분
     };
-    const storageRef = ref(storage, `images/${postId}/` + file.name);
+    const url = type === 'content' ? `images/${postId}/` : `images/${postId}/thumbnail/`;
+    const storageRef = ref(storage, url + file.name);
     const uploadResult = await uploadBytes(storageRef, file, metadata);
     const downloadURL = await getDownloadURL(uploadResult.ref);
 
@@ -56,6 +60,18 @@ export async function removeUnusedImages(postId: string, content?: string) {
 export async function removeAllImages(postId: string) {
   try {
     const folderRef = ref(storage, `images/${postId}/`);
+    const { items } = await listAll(folderRef);
+    const deletePromises = items.map((item) => deleteObject(item));
+    await Promise.all(deletePromises);
+    await removeThumbnail(postId);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function removeThumbnail(postId: string) {
+  try {
+    const folderRef = ref(storage, `images/${postId}/thumbnail/`);
     const { items } = await listAll(folderRef);
     const deletePromises = items.map((item) => deleteObject(item));
     await Promise.all(deletePromises);

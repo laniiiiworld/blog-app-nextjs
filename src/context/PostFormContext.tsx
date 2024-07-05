@@ -35,6 +35,8 @@ type ContextProps = {
   handleForm: ({ name, value, replacedValue }: HandleFormParams) => void;
   tags: string[];
   handleTags: ({ type, deleted }: HandleTagsParams) => void;
+  thumbnail: File | undefined;
+  handleThumbnail: (imageFile?: File) => void;
 };
 
 type Props = {
@@ -47,6 +49,8 @@ const PostFormContext = createContext<ContextProps>({
   handleForm: ({ name, value, replacedValue }: HandleFormParams) => {},
   tags: [],
   handleTags: ({ type, deleted }: HandleTagsParams) => {},
+  thumbnail: undefined,
+  handleThumbnail: () => {},
 });
 
 export function PostFormContextProvider({ post, children }: Props) {
@@ -54,6 +58,8 @@ export function PostFormContextProvider({ post, children }: Props) {
     post ? { ...post, newTag: '' } : { ...POST_DEFAULT_DATA, id: uuidv4() }
   );
   const [tags, setTags] = useState<string[]>(post?.tags || []);
+  const [thumbnail, setThumbnail] = useState<File | undefined>(undefined);
+
   const handleForm = ({ name, value, replacedValue = '' }: HandleFormParams) => {
     if (name === undefined) {
       setForm(POST_DEFAULT_DATA);
@@ -70,14 +76,22 @@ export function PostFormContextProvider({ post, children }: Props) {
       setTags((prev) => prev.filter((v) => v !== deleted));
     }
   };
+  const handleThumbnail = (imageFile?: File) => {
+    setForm((prev) => ({ ...prev, ['thumbnail']: '' }));
+    setThumbnail(imageFile);
+  };
 
   useEffect(() => {
     return () => {
-      (async () => await removeUnusedImages(form.id))();
+      form.id && (async () => await removeUnusedImages(form.id))();
     };
   }, [form.id]);
 
-  return <PostFormContext.Provider value={{ form, handleForm, tags, handleTags }}>{children}</PostFormContext.Provider>;
+  return (
+    <PostFormContext.Provider value={{ form, handleForm, tags, handleTags, thumbnail, handleThumbnail }}>
+      {children}
+    </PostFormContext.Provider>
+  );
 }
 
 export function usePostFormContext() {

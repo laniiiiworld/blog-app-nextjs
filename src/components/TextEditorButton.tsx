@@ -3,7 +3,7 @@ import { ChangeEvent, MouseEvent, MutableRefObject, ReactNode, useRef } from 're
 import { ButtonType } from './TextEditorButtons';
 import { addPostImage } from '@/service/postImage';
 import { usePostFormContext } from '@/context/PostFormContext';
-import { pushNotification } from '@/util/notification';
+import { checkFileExtension, checkMaxFileSize } from '@/util/imageFileValidation';
 
 export type SelectionType = 'line' | 'part' | 'link' | 'image' | 'code';
 type Props = {
@@ -53,7 +53,7 @@ export default function TextEditorButton({
     const file = e.target.files && e.target.files[0];
 
     if (!file) return;
-    if (!checkFileExtension(file.type) || !checkMaxFileSize(file.size)) {
+    if (!checkFileExtension(file.type) || !checkMaxFileSize(file.size, 8)) {
       e.target.value = '';
       return;
     }
@@ -69,7 +69,7 @@ export default function TextEditorButton({
     handleTextAreaEl(placeholder);
 
     //업로드
-    const downloadURL = await addPostImage(form.id, file);
+    const downloadURL = await addPostImage('content', form.id, file);
 
     //업로드한 파일 preview에 display
     handleForm({
@@ -103,26 +103,6 @@ export default function TextEditorButton({
       )}
     </>
   );
-}
-
-function checkFileExtension(type: string) {
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'image/svg+xml'];
-  const isImageFile = allowedTypes.includes(type);
-
-  if (isImageFile) return true;
-
-  pushNotification('error', '이미지 파일(jpg, jpeg, png, gif)만 업로드 가능합니다.');
-  return false;
-}
-
-function checkMaxFileSize(size: number) {
-  const maxFileSizeMB = 8;
-  const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024;
-
-  if (size <= maxFileSizeBytes) return true;
-
-  pushNotification('error', `이미지 파일 크기는 ${maxFileSizeMB}MB를 초과할 수 없습니다.`);
-  return false;
 }
 
 function getNewFormatInfo(

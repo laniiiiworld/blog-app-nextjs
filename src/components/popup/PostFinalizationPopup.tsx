@@ -8,6 +8,7 @@ import { pushNotification } from '@/util/notification';
 import { ChangeEvent } from 'react';
 import { PostFormData } from '@/model/post';
 import PopUpButton from '../ui/PopUpButton';
+import ThumbnailToUpload from '../ThumbnailToUpload';
 
 type Props = {
   isAdding: boolean;
@@ -17,11 +18,12 @@ type Props = {
 export default function PostFinalizationPopup({ isAdding, path, handleChange }: Props) {
   const router = useRouter();
   const { popupType, setPopupType } = usePopUpContext();
-  const { form, handleForm, tags } = usePostFormContext();
+  const { form, handleForm, tags, thumbnail } = usePostFormContext();
   const { addPost, updatePost } = usePost({ path, enabled: false });
   const handleSubmitSuccess = () => {
     router.push(`/posts/${form.path}`);
     handleForm({});
+    setTimeout(() => setPopupType(''), 0);
   };
   const handleSubmitError = (error: Error) => {
     pushNotification('error', error.message);
@@ -31,7 +33,7 @@ export default function PostFinalizationPopup({ isAdding, path, handleChange }: 
 
     const mutation = isAdding ? addPost : updatePost;
     mutation.mutate(
-      { form, tags },
+      { form, tags, thumbnail },
       {
         onSuccess: handleSubmitSuccess,
         onError: handleSubmitError,
@@ -54,6 +56,7 @@ export default function PostFinalizationPopup({ isAdding, path, handleChange }: 
           required={true}
           handleChange={handleChange}
         />
+        <ThumbnailToUpload />
         <PostFormItem
           type='input'
           labelName='설명'
@@ -64,7 +67,7 @@ export default function PostFinalizationPopup({ isAdding, path, handleChange }: 
         />
         <div className='flex gap-4 justify-end mt-4'>
           <PopUpButton type='cancle' name='취소' handleClick={() => setTimeout(() => setPopupType(''), 0)} />
-          <PopUpButton type='confirm' name='작성' handleClick={onSubmit} />
+          <PopUpButton type='confirm' name={`${isAdding ? '작성' : '수정'}`} handleClick={onSubmit} />
         </div>
       </>
     </PopUp>

@@ -1,7 +1,7 @@
-import { PostWithAdjacents } from '@/model/post';
+import { FullPostData, PostWithAdjacents } from '@/model/post';
 import { onlyAdminUserSession } from '@/service/firebaseAdmin';
 import { getPostWithAdjacents, addOrUpdatePost, removePost } from '@/service/post';
-import { removeAllImages } from '@/service/postImage';
+import { addPostImage, removeAllImages } from '@/service/postImage';
 import { removeTags, updateTags } from '@/service/tags';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -41,15 +41,18 @@ export function DELETE(req: NextRequest) {
 }
 
 async function handlePostRequest(req: NextRequest) {
-  const { post } = await req.json();
-
+  const formData = await req.formData();
+  const post = JSON.parse((formData.get('post') as string | null) || '') as FullPostData | null;
+  const thumbnail = formData.get('thumbnail') as File | null;
   if (!post) {
     return new Response('Bad Request', { status: 400 });
   }
 
   try {
+    const hasUnmodifiedPrevThumbnail = post.thumbnail && !thumbnail;
     await updateTags(post.id, post.tags);
-    await addOrUpdatePost(post);
+    await addOrUpdatePost({ ...post, thumbnail: thumbnail?.name || post.thumbnail });
+    !hasUnmodifiedPrevThumbnail && (await addPostImage('thumbnail', post.id, thumbnail as File));
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify(error), { status: 500 });

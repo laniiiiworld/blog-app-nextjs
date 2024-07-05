@@ -37,7 +37,7 @@ export async function getPostContent(postId: string): Promise<string> {
     const postRef = doc(firebaseDB, 'posts', postId);
     const postDoc = await getDoc(postRef);
     const post = postDoc.data() as FullPostData;
-    return post.content;
+    return post?.content || '';
   } catch (error) {
     console.log(error);
   }
