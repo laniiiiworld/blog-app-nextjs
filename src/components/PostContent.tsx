@@ -1,7 +1,6 @@
 'use client';
 
 import { FullPostData } from '@/model/post';
-import PostPageImage from '@/components/PostPageImage';
 import MarkdownViewr from '@/components/MarkdownViewr';
 import { useAuthContext } from '@/context/AuthContext';
 import { usePopUpContext } from '@/context/PopUpContext';
@@ -13,6 +12,7 @@ import { forwardRef } from 'react';
 import { useRouter } from 'next/navigation';
 import PostDeletePopup from './popup/PostDeletePopup';
 import { formatToISODate } from '@/util/date';
+import ThumbnailImage from './ThumbnailImage';
 
 type Props = {
   post: FullPostData;
@@ -61,7 +61,17 @@ const PostContent = forwardRef<HTMLElement | null, Props>(({ post }, ref) => {
             </ToggleButton>
           </div>
         </div>
-        {thumbnail && <PostPageImage post={post} width={760} height={420} />}
+        {thumbnail && (
+          <ThumbnailImage
+            type='page'
+            postId={post.id}
+            thumbnail={post.thumbnail}
+            width={760}
+            height={420}
+            title={post.title}
+            isPriority={true}
+          />
+        )}
         <p className='pt-2 mb-4 text-xl font-semibold'>{description}</p>
         <div className='w-44 h-1 bg-green-800 mt-2 mb-4'></div>
         <MarkdownViewr content={content} />
