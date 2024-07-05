@@ -1,6 +1,7 @@
 'use client';
 
 import { usePopUpContext } from '@/context/PopUpContext';
+import PopUpButton from '../ui/PopUpButton';
 
 type Props = {
   wantToClose?: boolean;
@@ -16,18 +17,8 @@ export default function PopUpButtons({ wantToClose = true, handleConfirm }: Prop
 
   return (
     <div className='flex gap-4 justify-end mt-4'>
-      <button
-        onClick={() => setTimeout(() => setPopupType(''), 0)}
-        className='bg-white text-green-800 rounded-sm px-4 py-2 cursor-pointer hover:bg-gray-100'
-      >
-        취소
-      </button>
-      <button
-        onClick={handleClick}
-        className='bg-green-800 text-white rounded-sm px-4 py-2 cursor-pointer hover:brightness-125'
-      >
-        확인
-      </button>
+      <PopUpButton type='cancle' name='취소' handleClick={() => setTimeout(() => setPopupType(''), 0)} />
+      <PopUpButton type='confirm' name='확인' handleClick={handleClick} />
     </div>
   );
 }

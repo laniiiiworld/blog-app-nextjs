@@ -40,10 +40,10 @@ export default function MarkdownViewr({ content }: Props) {
         h3: ({ children }) => <h3 id={children?.toString().replaceAll(' ', '-')}>{children}</h3>,
         img: (image) => (
           <Image //
-            className='w-full object-cover m-4'
+            className='w-full object-cover'
             src={image.src || ''}
             alt={image.alt || ''}
-            width={parseInt(image.width as string)|| 500}
+            width={parseInt(image.width as string) || 500}
             height={parseInt(image.height as string) || 350}
           />
         ),

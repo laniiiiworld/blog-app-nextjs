@@ -29,3 +29,14 @@ export function removeCodeAndQuotesFrom(content: string) {
     .replace(inlineCodeRegex, '')
     .replace(quoteRegex, '');
 }
+
+export function findImageUrls(content: string) {
+  const imageUrls: string[] = [];
+  const regex = /!\[.*?\]\((.*?)\)/g;
+  let match;
+
+  while ((match = regex.exec(content)) !== null) {
+    imageUrls.push(match[1]);
+  }
+  return imageUrls;
+}

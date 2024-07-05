@@ -1,17 +1,19 @@
-import { FullUser } from './user';
+import { SimpleUser } from './user';
 
 type SimplePostData = {
   id: string;
   title: string;
   description: string;
-  date: string;
   tags: string[];
   path: string;
   featured: boolean;
-  isImage: boolean;
+  thumbnail: string;
+  writer: string;
+  createdAt: string;
+  lastUpdatedAt: string;
 };
 
-export type AdjacentPostData = Pick<SimplePostData, 'title' | 'path' | 'isImage'>;
+export type AdjacentPostData = Pick<SimplePostData, 'id' | 'title' | 'path' | 'thumbnail'>;
 
 export type PostCardData = SimplePostData & {
   likesCount: number;
@@ -21,6 +23,8 @@ export type PostCardData = SimplePostData & {
 export type FullPostData = SimplePostData & {
   content: string;
 };
+
+export type PostFormData = Omit<FullPostData, 'tags'> & { newTag: string };
 
 export type PostWithAdjacents = {
   post: FullPostData | null;
@@ -33,7 +37,7 @@ export type CommentData = {
   id: string;
   content: string;
   createdAt: string;
-  user: FullUser;
+  user: SimpleUser;
 };
 
 export type SimpleCommentData = Omit<CommentData, 'user'>;

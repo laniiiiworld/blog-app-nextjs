@@ -1,5 +1,6 @@
 import admin, { ServiceAccount } from 'firebase-admin';
 import { NextRequest } from 'next/server';
+import { isAdmin } from './users';
 
 export const FIREBASE_SERVICE_ACCOUNT_KEY = {
   type: process.env.FIREBASE_TYPE,
@@ -32,6 +33,27 @@ export async function withSessionUser(
 
   if (!userId) {
     return new Response('Authentication Error', { status: 401 });
+  }
+
+  return handler(userId);
+}
+
+export async function onlyAdminUserSession(
+  req: NextRequest,
+  handler: (userId: string) => Promise<Response>
+): Promise<Response> {
+  const authHeader = req.headers.get('Authorization');
+  const token = authHeader ? authHeader.split(' ')[1] : '';
+  const decodedToken = await admin.auth().verifyIdToken(token);
+  const userId = decodedToken.uid;
+
+  if (!userId) {
+    return new Response('Authentication Error', { status: 401 });
+  }
+
+  const adminYn = await isAdmin(userId);
+  if (!adminYn) {
+    return new Response('Authentication Error: You are not an administrator', { status: 403 });
   }
 
   return handler(userId);

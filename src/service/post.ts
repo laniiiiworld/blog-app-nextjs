@@ -1,9 +1,7 @@
-import path from 'path';
-import { promises } from 'fs';
 import { firebaseDB } from './firebase';
 import { collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, setDoc, where } from 'firebase/firestore';
 import { AdjacentPostData, CommentData, FullPostData, PostWithAdjacents, SimpleCommentData } from '@/model/post';
-import { FullUser } from '@/model/user';
+import { SimpleUser } from '@/model/user';
 
 export async function getPostWithAdjacents(path: string): Promise<PostWithAdjacents | null> {
   try {
@@ -11,8 +9,8 @@ export async function getPostWithAdjacents(path: string): Promise<PostWithAdjace
 
     if (!post) return { post: null, prevPost: null, nextPost: null };
 
-    const prevPostPromise = getAdjacentPost(post.id, post.date, true);
-    const nextPostPromise = getAdjacentPost(post.id, post.date, false);
+    const prevPostPromise = getAdjacentPost(post.id, post.createdAt, true);
+    const nextPostPromise = getAdjacentPost(post.id, post.createdAt, false);
     const [prevPost, nextPost] = await Promise.all([prevPostPromise, nextPostPromise]);
 
     return { post, prevPost, nextPost };
@@ -34,10 +32,22 @@ export async function getPost(path: string): Promise<FullPostData | null> {
   return null;
 }
 
-async function getAdjacentPost(postId: string, date: string, isPrev: boolean) {
+export async function getPostContent(postId: string): Promise<string> {
+  try {
+    const postRef = doc(firebaseDB, 'posts', postId);
+    const postDoc = await getDoc(postRef);
+    const post = postDoc.data() as FullPostData;
+    return post?.content || '';
+  } catch (error) {
+    console.log(error);
+  }
+  return '';
+}
+
+async function getAdjacentPost(postId: string, createdAt: string, isPrev: boolean) {
   try {
     const postsRef = collection(firebaseDB, 'posts');
-    const postsQuery = query(postsRef, ...makeAdjacentPostsQuery(postId, date, isPrev));
+    const postsQuery = query(postsRef, ...makeAdjacentPostsQuery(postId, createdAt, isPrev));
     const data = await getDocs(postsQuery);
     return (data.docs[0]?.data() as AdjacentPostData) || null;
   } catch (error) {
@@ -46,14 +56,32 @@ async function getAdjacentPost(postId: string, date: string, isPrev: boolean) {
   return null;
 }
 
-function makeAdjacentPostsQuery(postId: string, date: string, isPrev: boolean) {
+function makeAdjacentPostsQuery(postId: string, createdAt: string, isPrev: boolean) {
   return [
-    orderBy('date', isPrev ? 'asc' : 'desc'), //
+    orderBy('createdAt', isPrev ? 'asc' : 'desc'), //
     orderBy('id', 'asc'),
-    where('date', isPrev ? '>' : '<', date),
+    where('createdAt', isPrev ? '>' : '<', createdAt),
     where('id', '!=', postId),
     limit(1),
   ];
+}
+export async function addOrUpdatePost(post: FullPostData) {
+  try {
+    const userRef = doc(firebaseDB, 'users', post.writer);
+    await setDoc(doc(firebaseDB, 'posts', post.id), { ...post, writer: userRef });
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to update post');
+  }
+}
+
+export async function removePost(postId: string) {
+  try {
+    await deleteDoc(doc(firebaseDB, 'posts', postId));
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to remove post');
+  }
 }
 
 export async function getLikesCount(path: string) {
@@ -99,7 +127,7 @@ export async function getPostComments(path: string): Promise<[] | CommentData[]>
         const data = doc.data();
         const userRef = data.user;
         if (userRef) {
-          const user = (await getDoc(userRef)).data() as FullUser;
+          const user = (await getDoc(userRef)).data() as SimpleUser;
           return { ...data, user } as CommentData;
         }
         return doc.data() as CommentData;
