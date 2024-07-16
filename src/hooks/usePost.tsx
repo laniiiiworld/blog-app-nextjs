@@ -2,6 +2,8 @@
 import { useAuthContext } from '@/context/AuthContext';
 import { FullPostData, PostFormData, PostWithAdjacents } from '@/model/post';
 import { getIdTokenAsync } from '@/service/auth';
+import { formatDateTime24HH } from '@/util/date';
+import { createPostFormData, fetchWithAuth } from '@/util/fetch';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
@@ -13,6 +15,7 @@ type Props = {
 export function usePost({ path, enabled = true }: Props) {
   const queryClient = useQueryClient();
   const { user } = useAuthContext();
+
   const onSuccess = useCallback(
     (postId: string) => {
       queryClient.invalidateQueries({ queryKey: ['posts', 'desc'] });
@@ -21,6 +24,7 @@ export function usePost({ path, enabled = true }: Props) {
     },
     [queryClient, path]
   );
+
   const {
     data: { post, prevPost, nextPost },
     isLoading,
@@ -48,35 +52,18 @@ export function usePost({ path, enabled = true }: Props) {
       const post: FullPostData = {
         ...rest,
         tags,
-        createdAt: new Date().toLocaleDateString('ko', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false,
-        }),
+        createdAt: formatDateTime24HH(),
         writer: user?.uid || '',
       };
 
-      const formData = new FormData();
-      formData.append('post', JSON.stringify(post));
-      thumbnail && formData.append('thumbnail', thumbnail);
-
-      const token = await getIdTokenAsync();
-      const response = await fetch(`/api/posts/${post.path}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
+      return fetchWithAuth(
+        `/api/posts/${post.path}`,
+        {
+          method: 'POST',
+          body: createPostFormData(post, thumbnail),
         },
-        body: formData,
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to add post');
-      }
-      return post.id;
+        'Failed to add post'
+      ).then(() => post.id);
     },
   });
 
@@ -94,54 +81,34 @@ export function usePost({ path, enabled = true }: Props) {
         ...rest,
         tags,
         writer: user?.uid || '',
-        lastUpdatedAt: new Date().toLocaleDateString('ko', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false,
-        }),
+        lastUpdatedAt: formatDateTime24HH(),
       };
-      const formData = new FormData();
-      formData.append('post', JSON.stringify(post));
-      thumbnail && formData.append('thumbnail', thumbnail);
 
-      const token = await getIdTokenAsync();
-      const response = await fetch(`/api/posts/${path}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
+      return fetchWithAuth(
+        `/api/posts/${path}`,
+        {
+          method: 'PUT',
+          body: createPostFormData(post, thumbnail),
         },
-        body: formData,
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update post');
-      }
-      return post.id;
+        'Failed to update post'
+      ).then(() => post.id);
     },
     onSuccess,
   });
 
   const removePost = useMutation({
-    mutationFn: async ({ postId }: { postId: string }) => {
-      const token = await getIdTokenAsync();
-      const response = await fetch(`/api/posts/${path}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+    mutationFn: async ({ postId }: { postId: string }) =>
+      fetchWithAuth(
+        `/api/posts/${path}`,
+        {
+          method: 'DELETE',
+          body: JSON.stringify({ postId }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-        body: JSON.stringify({ postId }),
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to remove post');
-      }
-      return postId;
-    },
+        'Failed to remove post'
+      ).then(() => postId),
     onSuccess,
   });
 
