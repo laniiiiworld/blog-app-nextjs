@@ -9,7 +9,7 @@ type Props = {
 
 export async function generateMetadata({ params: { slug } }: Props): Promise<Metadata> {
   try {
-    const post = await getPost(slug);
+    const post = await getPost(decodeURIComponent(slug));
     if (!post) notFound();
     const { title, description } = post;
     return {
