@@ -32,18 +32,18 @@ export async function getAllPosts({ order, tag }: AllPostsProps): Promise<PostCa
 function makeAllPostsQuery({ order, tag }: AllPostsProps) {
   if (tag) {
     return tag === SELECT_ALL //
-      ? [orderBy('createdAt', 'desc')]
-      : [where('tags', 'array-contains', tag), orderBy('createdAt', 'desc')];
+      ? [where('postType', '==', 'posts'), orderBy('createdAt', 'desc')]
+      : [where('postType', '==', 'posts'), where('tags', 'array-contains', tag), orderBy('createdAt', 'desc')];
   }
   return order === 'name' //
-    ? [orderBy('title', 'asc'), orderBy('createdAt', 'desc')]
-    : [orderBy('createdAt', order)];
+    ? [where('postType', '==', 'posts'), orderBy('title', 'asc'), orderBy('createdAt', 'desc')]
+    : [where('postType', '==', 'posts'), orderBy('createdAt', order)];
 }
 
 export async function getAllPostsSize() {
   try {
     const postsRef = collection(firebaseDB, 'posts');
-    const datas = await getDocs(query(postsRef));
+    const datas = await getDocs(query(postsRef, where('postType', '==', 'posts')));
     return datas.size;
   } catch (error) {
     console.log(error);

@@ -60,11 +60,13 @@ function makeAdjacentPostsQuery(postId: string, createdAt: string, isPrev: boole
   return [
     orderBy('createdAt', isPrev ? 'asc' : 'desc'), //
     orderBy('id', 'asc'),
+    where('postType', '==', 'posts'),
     where('createdAt', isPrev ? '>' : '<', createdAt),
     where('id', '!=', postId),
     limit(1),
   ];
 }
+
 export async function addOrUpdatePost(post: FullPostData) {
   try {
     const userRef = doc(firebaseDB, 'users', post.writer);

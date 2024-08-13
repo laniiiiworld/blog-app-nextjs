@@ -1,5 +1,7 @@
 import { SimpleUser } from './user';
 
+export type PostType = 'saved' | 'posts';
+
 type SimplePostData = {
   id: string;
   title: string;
@@ -11,6 +13,7 @@ type SimplePostData = {
   writer: string;
   createdAt: string;
   lastUpdatedAt: string;
+  postType: PostType;
 };
 
 export type AdjacentPostData = Pick<SimplePostData, 'id' | 'title' | 'path' | 'thumbnail'>;
