@@ -13,7 +13,7 @@ export async function generateMetadata({ params: { slug } }: Props): Promise<Met
     if (!post) notFound();
     const { title, description } = post;
     return {
-      title,
+      title: `(작성중) ${title}`,
       description,
     };
   } catch (error) {
@@ -22,5 +22,5 @@ export async function generateMetadata({ params: { slug } }: Props): Promise<Met
 }
 
 export default async function PostPageLayout({ children }: Props) {
-  return <article className='relative flex justify-center mt-10'>{children}</article>;
+  return <>{children}</>;
 }

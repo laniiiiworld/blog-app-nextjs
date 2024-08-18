@@ -1,8 +1,8 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useContext, useState } from 'react';
 
-export type PopupType = '' | 'confirm' | 'email' | 'login' | 'postWrite';
+export type PopupType = '' | 'confirm' | 'email' | 'login' | 'postWrite' | 'savedPosts';
 type Props = {
   children: ReactNode;
 };

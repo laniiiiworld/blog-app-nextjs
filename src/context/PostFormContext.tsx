@@ -17,6 +17,7 @@ const POST_DEFAULT_DATA: PostFormData = {
   writer: '',
   createdAt: '',
   lastUpdatedAt: '',
+  postType: 'posts',
 };
 
 type HandleFormParams = {

@@ -34,9 +34,9 @@ export async function getPostTags(postId: string): Promise<string[]> {
   return [];
 }
 
-export async function updateTags(postId: string, tagsToUpdate: string[]) {
+export async function updateTags(isAdding: boolean, postId: string, tagsToUpdate: string[]) {
   try {
-    await removeTags(postId);
+    !isAdding && (await removeTags(postId));
     const tagPromises = tagsToUpdate.map(async (tag) => {
       const tagRef = doc(firebaseDB, 'tags', tag);
       const tagDoc = await getDoc(tagRef);
