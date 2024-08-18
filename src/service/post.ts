@@ -66,6 +66,24 @@ function makeAdjacentPostsQuery(postId: string, createdAt: string, isPrev: boole
     limit(1),
   ];
 }
+export async function addOrUpdatePost(post: FullPostData) {
+  try {
+    const userRef = doc(firebaseDB, 'users', post.writer);
+    await setDoc(doc(firebaseDB, 'posts', post.id), { ...post, writer: userRef });
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to update post');
+  }
+}
+
+export async function removePost(postId: string) {
+  try {
+    await deleteDoc(doc(firebaseDB, 'posts', postId));
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to remove post');
+  }
+}
 
 export async function addOrUpdatePost(post: FullPostData) {
   try {

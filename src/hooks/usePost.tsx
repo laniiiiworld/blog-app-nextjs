@@ -15,7 +15,6 @@ type Props = {
 export function usePost({ path, enabled = true }: Props) {
   const queryClient = useQueryClient();
   const { user } = useAuthContext();
-
   const onSuccess = useCallback(
     ({ postId, postPath }: { postId: string; postPath: string }) => {
       queryClient.invalidateQueries({ queryKey: ['posts', 'desc'] });
