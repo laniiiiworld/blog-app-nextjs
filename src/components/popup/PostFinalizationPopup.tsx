@@ -6,9 +6,9 @@ import { usePost } from '@/hooks/usePost';
 import { usePostFormContext } from '@/context/PostFormContext';
 import { pushNotification } from '@/util/notification';
 import { ChangeEvent } from 'react';
-import { PostFormData } from '@/model/post';
 import PopUpButton from '../ui/PopUpButton';
 import ThumbnailToUpload from '../ThumbnailToUpload';
+import { validateBeforeWriting } from '@/util/validation';
 
 type Props = {
   isAdding: boolean;
@@ -20,6 +20,7 @@ export default function PostFinalizationPopup({ isAdding, path, handleChange }: 
   const { popupType, setPopupType } = usePopUpContext();
   const { form, handleForm, tags, thumbnail } = usePostFormContext();
   const { addPost, updatePost } = usePost({ path, enabled: false });
+  const isUpdating = !isAdding && form.postType === 'posts';
   const handleSubmitSuccess = () => {
     router.push(`/posts/${form.path}`);
     handleForm({});
@@ -29,11 +30,11 @@ export default function PostFinalizationPopup({ isAdding, path, handleChange }: 
     pushNotification('error', error.message);
   };
   const onSubmit = () => {
-    if (!validateBeforeSubmit(form)) return;
+    if (!validateBeforeWriting('posts', form)) return;
 
-    const mutation = isAdding ? addPost : updatePost;
+    const mutation = isUpdating ? updatePost : addPost;
     mutation.mutate(
-      { form, tags, thumbnail },
+      { form: { ...form, postType: 'posts' }, tags, thumbnail },
       {
         onSuccess: handleSubmitSuccess,
         onError: handleSubmitError,
@@ -67,26 +68,9 @@ export default function PostFinalizationPopup({ isAdding, path, handleChange }: 
         />
         <div className='flex gap-4 justify-end mt-4'>
           <PopUpButton type='cancle' name='취소' handleClick={() => setTimeout(() => setPopupType(''), 0)} />
-          <PopUpButton type='confirm' name={`${isAdding ? '작성' : '수정'}`} handleClick={onSubmit} />
+          <PopUpButton type='confirm' name={`${isUpdating ? '수정' : '작성'}`} handleClick={onSubmit} />
         </div>
       </>
     </PopUp>
   );
-}
-
-function validateBeforeSubmit(form: PostFormData) {
-  if (!form.title.trim()) {
-    pushNotification('warning', '제목이 비어있습니다.');
-    return false;
-  }
-  if (!form.content.trim()) {
-    pushNotification('warning', '내용이 비어있습니다.');
-    return false;
-  }
-  if (!form.path.trim()) {
-    pushNotification('warning', 'URL 설정이 비어있습니다.');
-    return false;
-  }
-
-  return true;
 }

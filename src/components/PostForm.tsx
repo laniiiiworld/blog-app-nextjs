@@ -8,6 +8,7 @@ import { PostFormData } from '@/model/post';
 import PostFinalizationPopup from './popup/PostFinalizationPopup';
 import { usePopUpContext } from '@/context/PopUpContext';
 import PopUpButton from './ui/PopUpButton';
+import TemporarySaveButton from './TemporarySaveButton';
 
 type Props = {
   isAdding: boolean;
@@ -17,6 +18,7 @@ type Props = {
 export default function PostForm({ isAdding, path }: Props) {
   const { setPopupType } = usePopUpContext();
   const { form, handleForm, tags, handleTags } = usePostFormContext();
+  const isUpdating = !isAdding && form.postType === 'posts';
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     handleForm({ name: name as keyof PostFormData, value });
@@ -63,10 +65,11 @@ export default function PostForm({ isAdding, path }: Props) {
         required={true}
         handleChange={handleChange}
       />
-      <div className='mt-5 text-right'>
+      <div className='flex justify-end gap-2 mt-5 text-right'>
+        {!isUpdating && <TemporarySaveButton isAdding={isAdding} />}
         <PopUpButton
           type='confirm'
-          name={`${isAdding ? '작성' : '수정'}`}
+          name={`${isUpdating ? '수정' : '작성'}`}
           handleClick={() => setPopupType('postWrite')}
         />
       </div>

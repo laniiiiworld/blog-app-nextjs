@@ -1,9 +1,9 @@
 'use client';
 import { useAuthContext } from '@/context/AuthContext';
 import { FullPostData, PostFormData, PostWithAdjacents } from '@/model/post';
-import { getIdTokenAsync } from '@/service/auth';
 import { formatDateTime24HH } from '@/util/date';
 import { createPostFormData, fetchWithAuth } from '@/util/fetch';
+import { makePostPath } from '@/util/parse';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
@@ -21,6 +21,7 @@ export function usePost({ path, enabled = true }: Props) {
       queryClient.invalidateQueries({ queryKey: ['posts', 'desc'] });
       queryClient.invalidateQueries({ queryKey: ['posts', path] });
       queryClient.invalidateQueries({ queryKey: ['thumbnail', postId] });
+      queryClient.invalidateQueries({ queryKey: ['posts', 'saved'] });
     },
     [queryClient, path]
   );
@@ -36,7 +37,20 @@ export function usePost({ path, enabled = true }: Props) {
         method: 'GET',
       }).then((res) => res.json()),
     initialData: { post: null, prevPost: null, nextPost: null },
-    enabled,
+    enabled: path !== 'SAVEDPOSTS' && enabled,
+  });
+
+  const {
+    data: savedPosts = [],
+    isLoading: isSavedLoading,
+    isError: isSavedError,
+  } = useQuery<FullPostData[], Error>({
+    queryKey: ['posts', 'saved'],
+    queryFn: () =>
+      fetch('/api/saved', {
+        method: 'GET',
+      }).then((res) => res.json()),
+    enabled: path === 'SAVEDPOSTS' && enabled,
   });
 
   const addPost = useMutation({
@@ -51,6 +65,7 @@ export function usePost({ path, enabled = true }: Props) {
     }) => {
       const post: FullPostData = {
         ...rest,
+        path: rest.path || makePostPath(rest.title),
         tags,
         createdAt: formatDateTime24HH(),
         writer: user?.uid || '',
@@ -81,7 +96,7 @@ export function usePost({ path, enabled = true }: Props) {
         ...rest,
         tags,
         writer: user?.uid || '',
-        lastUpdatedAt: formatDateTime24HH(),
+        [`${rest.postType === 'saved' ? 'createdAt' : 'lastUpdatedAt'}`]: formatDateTime24HH(),
       };
 
       return fetchWithAuth(
@@ -112,5 +127,17 @@ export function usePost({ path, enabled = true }: Props) {
     onSuccess,
   });
 
-  return { post, prevPost, nextPost, isLoading, isError, addPost, updatePost, removePost };
+  return {
+    post,
+    prevPost,
+    nextPost,
+    isLoading,
+    isError,
+    savedPosts,
+    isSavedLoading,
+    isSavedError,
+    addPost,
+    updatePost,
+    removePost,
+  };
 }

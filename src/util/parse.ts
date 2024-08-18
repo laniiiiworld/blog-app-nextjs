@@ -40,3 +40,10 @@ export function findImageUrls(content: string) {
   }
   return imageUrls;
 }
+
+export function makePostPath(title: string) {
+  return title //
+    .replace(/[^가-힣a-zA-Z0-9 ]/g, '')
+    .trim()
+    .replaceAll(' ', '-');
+}

@@ -1,3 +1,4 @@
+import { FullPostData } from './../model/post';
 import { PostCardData } from '@/model/post';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { Order } from '@/hooks/usePosts';
@@ -49,4 +50,15 @@ export async function getAllPostsSize() {
     console.log(error);
   }
   return 0;
+}
+
+export async function getAllSavedPosts(): Promise<FullPostData[]> {
+  try {
+    const postsRef = collection(firebaseDB, 'posts');
+    const datas = await getDocs(query(postsRef, orderBy('createdAt', 'desc'), where('postType', '==', 'saved')));
+    return Promise.all(datas.docs.map(async (doc) => doc.data() as FullPostData));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
 }
