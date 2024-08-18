@@ -1,6 +1,10 @@
 import { PostFormData, PostType } from '@/model/post';
 import { pushNotification } from './notification';
 
+export function hasNoContent(form: PostFormData) {
+  return !form.title.trim() && !form.content.trim();
+}
+
 export function validateBeforeWriting(postType: PostType, form: PostFormData) {
   if (!form.title.trim()) {
     pushNotification('warning', '제목이 비어있습니다.');

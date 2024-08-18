@@ -17,13 +17,13 @@ export function usePost({ path, enabled = true }: Props) {
   const { user } = useAuthContext();
 
   const onSuccess = useCallback(
-    (postId: string) => {
+    ({ postId, postPath }: { postId: string; postPath: string }) => {
       queryClient.invalidateQueries({ queryKey: ['posts', 'desc'] });
-      queryClient.invalidateQueries({ queryKey: ['posts', path] });
+      queryClient.invalidateQueries({ queryKey: ['posts', postPath] });
       queryClient.invalidateQueries({ queryKey: ['thumbnail', postId] });
       queryClient.invalidateQueries({ queryKey: ['posts', 'saved'] });
     },
-    [queryClient, path]
+    [queryClient]
   );
 
   const {
@@ -78,7 +78,7 @@ export function usePost({ path, enabled = true }: Props) {
           body: createPostFormData(post, thumbnail),
         },
         'Failed to add post'
-      ).then(() => post.id);
+      ).then(() => ({ postId: post.id, postPath: post.path }));
     },
   });
 
@@ -106,7 +106,7 @@ export function usePost({ path, enabled = true }: Props) {
           body: createPostFormData(post, thumbnail),
         },
         'Failed to update post'
-      ).then(() => post.id);
+      ).then(() => ({ postId: post.id, postPath: post.path }));
     },
     onSuccess,
   });
@@ -123,7 +123,7 @@ export function usePost({ path, enabled = true }: Props) {
           },
         },
         'Failed to remove post'
-      ).then(() => postId),
+      ).then(() => ({ postId, postPath: path })),
     onSuccess,
   });
 

@@ -2,6 +2,8 @@ import { usePostFormContext } from '@/context/PostFormContext';
 import { pushNotification } from '@/util/notification';
 import { makePostPath } from '@/util/parse';
 import { validateBeforeWriting } from '@/util/validation';
+import { usePopUpContext } from '@/context/PopUpContext';
+import SavedPostsPopup from './popup/SavedPostsPopup';
 import PopUpButton from './ui/PopUpButton';
 import { usePost } from '@/hooks/usePost';
 import { useRouter } from 'next/navigation';
@@ -12,6 +14,7 @@ type Props = {
 
 export default function TemporarySaveButton({ isAdding }: Props) {
   const router = useRouter();
+  const { setPopupType } = usePopUpContext();
   const { savedPosts, addPost, updatePost } = usePost({ path: 'SAVEDPOSTS' });
   const { form, tags } = usePostFormContext();
   const handleSave = () => {
@@ -29,10 +32,11 @@ export default function TemporarySaveButton({ isAdding }: Props) {
       }
     );
   };
-  const showSavedPosts = () => {};
+  const showSavedPosts = () => setPopupType('savedPosts');
 
   return (
     <>
+      <SavedPostsPopup isAdding={isAdding} />
       <div className='border border-green-800'>
         <PopUpButton type='cancle' name='임시저장' handleClick={handleSave} />
         <span className='text-green-800'>|</span>
