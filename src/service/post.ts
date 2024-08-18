@@ -66,6 +66,7 @@ function makeAdjacentPostsQuery(postId: string, createdAt: string, isPrev: boole
     limit(1),
   ];
 }
+
 export async function addOrUpdatePost(post: FullPostData) {
   try {
     const userRef = doc(firebaseDB, 'users', post.writer);
