@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import PostDeletePopup from './popup/PostDeletePopup';
 import { formatToISODate } from '@/util/date';
 import ThumbnailImage from './ThumbnailImage';
+import PostTagList from './PostTagList';
 
 type Props = {
   post: FullPostData;
@@ -20,7 +21,7 @@ type Props = {
 
 const PostContent = forwardRef<HTMLElement | null, Props>(({ post }, ref) => {
   const router = useRouter();
-  const { id, path, title, description, createdAt, content, thumbnail } = post;
+  const { id, path, title, description, createdAt, content, thumbnail, tags } = post;
   const { user } = useAuthContext();
   const { setPopupType } = usePopUpContext();
   const { likes, liked, updateLikes } = useLikesContext();
@@ -36,7 +37,8 @@ const PostContent = forwardRef<HTMLElement | null, Props>(({ post }, ref) => {
     <>
       <PostDeletePopup postId={id} path={path} />
       <section ref={ref} className='py-4'>
-        <h1 className='text-4xl font-bold mb-2 text-center'>{title}</h1>
+        <PostTagList path={path} tags={tags} />
+        <h1 className='text-4xl font-bold my-6 text-center'>{title}</h1>
         <div className='relative flex justify-center items-center mt-6 mb-8 lg:mb-12'>
           <p className='text-center'>{formatToISODate(createdAt)}</p>
           <div className='absolute right-0 flex gap-2'>

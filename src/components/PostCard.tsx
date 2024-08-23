@@ -4,6 +4,7 @@ import { FaRegCommentAlt } from 'react-icons/fa';
 import { PiHeartFill } from 'react-icons/pi';
 import { PostCardData } from '@/model/post';
 import { formatToISODate } from '@/util/date';
+import PostTagList from './PostTagList';
 
 type Props = {
   post: PostCardData;
@@ -28,22 +29,7 @@ export default function PostCard({ post, isPriority }: Props) {
             <time className='w-full text-right'>{formatToISODate(createdAt)}</time>
           </div>
           <h3 className='text-xl leading-relaxed font-semibold w-full py-2'>{title}</h3>
-          <ul className='flex gap-2 flex-wrap'>
-            {tags.length &&
-              tags.map((tag) => (
-                <li key={`${path} ${tag}`}>
-                  <Link
-                    href={{
-                      pathname: '/posts',
-                      query: { tag },
-                    }}
-                    className='text-xs bg-blue-200 rounded-md px-2 py-1 hover:brightness-105'
-                  >
-                    {tag}
-                  </Link>
-                </li>
-              ))}
-          </ul>
+          <PostTagList path={path} tags={tags} textSize='text-xs' />
         </div>
       </article>
     </Link>
